@@ -1,0 +1,52 @@
+services:
+    backend:
+        build: ./backend
+        container_name: iitgn_sentry_backend
+        ports:
+            - "8080:8080"
+        volumes:
+            - type: bind
+              source: ./backend
+              target: /api
+
+        depends_on:
+            - database
+
+    frontend:
+        build: ./frontend
+        container_name: iitgn_sentry_frontend
+        ports:
+            - "3000:3000"
+        volumes:
+            - type: bind
+              source: ./frontend
+              target: /app
+        depends_on:
+            - backend
+
+    nginx:
+        build: ./nginx
+        container_name: iitgn_sentry_nginx
+        ports:
+            - "80:80"
+        volumes:
+            - type: bind
+              source: ./nginx
+              target: /etc/nginx/conf.d
+        depends_on:
+            - frontend
+            - backend
+
+    database:
+        build:
+            context: ./database
+            args:
+                - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+                - MYSQL_DATABASE=${MYSQL_DATABASE}
+        environment:
+            MYSQL_ROOT_HOST: "%" # allow root login from any host
+        container_name: iitgn_sentry_database
+        volumes:
+            - type: bind
+              source: ./database
+              target: /files

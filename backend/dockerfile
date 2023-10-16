@@ -1,0 +1,5 @@
+FROM maven:3.9.4-amazoncorretto-17
+
+WORKDIR /api
+
+CMD ["./mvnw", "spring-boot:run"]
