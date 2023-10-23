@@ -3,7 +3,6 @@ package com.iitgn.entryexit.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-;
 
 @Setter
 @Getter

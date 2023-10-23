@@ -34,11 +34,14 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/manager/signup")
-    public ResponseEntity<String> registerManager(@RequestBody SignUpDto signUpDto){
-        String response = authService.managerSignUp(signUpDto);
+    @PostMapping("/security/signup")
+    public ResponseEntity<String> registerSecurity(@RequestBody SignUpDto signUpDto){
+        String response = authService.securitySignUp(signUpDto);
         return ResponseEntity.ok(response);
     }
+
+
+
+
 }

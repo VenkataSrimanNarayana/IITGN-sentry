@@ -8,5 +8,5 @@ public interface AuthService {
 
     String signup(SignUpDto signUpDto);
 
-    String managerSignUp(SignUpDto signUpDto);
+    String securitySignUp(SignUpDto signUpDto);
 }

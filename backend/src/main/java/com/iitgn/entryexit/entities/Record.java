@@ -1,6 +1,6 @@
 package com.iitgn.entryexit.entities;
 
-import com.iitgn.entryexit.models.EntryExit;
+import com.iitgn.entryexit.models.EnumModels.EntryExit;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,9 +14,10 @@ import java.util.Date;
 @Setter
 @Table(name = "records")
 public class Record {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
     private int memberId;
     @Enumerated(EnumType.ORDINAL)
     private EntryExit type;

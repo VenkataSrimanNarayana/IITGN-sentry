@@ -1,15 +1,7 @@
 package com.iitgn.entryexit.models;
+import lombok.*;
 
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-@Setter
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 public class JWTAuthResponse {
     private String accessToken;
     private String tokenType = "Bearer";
