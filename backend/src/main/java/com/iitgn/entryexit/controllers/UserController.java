@@ -25,7 +25,7 @@ public class UserController {
 
     private final PasswordEncoder passwordEncoder;
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('READ_PRIVILEGE')")
     @GetMapping("/api/users")
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();

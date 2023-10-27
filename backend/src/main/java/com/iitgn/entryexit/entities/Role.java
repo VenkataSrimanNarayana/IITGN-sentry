@@ -1,8 +1,13 @@
 package com.iitgn.entryexit.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -14,8 +19,21 @@ import lombok.*;
 public class Role {
 
     @Id
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(length = 60)
     private String name;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "role")
+    private Set<User> users;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "roles_privileges",
+            joinColumns = @JoinColumn(
+                    name = "role_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "privilege_id", referencedColumnName = "id"))
+    private Set<Privilege> privileges;
 }

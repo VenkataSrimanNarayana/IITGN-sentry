@@ -6,7 +6,6 @@ import com.iitgn.entryexit.models.SignUpDto;
 import com.iitgn.entryexit.services.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,16 +29,16 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<String> registerUser(@RequestBody SignUpDto signUpDto){
-        String response = authService.signup(signUpDto);
+        String response = authService.userSignup(signUpDto);
         return ResponseEntity.ok(response);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/security/signup")
-    public ResponseEntity<String> registerSecurity(@RequestBody SignUpDto signUpDto){
-        String response = authService.securitySignUp(signUpDto);
-        return ResponseEntity.ok(response);
-    }
+//    @PreAuthorize("hasRole('ADMIN')")
+//    @PostMapping("/security/signup")
+//    public ResponseEntity<String> registerSecurity(@RequestBody SignUpDto signUpDto){
+//        String response = authService.securitySignUp(signUpDto);
+//        return ResponseEntity.ok(response);
+//    }
 
 
 

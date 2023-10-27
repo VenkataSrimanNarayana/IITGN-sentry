@@ -19,6 +19,8 @@ public class RecordController {
     private final UserRepository userRepository;
 
 
+//    @PreAuthorize("hasAuthority('DOWNLOAD_PRIVILEGE')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/records")
     public ResponseEntity<String> getRecords(){
         return new ResponseEntity<>("Karthikeya", HttpStatus.OK);

@@ -1,14 +1,10 @@
 package com.iitgn.entryexit.services.impl;
 
 import com.iitgn.entryexit.entities.Role;
-import com.iitgn.entryexit.entities.Security;
 import com.iitgn.entryexit.entities.User;
-import com.iitgn.entryexit.models.EnumModels.Designation;
 import com.iitgn.entryexit.models.LoginDto;
-import com.iitgn.entryexit.models.EnumModels.Provider;
 import com.iitgn.entryexit.models.SignUpDto;
 import com.iitgn.entryexit.repositories.RoleRepository;
-import com.iitgn.entryexit.repositories.SecurityRepository;
 import com.iitgn.entryexit.repositories.UserRepository;
 import com.iitgn.entryexit.security.JwtTokenProvider;
 import com.iitgn.entryexit.services.AuthService;
@@ -20,7 +16,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
@@ -30,66 +27,46 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-    private final SecurityRepository securityRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
 
     @Override
     public String login(LoginDto loginDto) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                loginDto.getEmail(), loginDto.getPassword()));
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return jwtTokenProvider.generateToken(authentication);
     }
 
     @Override
-    public String signup(SignUpDto signUpDto) {
-        if(userRepository.existsByEmail(signUpDto.getEmail())){
+    public String userSignup(SignUpDto signUpDto) {
+
+
+        // check if email already exists
+        if (userRepository.existsByEmail(signUpDto.getEmail())) {
             return "Email Already Exists";
         }
 
-        String email = signUpDto.getEmail();
-        if(email.endsWith("@iitgn.ac.in")){
-            User user = User.builder().id(signUpDto.getId()).
-                    name(signUpDto.getName()).
-                    email(signUpDto.getEmail()).
-                    providerId(Provider.LOCAL.name()).
-                    password(passwordEncoder.encode(signUpDto.getPassword())).build();
-
-//            Optional<Role> tempRoles = roleRepository.findByName("ROLE_" + Designation.USER.name());
-            Role roles = roleRepository.findByName("ROLE_" + Designation.USER.name()).get();
-            user.setRoles(Collections.singleton(roles));
-            userRepository.save(user);
-            return "User registered successfully";
-        }else{
+        // check if email is valid
+        if (!signUpDto.getEmail().endsWith("@iitgn.ac.in")) {
             return "Invalid IITGN Account";
         }
-        // create user object
-    }
 
-
-    @Override
-    public String securitySignUp(SignUpDto signUpDto) {
-        if (securityRepository.existsByEmail(signUpDto.getEmail())) {
-            return "Email Already Exists";
+        // check if id is valid
+        if (signUpDto.getId() < 0 || signUpDto.getId() > 99999999) {
+            return "Invalid ID";
         }
 
-        String email = signUpDto.getEmail();
-        if (email.endsWith("@iitgn.ac.in")) {
-            Security security = Security.builder().id(signUpDto.getId()).
-                    name(signUpDto.getName()).
-                    email(signUpDto.getEmail()).
-                    providerId(Provider.LOCAL.name()).
-                    password(passwordEncoder.encode(signUpDto.getPassword())).build();
+        User user = User.builder().id(signUpDto.getId()).name(signUpDto.getName()).email(signUpDto.getEmail()).password(passwordEncoder.encode(signUpDto.getPassword())).userType(signUpDto.getUserType()).build();
 
-            Role roles = roleRepository.findByName("ROLE_" + Designation.MANAGER.name()).get();
-            security.setRoles(Collections.singleton(roles));
-            securityRepository.save(security);
-            return "Security registered successfully";
-        }else{
-            return "Invalid IITGN Account";
+        Optional<Role> role = roleRepository.findByName(signUpDto.getRole());
+
+        if (role.isEmpty()) {
+            return "Invalid Role";
         }
-    }
 
+        user.setRole(role.get());
+        userRepository.save(user);
+        return "User Registered Successfully";
+    }
 
 }
