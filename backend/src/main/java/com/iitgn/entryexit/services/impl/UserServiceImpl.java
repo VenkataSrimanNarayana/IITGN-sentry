@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void changeRoleById(Long id, Role role) {
-        userRepository.changeRoleById(id, role);
+//        userRepository.changeRoleById(id, role);
     }
 
     @Override
