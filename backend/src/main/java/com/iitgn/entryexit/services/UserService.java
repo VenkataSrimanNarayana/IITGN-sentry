@@ -1,6 +1,8 @@
 package com.iitgn.entryexit.services;
 
+import com.iitgn.entryexit.entities.Role;
 import com.iitgn.entryexit.entities.User;
+import com.iitgn.entryexit.models.SignUpDto;
 
 import javax.swing.text.html.Option;
 import java.util.List;
@@ -13,11 +15,11 @@ public interface UserService {
 
     Optional<User> getUserById(Long Id);
 
-    void updateUserById(Long id, User user);
+    void updateUserById(Long id, SignUpDto signUpDto);
 
     void changePasswordById(Long id, String password);
 
-    void changeNameById(Long id, String name);
+    void changeRoleById(Long id, Role role);
 
     void deleteUserById(Long id);
 }

@@ -1,6 +1,6 @@
 package com.iitgn.entryexit.spring;
 
-import com.iitgn.entryexit.entities.Privilege;
+import com.iitgn.entryexit.entities.*;
 import com.iitgn.entryexit.repositories.PrivilegeRepository;
 import com.iitgn.entryexit.repositories.RoleRepository;
 import com.iitgn.entryexit.repositories.UserRepository;
@@ -12,11 +12,17 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.iitgn.entryexit.entities.Role;
-import com.iitgn.entryexit.entities.User;
-
 import java.util.*;
 
+// READ_SINGLE_USER_PRIVILEGE
+//
+//READ_SELF_PRIVILEGE
+//
+//CHANGE_PASSWORD_PRIVILEGE
+//
+//DELETE_USER_PRIVILEGE
+//
+//READ_USERS_PRIVILEGE
 
 @Component
 @RequiredArgsConstructor
@@ -40,36 +46,56 @@ public class SetupDataLoader implements
         if (alreadySetup)
             return;
 
-        Privilege readPrivilege
-                = createPrivilegeIfNotFound("READ_PRIVILEGE");
-        Privilege writePrivilege
-                = createPrivilegeIfNotFound("WRITE_PRIVILEGE");
-        Privilege updatePrivilege
-                = createPrivilegeIfNotFound("UPDATE_PRIVILEGE");
-        Privilege deletePrivilege
-                = createPrivilegeIfNotFound("DELETE_PRIVILEGE");
-        Privilege managePrivilege
-                = createPrivilegeIfNotFound("MANAGE_PRIVILEGE");
+        Privilege privilege1 = createPrivilegeIfNotFound("READ_SINGLE_USER_PRIVILEGE");
+        Privilege privilege2 = createPrivilegeIfNotFound("READ_SELF_PRIVILEGE");
+        Privilege privilege3 = createPrivilegeIfNotFound("CHANGE_PASSWORD_PRIVILEGE");
+        Privilege privilege4 = createPrivilegeIfNotFound("DELETE_USER_PRIVILEGE");
+        Privilege privilege5 = createPrivilegeIfNotFound("READ_USERS_PRIVILEGE");
+        Privilege privilege6 = createPrivilegeIfNotFound("UPDATE_USER_PRIVILEGE");
 
 
         List<Privilege> userPrivileges = Arrays.asList(
-                readPrivilege, deletePrivilege, updatePrivilege);
+                privilege2, privilege3);
 
         List<Privilege> adminPrivileges = Arrays.asList(
-                readPrivilege, writePrivilege, updatePrivilege, deletePrivilege, managePrivilege);
+                privilege1, privilege2, privilege3, privilege4, privilege5, privilege6);
 
 
         createRoleIfNotFound("ROLE_ADMIN", new HashSet<>(adminPrivileges));
         createRoleIfNotFound("ROLE_USER", new HashSet<>(userPrivileges));
 
         Optional<Role> adminRole = roleRepository.findByName("ROLE_ADMIN");
-        User user = new User();
-        user.setId(20110242);
-        user.setName("Zeeshan Snehil Bhagat");
-        user.setPassword(passwordEncoder.encode("test"));
-        user.setEmail("test@iitgn.ac.in");
-        user.setUserType("Student");
-        adminRole.ifPresent(user::setRole);
+
+
+        User user = User.builder().id(20110242)
+                .firstName("Zeeshan Snehil")
+                .lastName("Bhagat")
+                .password(passwordEncoder.encode("test"))
+                .userType("Student")
+                .area("IIT Gandhinagar")
+                .houseNo("H-102")
+                .country("India")
+                .landmark("IIT Gandhinagar")
+                .pincode(382355)
+                .state("Gujarat")
+                .townCity("Gandhinagar")
+                .build();
+
+
+        // Set Emails
+        Email email = Email.builder().email("zeeshan.snehil@iitgn.ac.in").type("college").build();
+        Set<Email> emails = new HashSet<>();
+        emails.add(email);
+        user.setEmails(emails);
+
+        // Set Contact Numbers
+        ContactNumber contactNumber = ContactNumber.builder().phone("9434614611").type("personal").build();
+        Set<ContactNumber> contactNumbers = new HashSet<>();
+        contactNumbers.add(contactNumber);
+        user.setContactNumbers(contactNumbers);
+
+        // Set Role
+        user.setRole(adminRole.orElse(null));
         userRepository.save(user);
         alreadySetup = true;
     }

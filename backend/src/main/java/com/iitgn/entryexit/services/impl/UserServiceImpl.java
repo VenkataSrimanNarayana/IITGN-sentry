@@ -1,6 +1,8 @@
 package com.iitgn.entryexit.services.impl;
 
+import com.iitgn.entryexit.entities.Role;
 import com.iitgn.entryexit.entities.User;
+import com.iitgn.entryexit.models.SignUpDto;
 import com.iitgn.entryexit.repositories.UserRepository;
 import com.iitgn.entryexit.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -26,18 +28,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserById(Long id, User user) {
+    public void updateUserById(Long id, SignUpDto signUpDto) {
 //        userRepository.
+    }
+
+    @Override
+    public void changeRoleById(Long id, Role role) {
+        userRepository.changeRoleById(id, role);
     }
 
     @Override
     public void changePasswordById(Long id, String password) {
         userRepository.changePasswordById(id, password);
-    }
-
-    @Override
-    public void changeNameById(Long id, String name) {
-        userRepository.changeNameById(id, name);
     }
 
     @Override
