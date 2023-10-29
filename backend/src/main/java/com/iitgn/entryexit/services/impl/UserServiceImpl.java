@@ -49,11 +49,7 @@ public class UserServiceImpl implements UserService {
 
     // All delete methods
     @Override
-    public void deleteUserById(Long id) {
-        Optional<User> user = userRepository.findById(id);
-        if(user.isEmpty()){
-            return;
-        }
-        userRepository.delete(user.get());
+    public void deleteUserById(User user) {
+        userRepository.delete(user);
     }
 }

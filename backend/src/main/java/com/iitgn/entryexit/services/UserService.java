@@ -19,5 +19,5 @@ public interface UserService {
 
     boolean changeRoleById(Long id, String role);
 
-    void deleteUserById(Long id);
+    void deleteUserById(User user);
 }

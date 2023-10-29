@@ -131,11 +131,17 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('DELETE_USER_PRIVILEGE')")
     @DeleteMapping("/api/users/{id}")
-    public ResponseEntity<String> deleteUserById(@PathVariable Long id) {
-        userService.deleteUserById(id);
-        return new ResponseEntity<>("User successfully deleted.", HttpStatus.NO_CONTENT);
+    public ResponseEntity<SingleLineResponse> deleteUserById(@PathVariable Long id) {
+        User user = userService.getUserById(id).orElse(null);
+        if(user == null){
+            return new ResponseEntity<>(new SingleLineResponse("User not found"), HttpStatus.NOT_FOUND);
+        }
+        userService.deleteUserById(user);
+        return new ResponseEntity<>(new SingleLineResponse("User deleted successfully"), HttpStatus.OK);
     }
 
+
+    // TODO : Function to be completed
     @PreAuthorize("hasAuthority('UPDATE_USER_PRIVILEGE')")
     @PutMapping("/api/users/{id}")
     public ResponseEntity<User> updateUserById(@PathVariable Long id, @RequestBody SignUpDto signUpDto) {
