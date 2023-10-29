@@ -2,6 +2,7 @@ package com.iitgn.entryexit.controllers;
 
 
 import com.iitgn.entryexit.entities.User;
+import com.iitgn.entryexit.models.NewRoleDto;
 import com.iitgn.entryexit.models.PasswordChangeRequest;
 import com.iitgn.entryexit.models.SignUpDto;
 import com.iitgn.entryexit.models.SingleLineResponse;
@@ -28,12 +29,12 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('READ_USERS_PRIVILEGE')")
     @GetMapping("/api/users")
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
+    public ResponseEntity<List<User>> getAllUsers(@RequestParam int offset, @RequestParam int limit) {
+        List<User> users = userService.getAllUsers(offset, limit);
         if(users.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('READ_SINGLE_USER_PRIVILEGE')")
@@ -149,14 +150,14 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('ROLE_UPDATE_PRIVILEGE')")
     @PutMapping("/api/users/{id}/role")
-    public ResponseEntity<SingleLineResponse> updateUserRoleById(@PathVariable Long id, @RequestBody String role) {
+    public ResponseEntity<SingleLineResponse> updateUserRoleById(@PathVariable Long id, @RequestBody NewRoleDto newRoleDto) {
 
         Optional<User> userTemp = userService.getUserById(id);
         if(userTemp.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        if(userService.changeRoleById(id, role)){
+        if(userService.changeRoleById(id, newRoleDto.getNewRole())){
             return new ResponseEntity<>(new SingleLineResponse("Role changed successfully"), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -172,6 +173,8 @@ public class UserController {
 //        userService.updateUserRoleById(id, role);
 //        return new ResponseEntity<>(userTemp.get(), HttpStatus.OK);
 //    }
+
+
 }
 
 

@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface UserService {
 
-    List<User> getAllUsers();
+    List<User> getAllUsers(int offset, int limit);
 
     Optional<User> getUserById(Long Id);
 

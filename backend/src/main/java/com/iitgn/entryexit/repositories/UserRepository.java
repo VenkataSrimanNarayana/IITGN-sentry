@@ -3,6 +3,7 @@ package com.iitgn.entryexit.repositories;
 import com.iitgn.entryexit.entities.Role;
 import com.iitgn.entryexit.entities.User;
 import jakarta.transaction.Transactional;
+import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -19,6 +20,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 //    void updateUserById(Long id, String name,);
 //
 
+//    @Transactional
+//    @Modifying
+//    @Query("UPDATE User u SET u.firstName = ?2 WHERE u.id = ?1")
+//    void updateUserById(Long id, String name);
+
 
     @Transactional
     @Modifying
@@ -31,16 +37,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("UPDATE User u SET u.password = ?2 WHERE u.id = ?1")
     void changePasswordById(Long id, String password);
 
-
-    // query for updating name by id
-    @Transactional
-    @Modifying
-    @Query("UPDATE User u SET u.firstName = ?2 WHERE u.id = ?1")
-    void changeNameById(Long id, String name);
-
-    @Transactional
-    @Modifying
-    @Query("DELETE FROM User u WHERE u.id = ?1")
-    void deleteById(Long id);
 }
 

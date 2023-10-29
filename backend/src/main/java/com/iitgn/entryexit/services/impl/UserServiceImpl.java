@@ -5,6 +5,7 @@ import com.iitgn.entryexit.models.SignUpDto;
 import com.iitgn.entryexit.repositories.UserRepository;
 import com.iitgn.entryexit.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,8 +18,8 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<User> getAllUsers(int offset, int limit) {
+        return userRepository.findAll(PageRequest.of(offset / limit, limit)).getContent();
     }
 
     @Override
@@ -26,9 +27,18 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(Id);
     }
 
+
+    // All update methods
     @Override
     public void updateUserById(Long id, SignUpDto signUpDto) {
-//        userRepository.
+//        userRepository.updateUserById(id, signUpDto.getFirstName());
+    }
+
+
+    // All change methods
+    @Override
+    public void changePasswordById(Long id, String password) {
+        userRepository.changePasswordById(id, password);
     }
 
     @Override
@@ -36,13 +46,14 @@ public class UserServiceImpl implements UserService {
         return userRepository.changeRoleById(id, role) >= 1;
     }
 
-    @Override
-    public void changePasswordById(Long id, String password) {
-        userRepository.changePasswordById(id, password);
-    }
 
+    // All delete methods
     @Override
     public void deleteUserById(Long id) {
-        userRepository.deleteById(id);
+        Optional<User> user = userRepository.findById(id);
+        if(user.isEmpty()){
+            return;
+        }
+        userRepository.delete(user.get());
     }
 }
