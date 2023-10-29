@@ -1,4 +1,4 @@
-package com.iitgn.entryexit.models;
+package com.iitgn.entryexit.models.id;
 
 
 import lombok.Setter;
@@ -9,9 +9,7 @@ import java.time.LocalTime;
 
 @Setter
 public class UserLogId implements Serializable {
-
-    private long userId;
+    private boolean isEntry;
     private LocalDate eventDate;
     private LocalTime eventTime;
-
 }

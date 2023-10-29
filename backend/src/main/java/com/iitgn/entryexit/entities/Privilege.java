@@ -12,7 +12,9 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(uniqueConstraints = {
+@Table(
+        name = "privilege",
+        uniqueConstraints = {
         @UniqueConstraint(columnNames = {"name"})
 })
 public class Privilege {

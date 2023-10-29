@@ -1,7 +1,8 @@
 package com.iitgn.entryexit.services;
 
 import com.iitgn.entryexit.entities.User;
-import com.iitgn.entryexit.models.SignUpDto;
+import com.iitgn.entryexit.models.requestdto.PendingRequestDto;
+import com.iitgn.entryexit.models.requestdto.SignUpDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,4 +21,6 @@ public interface UserService {
     boolean changeRoleById(Long id, String role);
 
     void deleteUserById(User user);
+
+    void raiseRequest(Long id, PendingRequestDto pendingRequestDto);
 }

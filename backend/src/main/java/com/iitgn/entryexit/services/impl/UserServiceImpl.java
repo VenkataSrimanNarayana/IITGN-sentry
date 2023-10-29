@@ -1,7 +1,8 @@
 package com.iitgn.entryexit.services.impl;
 
 import com.iitgn.entryexit.entities.User;
-import com.iitgn.entryexit.models.SignUpDto;
+import com.iitgn.entryexit.models.requestdto.PendingRequestDto;
+import com.iitgn.entryexit.models.requestdto.SignUpDto;
 import com.iitgn.entryexit.repositories.UserRepository;
 import com.iitgn.entryexit.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -51,5 +52,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUserById(User user) {
         userRepository.delete(user);
+    }
+
+    @Override
+    public void raiseRequest(Long id, PendingRequestDto pendingRequestDto) {
+//        userRepository.raiseRequest(id, pendingRequestDto);
     }
 }

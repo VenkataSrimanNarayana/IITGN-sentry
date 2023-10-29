@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -57,22 +58,40 @@ public class User implements UserDetails {
     @JoinColumn(name = "user_id")
     private Set<Email> emails;
 
-//    @JsonIgnore
-//    @OneToMany(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id")
-//    private List<UserLog> userLogs;
+    @JsonIgnore
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private Set<UserLog> userLogs;
+
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private Set<PendingRequest> pendingRequest;
 
 
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "role_id")
     private Role role;
+
+
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumns(
+            {
+                    @JoinColumn(name = "blockName", referencedColumnName = "blockName"),
+                    @JoinColumn(name = "roomNo", referencedColumnName = "roomNo")
+            }
+    )
+    private Room room;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.role.getPrivileges().stream().map(privilege ->
                 new SimpleGrantedAuthority(privilege.getName())).collect(Collectors.toList());
     }
+
 
     @JsonIgnore
     @Override

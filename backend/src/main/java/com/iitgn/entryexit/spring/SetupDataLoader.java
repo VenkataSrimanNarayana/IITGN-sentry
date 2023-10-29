@@ -90,6 +90,11 @@ public class SetupDataLoader implements
         emails.add(email);
         user.setEmails(emails);
 
+
+        // Set Room
+        Room room = Room.builder().blockName("H").roomNo(102).build();
+        user.setRoom(room);
+
         // Set Contact Numbers
         ContactNumber contactNumber = ContactNumber.builder().phone("9434614611").type("personal").build();
         Set<ContactNumber> contactNumbers = new HashSet<>();

@@ -1,6 +1,6 @@
 //package com.iitgn.entryexit.entities;
 //
-//import com.iitgn.entryexit.models.VehicleUserLogId;
+//import com.iitgn.entryexit.models.Id.VehicleUserLogId;
 //import jakarta.persistence.Entity;
 //import jakarta.persistence.Id;
 //import jakarta.persistence.IdClass;

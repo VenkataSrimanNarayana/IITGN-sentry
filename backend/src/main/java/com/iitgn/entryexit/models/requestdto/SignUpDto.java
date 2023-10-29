@@ -1,4 +1,4 @@
-package com.iitgn.entryexit.models;
+package com.iitgn.entryexit.models.requestdto;
 
 import lombok.Data;
 // user(user_id, first_name, last_name, house_no, area, Landmark, Pincode, Town_city, State, Country, Type)

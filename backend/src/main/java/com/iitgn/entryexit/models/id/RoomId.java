@@ -1,4 +1,4 @@
-package com.iitgn.entryexit.models;
+package com.iitgn.entryexit.models.id;
 
 import lombok.Setter;
 

@@ -1,9 +1,8 @@
 package com.iitgn.entryexit.controllers;
 
-import com.iitgn.entryexit.entities.User;
-import com.iitgn.entryexit.models.JWTAuthResponse;
-import com.iitgn.entryexit.models.LoginDto;
-import com.iitgn.entryexit.models.SignUpDto;
+import com.iitgn.entryexit.models.responses.JWTAuthResponse;
+import com.iitgn.entryexit.models.requestdto.LoginDto;
+import com.iitgn.entryexit.models.requestdto.SignUpDto;
 import com.iitgn.entryexit.services.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
