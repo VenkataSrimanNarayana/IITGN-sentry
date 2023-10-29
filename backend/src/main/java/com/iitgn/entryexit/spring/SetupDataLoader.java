@@ -52,19 +52,21 @@ public class SetupDataLoader implements
         Privilege privilege4 = createPrivilegeIfNotFound("DELETE_USER_PRIVILEGE");
         Privilege privilege5 = createPrivilegeIfNotFound("READ_USERS_PRIVILEGE");
         Privilege privilege6 = createPrivilegeIfNotFound("UPDATE_USER_PRIVILEGE");
+        Privilege privilege7 = createPrivilegeIfNotFound("ROLE_UPDATE_PRIVILEGE");
 
 
         List<Privilege> userPrivileges = Arrays.asList(
-                privilege2, privilege3);
+                privilege2, privilege3, privilege6);
 
         List<Privilege> adminPrivileges = Arrays.asList(
-                privilege1, privilege2, privilege3, privilege4, privilege5, privilege6);
+                privilege1, privilege2, privilege3, privilege4, privilege5, privilege6, privilege7);
 
 
         createRoleIfNotFound("ROLE_ADMIN", new HashSet<>(adminPrivileges));
         createRoleIfNotFound("ROLE_USER", new HashSet<>(userPrivileges));
 
         Optional<Role> adminRole = roleRepository.findByName("ROLE_ADMIN");
+
 
 
         User user = User.builder().id(20110242)

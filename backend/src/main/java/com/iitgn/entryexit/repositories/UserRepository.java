@@ -20,10 +20,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 //
 
 
-//    @Transactional
-//    @Modifying
+    @Transactional
+    @Modifying
+    @Query("UPDATE User u SET u.role = (SELECT r FROM Role r WHERE r.name = :roleName) WHERE u.id = :id")
 //    @Query("UPDATE User u SET u.role = ?2 WHERE u.id = ?1")
-//    void changeRoleById(Long id, Role role);
+    int changeRoleById(Long id, String roleName);
 
     @Transactional
     @Modifying

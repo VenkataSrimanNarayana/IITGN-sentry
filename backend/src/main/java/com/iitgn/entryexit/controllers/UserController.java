@@ -1,7 +1,6 @@
 package com.iitgn.entryexit.controllers;
 
 
-import com.iitgn.entryexit.entities.Role;
 import com.iitgn.entryexit.entities.User;
 import com.iitgn.entryexit.models.PasswordChangeRequest;
 import com.iitgn.entryexit.models.SignUpDto;
@@ -148,15 +147,19 @@ public class UserController {
     }
 
 
-    @PreAuthorize("hasAuthority('UPDATE_USER_PRIVILEGE')")
+    @PreAuthorize("hasAuthority('ROLE_UPDATE_PRIVILEGE')")
     @PutMapping("/api/users/{id}/role")
-    public ResponseEntity<User> updateUserRoleById(@PathVariable Long id, @RequestBody Role role) {
+    public ResponseEntity<SingleLineResponse> updateUserRoleById(@PathVariable Long id, @RequestBody String role) {
+
         Optional<User> userTemp = userService.getUserById(id);
         if(userTemp.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        userService.changeRoleById(id, role);
-        return new ResponseEntity<>(userTemp.get(), HttpStatus.OK);
+
+        if(userService.changeRoleById(id, role)){
+            return new ResponseEntity<>(new SingleLineResponse("Role changed successfully"), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
 //    @PreAuthorize("hasAuthority('UPDATE_USER_PRIVILEGE')")

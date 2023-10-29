@@ -9,10 +9,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 
 // user(user_id, first_name, last_name, house_no, area, Landmark, Pincode, Town_city, State, Country, Type)
 

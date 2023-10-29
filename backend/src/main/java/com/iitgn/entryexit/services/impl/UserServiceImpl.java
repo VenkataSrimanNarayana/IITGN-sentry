@@ -1,6 +1,5 @@
 package com.iitgn.entryexit.services.impl;
 
-import com.iitgn.entryexit.entities.Role;
 import com.iitgn.entryexit.entities.User;
 import com.iitgn.entryexit.models.SignUpDto;
 import com.iitgn.entryexit.repositories.UserRepository;
@@ -33,8 +32,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void changeRoleById(Long id, Role role) {
-//        userRepository.changeRoleById(id, role);
+    public boolean changeRoleById(Long id, String role) {
+        return userRepository.changeRoleById(id, role) >= 1;
     }
 
     @Override
