@@ -6,10 +6,7 @@ import com.iitgn.entryexit.models.requestdto.SignUpDto;
 import com.iitgn.entryexit.services.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 // open endpoints, anyone can access these endpoints
@@ -21,6 +18,7 @@ public class AuthController {
 
     private final AuthService authService;
 
+    @CrossOrigin(origins = "*")
     @PostMapping("/login")
     public ResponseEntity<JWTAuthResponse> authenticate(@RequestBody LoginDto loginDto){
         String token = authService.login(loginDto);
