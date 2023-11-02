@@ -22,7 +22,6 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/login")
     public ResponseEntity<JWTAuthResponse> authenticate(@RequestBody LoginDto loginDto){
         String token = authService.login(loginDto);
