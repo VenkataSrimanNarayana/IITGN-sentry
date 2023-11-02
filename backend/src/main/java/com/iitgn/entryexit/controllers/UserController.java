@@ -207,17 +207,12 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @PreAuthorize("hasAuthority('RAISE_REQUEST_PRIVILEGE')")
+//    @PreAuthorize("hasAuthority('RAISE_REQUEST_PRIVILEGE')")
     @PostMapping("/api/users/{id}/request")
     public ResponseEntity<SingleLineResponse> raiseRequest(@PathVariable Long id, @RequestBody PendingRequestDto pendingRequestDto) {
-        Optional<User> userTemp = userService.getUserById(id);
-        if(userTemp.isEmpty()){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
         userService.raiseRequest(id, pendingRequestDto);
         return new ResponseEntity<>(new SingleLineResponse("Request raised successfully"), HttpStatus.OK);
     }
-
 
 
 

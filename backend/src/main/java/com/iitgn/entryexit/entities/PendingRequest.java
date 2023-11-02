@@ -1,8 +1,7 @@
 package com.iitgn.entryexit.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -23,20 +22,24 @@ import java.time.LocalTime;
 @Entity
 @Table(name = "pending_request")
 public class PendingRequest {
+
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private long requestId;
 
     private LocalTime validFromTime;
 
+    @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate validFromDate;
 
     private LocalTime validUptoTime;
 
+    @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate validUptoDate;
 
     private String requestType;
 
-    private boolean status;
-
     private String reason;
+
+//    @OneToOne
 }

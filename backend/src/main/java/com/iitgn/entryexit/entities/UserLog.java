@@ -1,15 +1,10 @@
 package com.iitgn.entryexit.entities;
 
 import jakarta.persistence.*;
+import lombok.*;
 
-import java.time.*;
-
-import com.iitgn.entryexit.models.id.UserLogId;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.Getter;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 // user_logs(user_id, room_no, block_no, purpose, is_entry, date, time, vehicle_no)
 
@@ -20,19 +15,25 @@ import lombok.Getter;
 @NoArgsConstructor
 @Builder
 @Table(name = "user_log")
-@IdClass(UserLogId.class)
 public class UserLog {
-    private int roomNo;
-    private String blockNo;
+
+    @Id
+    private long userLogId;
+
     private String purpose;
 
-    @Id
     private boolean isEntry;
 
-    @Id
     private LocalDate eventDate;
 
-    @Id
     private LocalTime eventTime;
+
     private String vehicleNo;
+
+    @ManyToOne
+    @JoinColumns({
+                    @JoinColumn(name = "blockName", referencedColumnName = "blockName"),
+                    @JoinColumn(name = "roomNo", referencedColumnName = "roomNo")
+            })
+    private Room room;
 }

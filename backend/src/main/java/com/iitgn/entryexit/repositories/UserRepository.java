@@ -37,5 +37,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("UPDATE User u SET u.password = ?2 WHERE u.id = ?1")
     void changePasswordById(Long id, String password);
 
+
 }
 

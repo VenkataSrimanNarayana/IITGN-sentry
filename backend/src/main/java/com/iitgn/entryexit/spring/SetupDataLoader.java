@@ -53,6 +53,7 @@ public class SetupDataLoader implements
         Privilege privilege5 = createPrivilegeIfNotFound("READ_USERS_PRIVILEGE");
         Privilege privilege6 = createPrivilegeIfNotFound("UPDATE_USER_PRIVILEGE");
         Privilege privilege7 = createPrivilegeIfNotFound("ROLE_UPDATE_PRIVILEGE");
+        Privilege privilege8 = createPrivilegeIfNotFound("RAISE_REQUEST_PRIVILEGE");
 
 
         List<Privilege> userPrivileges = Arrays.asList(
