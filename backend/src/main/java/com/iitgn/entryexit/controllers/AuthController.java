@@ -8,12 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-<<<<<<< HEAD
-=======
-
 import java.util.HashMap;
 import java.util.Map;
->>>>>>> backend-dev
+
 
 
 // open endpoints, anyone can access these endpoints
