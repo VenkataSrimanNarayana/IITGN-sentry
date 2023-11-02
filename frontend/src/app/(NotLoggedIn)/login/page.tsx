@@ -26,13 +26,11 @@ export default function Login() {
             password: password,
             callbackUrl: "/",
         });
-        if (!response || !response.ok) {
+        if (response && !response.ok) {
             setAlertData({
                 message: "Invalid Credentials!",
                 error: true,
             });
-        } else {
-            console.log("Successfully logged in");
         }
     };
 

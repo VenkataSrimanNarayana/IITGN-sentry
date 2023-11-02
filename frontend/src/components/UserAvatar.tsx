@@ -36,7 +36,7 @@ function stringAvatar(name: string) {
     };
 }
 
-export default function UserAvatar() {
+export default function UserAvatar(props: any) {
     const [userName, setUserName] = useState("");
     const { data: session } = useSession();
     useEffect(() => {
@@ -60,9 +60,9 @@ export default function UserAvatar() {
             )
                 .then((res) => res.json())
                 .then((data) => {
-                    setUserName(data.name);
+                    setUserName(data.firstName);
                 });
         }
     });
-    return <Avatar {...stringAvatar(userName)} />;
+    return <Avatar {...props} {...stringAvatar(userName)} />;
 }

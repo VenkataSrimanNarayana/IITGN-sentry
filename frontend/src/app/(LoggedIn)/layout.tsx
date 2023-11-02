@@ -17,7 +17,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <body>
                 <Provider>
                     <Navbar links={links} />
-                    <Container maxWidth="xl">{children}</Container>
+                    <Container maxWidth="xl" sx={{ marginTop: "5rem" }}>
+                        {children}
+                    </Container>
                 </Provider>
             </body>
         </html>
