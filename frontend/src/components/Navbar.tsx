@@ -4,6 +4,7 @@ import React from "react";
 import AppBar from "@mui/material/AppBar";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import NavigationList from "@/components/NavigationList";
+import UserAvatar from "@/components/UserAvatar";
 import {
     Container,
     Typography,
@@ -61,7 +62,9 @@ export default function Navbar({ links }: { links: LinkName[] }) {
                     >
                         IITGN LOGO
                     </Typography>
-                    <Button color="inherit">Login</Button>
+                    <Button color="inherit">
+                        <UserAvatar />
+                    </Button>
                 </Toolbar>
             </Container>
         </AppBar>

@@ -1,6 +1,11 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
+// Function to parse the jwt token to get the Subject(userId) from it
+function parseJwt(token: string) {
+    return JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
+}
+
 const handler = NextAuth({
     providers: [
         CredentialsProvider({
@@ -32,6 +37,7 @@ const handler = NextAuth({
                     throw new Error(user.message);
                 }
                 if (res.ok && user) {
+                    console.log(user);
                     return user;
                 } else {
                     return null;
@@ -52,7 +58,13 @@ const handler = NextAuth({
         },
 
         async session({ session, token }) {
-            session.user.accessToken = token.accessToken;
+            if (session.user) {
+                session.user = {
+                    ...session.user,
+                    accessToken: token.accessToken,
+                    userID: parseJwt(token.accessToken as string).sub,
+                } as { [key: string]: unknown };
+            }
 
             return session;
         },
