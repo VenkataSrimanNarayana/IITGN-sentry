@@ -44,5 +44,4 @@ public class Visitor {
 
     private String country;
 
-
 }

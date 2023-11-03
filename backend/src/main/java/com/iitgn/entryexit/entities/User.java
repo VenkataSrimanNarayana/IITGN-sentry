@@ -74,6 +74,11 @@ public class User implements UserDetails {
     @JoinColumn(name = "role_id")
     private Role role;
 
+    @JsonIgnore
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private Set<UserVisitorLog> userVisitorLogs;
+
 
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
@@ -91,6 +96,21 @@ public class User implements UserDetails {
         return this.role.getPrivileges().stream().map(privilege ->
                 new SimpleGrantedAuthority(privilege.getName())).collect(Collectors.toList());
     }
+
+    @JsonIgnore
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private Set<VehicleUserLog> vehicleUserLogs;
+
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            name = "visited_for",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "visitor_id")
+    )
+    private Set<Visitor> visitors;
 
 
     @JsonIgnore

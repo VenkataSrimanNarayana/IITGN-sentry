@@ -39,6 +39,7 @@ public class AuthController {
         return ResponseEntity.badRequest().body(response);
     }
 
+    // test endpoint
     @GetMapping("/test")
     public ResponseEntity<Map<String, String>> test(){
         Map<String, String> response = new HashMap<>();

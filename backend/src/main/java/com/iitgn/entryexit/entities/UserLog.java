@@ -30,10 +30,7 @@ public class UserLog {
 
     private String vehicleNo;
 
-    @ManyToOne
-    @JoinColumns({
-                    @JoinColumn(name = "blockName", referencedColumnName = "blockName"),
-                    @JoinColumn(name = "roomNo", referencedColumnName = "roomNo")
-            })
-    private Room room;
+    private String blockName;
+
+    private int roomNo;
 }

@@ -3,28 +3,25 @@ package com.iitgn.entryexit.entities;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 // Vehicle Visitor Logs Table:
-// vehicle_visitor_logs(vehicle_no, user_id, first_name, last_name, mobile_no, remarks, in_date, in_time, out_date, out_time)
+//        vehicle_visitor_logs(vehicle_no, first_name, last_name, mobile_no, remarks, in_date, in_time, out_date, out_time)
 
-@Entity
-@Setter
-@Getter
-@Builder
 @AllArgsConstructor
+@Setter
+@Builder
+@Entity
+@Getter
 @NoArgsConstructor
-public class VehicleUserLog {
+public class VehicleVisitorLog {
 
     @Id
-    private long VehicleUserLogId;
+    @OneToOne
+    private VisitorLog visitorLog;
 
     private String vehicleNo;
 
@@ -43,5 +40,4 @@ public class VehicleUserLog {
     private LocalDate outDate;
 
     private LocalTime outTime;
-
 }

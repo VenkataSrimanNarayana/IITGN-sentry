@@ -2,6 +2,7 @@ package com.iitgn.entryexit.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,29 +13,20 @@ import lombok.Getter;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-// Vehicle Visitor Logs Table:
-// vehicle_visitor_logs(vehicle_no, user_id, first_name, last_name, mobile_no, remarks, in_date, in_time, out_date, out_time)
-
-@Entity
-@Setter
-@Getter
-@Builder
 @AllArgsConstructor
+@Builder
+@Getter
+@Setter
 @NoArgsConstructor
-public class VehicleUserLog {
+@Entity
+public class VisitorLog {
 
     @Id
-    private long VehicleUserLogId;
+    private long visitorLongId;
+
+    private String purpose;
 
     private String vehicleNo;
-
-    private String firstName;
-
-    private String lastName;
-
-    private long mobileNo;
-
-    private String remarks;
 
     private LocalDate inDate;
 
@@ -44,4 +36,7 @@ public class VehicleUserLog {
 
     private LocalTime outTime;
 
+    @OneToOne
+    @JoinColumn(name = "visitor_id")
+    private Visitor visitor;
 }

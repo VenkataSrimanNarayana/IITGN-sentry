@@ -68,7 +68,6 @@ public class UserController {
         }
 
         // TODO : Send email to user with new password
-
         String newPassword = emailService.generateCommonLangPassword();
         simpleMailMessage.setSubject("Password Reset");
         simpleMailMessage.setText("Your new password is " + newPassword);
@@ -213,7 +212,6 @@ public class UserController {
         userService.raiseRequest(id, pendingRequestDto);
         return new ResponseEntity<>(new SingleLineResponse("Request raised successfully"), HttpStatus.OK);
     }
-
 
 
 }
