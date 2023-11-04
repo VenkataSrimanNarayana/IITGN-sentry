@@ -1,7 +1,7 @@
 package com.iitgn.entryexit.services;
 
 import com.iitgn.entryexit.entities.User;
-import com.iitgn.entryexit.models.requestdto.PendingRequestDto;
+import com.iitgn.entryexit.models.requestdto.PendingRequestSelfDto;
 import com.iitgn.entryexit.models.requestdto.SignUpDto;
 
 import java.util.List;
@@ -22,5 +22,5 @@ public interface UserService {
 
     void deleteUserById(User user);
 
-    void raiseRequest(Long id, PendingRequestDto pendingRequestDto);
+    void raiseRequest(Long id, PendingRequestSelfDto pendingRequestSelfDto);
 }

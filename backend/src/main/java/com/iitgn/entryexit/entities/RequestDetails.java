@@ -1,10 +1,9 @@
 package com.iitgn.entryexit.entities;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.*;
 
 
@@ -21,7 +20,12 @@ import lombok.*;
 public class RequestDetails {
 
     @Id
-    @JoinColumn
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long requestId;
+
+
+    @JsonIgnore
+    @JoinColumn(name = "request_id")
     @OneToOne
     private PendingRequest pendingRequest;
 

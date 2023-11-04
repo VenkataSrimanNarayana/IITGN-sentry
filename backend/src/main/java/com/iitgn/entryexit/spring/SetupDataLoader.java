@@ -1,17 +1,21 @@
 package com.iitgn.entryexit.spring;
 
 import com.iitgn.entryexit.entities.*;
+import com.iitgn.entryexit.repositories.PendingRequestRepository;
 import com.iitgn.entryexit.repositories.PrivilegeRepository;
 import com.iitgn.entryexit.repositories.RoleRepository;
 import com.iitgn.entryexit.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cglib.core.Local;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 
 // READ_SINGLE_USER_PRIVILEGE
@@ -38,6 +42,8 @@ public class SetupDataLoader implements
     private final PrivilegeRepository privilegeRepository;
 
     private final PasswordEncoder passwordEncoder;
+
+    private final PendingRequestRepository pendingRequestRepository;
 
     @Override
     @Transactional
@@ -93,8 +99,8 @@ public class SetupDataLoader implements
 
 
         // Set Room
-        Room room = Room.builder().blockName("H").roomNo(102).build();
-        user.setRoom(room);
+//        Room room = Room.builder().blockName("H").roomNo(102).build();
+//        user.setRoom(room);
 
         // Set Contact Numbers
         ContactNumber contactNumber = ContactNumber.builder().phone("9434614611").type("personal").build();
@@ -102,9 +108,29 @@ public class SetupDataLoader implements
         contactNumbers.add(contactNumber);
         user.setContactNumbers(contactNumbers);
 
+        // give a localdate time object
+
+
+        PendingRequest pendingRequest1 = PendingRequest.builder().reason("i am going").validUptoTime(LocalTime.now()).
+                validUptoDate(LocalDate.now()).validFromDate(LocalDate.now()).validFromTime(LocalTime.now()).requestType("self").build();
+
+        PendingRequest pendingRequest2 = PendingRequest.builder().reason("i am going").validUptoTime(LocalTime.now()).
+                validUptoDate(LocalDate.now()).validFromDate(LocalDate.now()).validFromTime(LocalTime.now()).requestType("self").build();
+
         // Set Role
         user.setRole(adminRole.orElse(null));
+
+        // Set Pending Request
+
+        // save the user
         userRepository.save(user);
+
+        pendingRequest1.setUser(user);
+        pendingRequest2.setUser(user);
+
+        pendingRequestRepository.save(pendingRequest1);
+        pendingRequestRepository.save(pendingRequest2);
+
         alreadySetup = true;
     }
 

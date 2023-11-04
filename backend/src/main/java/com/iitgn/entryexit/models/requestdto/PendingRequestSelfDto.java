@@ -7,15 +7,14 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Data
-public class PendingRequestDto {
-//    @JsonFormat(pattern="HH:mm")
+public class PendingRequestSelfDto {
+    @JsonFormat(pattern="HH:mm")
     private LocalTime validFromTime;
     @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate validFromDate;
-//    @JsonFormat(pattern="HH:mm")
+    @JsonFormat(pattern="HH:mm")
     private LocalTime validUptoTime;
     @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate validUptoDate;
-    private String requestType;
     private String reason;
 }

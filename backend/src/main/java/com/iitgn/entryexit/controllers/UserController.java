@@ -5,7 +5,7 @@ import com.iitgn.entryexit.entities.Email;
 import com.iitgn.entryexit.entities.User;
 import com.iitgn.entryexit.models.requestdto.NewRoleDto;
 import com.iitgn.entryexit.models.requestdto.PasswordChangeRequestDto;
-import com.iitgn.entryexit.models.requestdto.PendingRequestDto;
+import com.iitgn.entryexit.models.requestdto.PendingRequestSelfDto;
 import com.iitgn.entryexit.models.requestdto.SignUpDto;
 import com.iitgn.entryexit.models.responses.SingleLineResponse;
 import com.iitgn.entryexit.services.EmailService;
@@ -207,28 +207,16 @@ public class UserController {
     }
 
 //    @PreAuthorize("hasAuthority('RAISE_REQUEST_PRIVILEGE')")
-    @PostMapping("/api/users/{id}/request")
-    public ResponseEntity<SingleLineResponse> raiseRequest(@PathVariable Long id, @RequestBody PendingRequestDto pendingRequestDto) {
-        userService.raiseRequest(id, pendingRequestDto);
+    @PostMapping("/api/users/{id}/raise-request")
+    public ResponseEntity<SingleLineResponse> raiseRequest(@PathVariable Long id, @RequestBody PendingRequestSelfDto pendingRequestSelfDto) {
+        userService.raiseRequest(id, pendingRequestSelfDto);
         return new ResponseEntity<>(new SingleLineResponse("Request raised successfully"), HttpStatus.OK);
     }
 
 
+
 }
 
-
-
-
-//    @PreAuthorize("hasAuthority('UPDATE_USER_PRIVILEGE')")
-//    @PutMapping("/api/users/{id}/role")
-//    public ResponseEntity<User> updateUserRoleById(@PathVariable Long id, @RequestBody Role role) {
-//        Optional<User> userTemp = userService.getUserById(id);
-//        if(userTemp.isEmpty()){
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//        userService.updateUserRoleById(id, role);
-//        return new ResponseEntity<>(userTemp.get(), HttpStatus.OK);
-//    }
 
 
 

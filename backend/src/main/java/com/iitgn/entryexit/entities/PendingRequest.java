@@ -1,6 +1,7 @@
 package com.iitgn.entryexit.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,5 +42,11 @@ public class PendingRequest {
 
     private String reason;
 
-//    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    private RequestDetails requestDetails;
+
+    @JsonIgnore
+    @ManyToOne
+    private User user;
+
 }

@@ -64,10 +64,8 @@ public class User implements UserDetails {
     private Set<UserLog> userLogs;
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private Set<PendingRequest> pendingRequest;
-
 
     @JsonBackReference
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
@@ -81,14 +79,14 @@ public class User implements UserDetails {
 
 
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
-    @JoinColumns(
-            {
-                    @JoinColumn(name = "blockName", referencedColumnName = "blockName"),
-                    @JoinColumn(name = "roomNo", referencedColumnName = "roomNo")
-            }
-    )
-    private Room room;
+//    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
+//    @JoinColumns(
+//            {
+//                    @JoinColumn(name = "blockName", referencedColumnName = "blockName"),
+//                    @JoinColumn(name = "roomNo", referencedColumnName = "roomNo")
+//            }
+//    )
+//    private Room room;
 
 
     @Override
