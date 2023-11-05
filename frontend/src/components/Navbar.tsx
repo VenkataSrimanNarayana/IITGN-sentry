@@ -8,19 +8,15 @@ import UserAvatar from "@/components/UserAvatar";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Menu, MenuItem } from "@mui/material";
 import { signOut } from "next-auth/react";
-import {
-    Container,
-    Typography,
-    Toolbar,
-    IconButton,
-    Button,
-    Link,
-} from "@mui/material";
+import { Container, Typography, Toolbar, IconButton } from "@mui/material";
+import { useRouter } from "next/navigation";
+import SettingsIcon from "@mui/icons-material/Settings";
 import MenuIcon from "@mui/icons-material/Menu";
 
 export default function Navbar({ links }: { links: LinkName[] }) {
     const [navigationMenuState, setNavigationMenuState] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
+    const router = useRouter();
 
     const handleAvatarClick = (event: any) => {
         setAnchorEl(event.currentTarget);
@@ -31,12 +27,6 @@ export default function Navbar({ links }: { links: LinkName[] }) {
     };
 
     const handleLogout = () => {
-        // Implement your logout logic here
-        // For example, clear the user's session or access token
-        // and navigate them to the login page.
-        // You may use a library like react-router-dom for navigation.
-
-        // After the user is logged out, close the menu
         signOut();
     };
 
@@ -90,6 +80,16 @@ export default function Navbar({ links }: { links: LinkName[] }) {
                         open={Boolean(anchorEl)}
                         onClose={handleMenuClose}
                     >
+                        <MenuItem
+                            onClick={() => {
+                                router.push("/settings");
+                            }}
+                        >
+                            <IconButton color="inherit">
+                                <SettingsIcon />
+                            </IconButton>
+                            Settings
+                        </MenuItem>
                         <MenuItem onClick={handleLogout}>
                             <IconButton color="inherit">
                                 <LogoutIcon />

@@ -3,8 +3,9 @@ import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { CircularProgress } from "@mui/material";
 import { Container } from "@mui/material";
+import PersonalDetailsWidget from "@/components/PersonalDetailsWidget";
 export default function Home() {
-    const { data: session, status } = useSession();
+    const { status } = useSession();
     if (status === "loading") {
         return (
             <>
@@ -23,5 +24,5 @@ export default function Home() {
     } else if (status === "unauthenticated") {
         redirect("/login");
     }
-    return <div>Success</div>;
+    return <PersonalDetailsWidget />;
 }

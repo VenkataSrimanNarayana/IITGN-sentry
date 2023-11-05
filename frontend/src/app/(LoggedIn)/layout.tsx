@@ -1,5 +1,5 @@
 import Navbar from "@/components/Navbar";
-import { Container, Box } from "@mui/material";
+import { Container } from "@mui/material";
 import Provider from "@/components/Provider";
 import "public/global.css";
 
