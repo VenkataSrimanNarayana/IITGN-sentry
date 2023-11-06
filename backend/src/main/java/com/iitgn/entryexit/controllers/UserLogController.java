@@ -96,11 +96,8 @@ public class UserLogController {
         return ResponseEntity.ok().body(userLogs);
     }
 
-    @GetMapping("/user/{id}/all")
-    public ResponseEntity<List<UserLog>> getAllLogsOfUser(@PathVariable Long id){
-        List<UserLog> userLogs = userLogService.getAllLogsOfUser(id);
-        return ResponseEntity.ok().body(userLogs);
-    }
+
+
 
 
 

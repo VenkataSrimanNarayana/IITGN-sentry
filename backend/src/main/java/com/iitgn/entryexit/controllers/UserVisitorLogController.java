@@ -8,13 +8,13 @@ import com.iitgn.entryexit.services.PendingRequestService;
 import com.iitgn.entryexit.services.UserVisitorLogService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/user-visitor-log")
@@ -24,14 +24,26 @@ public class UserVisitorLogController {
     private final UserVisitorLogService userVisitorLogService;
     private final PendingRequestService pendingRequestService;
 
+    public Long getCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return Long.parseLong(auth.getName());
+    }
+
     public boolean checkValidity(LocalTime validFromTime, LocalDate validFromDate, LocalTime validUptoTime, LocalDate validUptoDate){
         LocalTime currentTime = LocalTime.now();
+        LocalDate currentDate = LocalDate.now();
         // compare current time with validFromTime and validFromDate
-        if(currentTime.isBefore(validFromTime) || LocalDate.now().isBefore(validFromDate)){
-            return false;
+        
+        
+        if(LocalDate.now().isBefore(validFromDate) && LocalTime.now().isBefore(validFromTime)){
+            return true;
         }
         // compare current time with validUptoTime and validUptoDate
-        return !currentTime.isAfter(validUptoTime) && !LocalDate.now().isAfter(validUptoDate);
+        if(LocalDate.now().isAfter(validUptoDate) && LocalTime.now().isAfter(validUptoTime)){
+            return true;
+        }
+
+        return false;
     }
 
 
@@ -49,6 +61,7 @@ public class UserVisitorLogController {
 
 
         boolean isEntry = pendingRequest.isEntry();
+
         if(isEntry){
             RequestDetails requestDetails = pendingRequest.getRequestDetails();
 
@@ -72,6 +85,8 @@ public class UserVisitorLogController {
 
             pendingRequest.setEntry(false);
             pendingRequest.setUserVisitorLog(userVisitorLog);
+            userVisitorLog.setUser(pendingRequest.getUser());
+            userVisitorLogService.saveUserVisitorLog(userVisitorLog);
             pendingRequestService.updateRequest(pendingRequest);
             return ResponseEntity.ok().body(new SingleLineResponse("Request in-log successful"));
         }
@@ -84,6 +99,53 @@ public class UserVisitorLogController {
             return ResponseEntity.ok().body(new SingleLineResponse("Request out-log successful"));
         }
     }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<SingleLineResponse> deleteRequest(@PathVariable Long id) {
+        UserVisitorLog userVisitorLog = userVisitorLogService.findById(id);
+        if (userVisitorLog == null) {
+            return ResponseEntity.badRequest().body(new SingleLineResponse("UserVisitorLog id not Found"));
+        }
+        userVisitorLogService.deleteUserVisitorLog(id);
+        return ResponseEntity.ok().body(new SingleLineResponse("UserVisitorLog deleted successfully"));
+    }
+
+    //delete all
+    @DeleteMapping("/all")
+    public ResponseEntity<SingleLineResponse> deleteAllUserVisitorLogs() {
+        userVisitorLogService.deleteAllUserVisitorLogs();
+        return ResponseEntity.ok().body(new SingleLineResponse("All UserVisitorLogs deleted successfully"));
+    }
+
+
+
+
+
+    //get all the userVisitorLogs by user id
+    @GetMapping("/user/all")
+    public ResponseEntity<List<UserVisitorLog>> getUserVisitorLogsByUserId() {
+        Long id = getCurrentUser();
+        List<UserVisitorLog> userVisitorLogs = userVisitorLogService.findUserVisitorLogByUserId(id);
+        if (userVisitorLogs == null) {
+            return ResponseEntity.badRequest().body(null);
+        }
+        return ResponseEntity.ok().body(userVisitorLogs);
+    }
+
+    //get mapping to get all user_visitor_logs
+    @GetMapping("/all")
+    public ResponseEntity<List<UserVisitorLog>> getAllUserVisitorLogs() {
+        List<UserVisitorLog> userVisitorLogs = userVisitorLogService.findAllUserVisitorLogs();
+        if (userVisitorLogs == null) {
+            return ResponseEntity.badRequest().body(null);
+        }
+        return ResponseEntity.ok().body(userVisitorLogs);
+    }
+
+
+
+
 
 
 }

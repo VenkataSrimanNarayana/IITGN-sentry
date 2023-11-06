@@ -37,6 +37,8 @@ public class UserController {
         return Long.parseLong(auth.getName());
     }
 
+
+
     @PreAuthorize("hasAuthority('READ_USERS_PRIVILEGE')")
     @GetMapping("/api/users/all")
     public ResponseEntity<List<User>> getAllUsers(@RequestParam int offset, @RequestParam int limit) {

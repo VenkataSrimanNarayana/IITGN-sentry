@@ -3,6 +3,7 @@ package com.iitgn.entryexit.entities;
 // vehicle_visitor_logs(vehicle_no, visitor_id, first_name, last_name, mobile_no, remarks, in_date, in_time, out_date, out_time)
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -58,5 +59,9 @@ public class UserVisitorLog {
     @JsonFormat(pattern="HH:mm")
     private LocalTime outTime;
 
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "user_id")
+    private User user;
 
 }
