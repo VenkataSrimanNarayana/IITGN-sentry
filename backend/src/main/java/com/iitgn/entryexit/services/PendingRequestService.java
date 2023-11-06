@@ -10,8 +10,14 @@ public interface PendingRequestService {
 
     public void raiseRequestSelf(Long id, PendingRequestSelfDto pendingRequestSelfDto);
 
-    public List<PendingRequest> findAllPendingRequests();
+    public List<PendingRequest> findAllPendingRequests(int offset, int limit);
 
     void raiseRequestOther(Long id, PendingRequestOtherDto requestOtherDto);
+
+    void deleteRequest(Long requestId);
+
+    List<PendingRequest> findPendingRequestByUserId(Long id);
+
+    PendingRequest findById(Long requestId);
 }
 

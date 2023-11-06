@@ -23,12 +23,6 @@ public class RequestDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long requestId;
 
-
-    @JsonIgnore
-    @JoinColumn(name = "request_id")
-    @OneToOne
-    private PendingRequest pendingRequest;
-
     private String firstName;
 
     private String lastName;
@@ -50,4 +44,9 @@ public class RequestDetails {
     private String mobileNo;
 
     private String vehicleNo;
+
+    @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "pending_request_id")
+    private PendingRequest pendingRequest;
 }

@@ -5,15 +5,13 @@ import com.iitgn.entryexit.models.requestdto.LoginDto;
 import com.iitgn.entryexit.models.requestdto.SignUpDto;
 import com.iitgn.entryexit.services.AuthService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
-
-// open endpoints, anyone can access these endpoints
+/* Open Endpoints */
 
 @RestController
 @RequiredArgsConstructor
@@ -22,6 +20,7 @@ public class AuthController {
 
     private final AuthService authService;
 
+    // login endpoint
     @PostMapping("/login")
     public ResponseEntity<JWTAuthResponse> authenticate(@RequestBody LoginDto loginDto){
         String token = authService.login(loginDto);
@@ -30,6 +29,7 @@ public class AuthController {
         return ResponseEntity.ok(jwtAuthResponse);
     }
 
+    // signup endpoint
     @PostMapping("/signup")
     public ResponseEntity<String> registerUser(@RequestBody SignUpDto signUpDto){
         String response = authService.userSignup(signUpDto);

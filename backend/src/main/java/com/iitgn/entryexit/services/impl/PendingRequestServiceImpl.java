@@ -10,6 +10,7 @@ import com.iitgn.entryexit.repositories.RequestDetailsRepository;
 import com.iitgn.entryexit.repositories.UserRepository;
 import com.iitgn.entryexit.services.PendingRequestService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,15 +34,11 @@ public class PendingRequestServiceImpl implements PendingRequestService {
                     .validUptoDate(pendingRequestSelfDto.getValidUptoDate())
                     .validUptoTime(pendingRequestSelfDto.getValidUptoTime())
                     .reason(pendingRequestSelfDto.getReason())
+                    .requestType("self")
                     .build();
             pendingRequest.setUser(user.get());
             pendingRequestRepository.save(pendingRequest);
         }
-    }
-
-    @Override
-    public List<PendingRequest> findAllPendingRequests() {
-        return pendingRequestRepository.findAll();
     }
 
     @Override
@@ -55,8 +52,8 @@ public class PendingRequestServiceImpl implements PendingRequestService {
                     .validUptoDate(requestOtherDto.getValidUptoDate())
                     .validUptoTime(requestOtherDto.getValidUptoTime())
                     .reason(requestOtherDto.getReason())
+                    .requestType("other")
                     .build();
-
 
             RequestDetails requestDetails = RequestDetails.builder()
                     .firstName(requestOtherDto.getFirstName())
@@ -72,14 +69,41 @@ public class PendingRequestServiceImpl implements PendingRequestService {
                     .vehicleNo(requestOtherDto.getVehicleNo())
                     .build();
             pendingRequest.setUser(user.get());
-
-//            requestDetails.setPendingRequest(pendingRequest);
-//            requestDetailsRepository.save(requestDetails);
-            pendingRequest.setRequestDetails(requestDetails);
             pendingRequestRepository.save(pendingRequest);
-
+            requestDetails.setPendingRequest(pendingRequest);
+            requestDetailsRepository.save(requestDetails);
         }
     }
+
+    @Override
+    public void deleteRequest(Long requestId) {
+        pendingRequestRepository.deleteById(requestId);
+    }
+
+    @Override
+    public List<PendingRequest> findAllPendingRequests(int offset, int limit) {
+        return pendingRequestRepository.findAll(PageRequest.of(offset/limit, limit)).getContent();
+    }
+
+    @Override
+    public List<PendingRequest> findPendingRequestByUserId(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        if(user.isPresent()){
+            System.out.println(user.get().getPendingRequest());
+            return pendingRequestRepository.findByUser(user.get());
+        }
+        return List.of();
+    }
+
+    @Override
+    public PendingRequest findById(Long requestId) {
+        if(pendingRequestRepository.findById(requestId).isPresent()){
+            return pendingRequestRepository.findById(requestId).get();
+        }
+        return null;
+    }
+
+
 }
 
 

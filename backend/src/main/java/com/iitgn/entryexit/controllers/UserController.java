@@ -5,13 +5,11 @@ import com.iitgn.entryexit.entities.Email;
 import com.iitgn.entryexit.entities.User;
 import com.iitgn.entryexit.models.requestdto.NewRoleDto;
 import com.iitgn.entryexit.models.requestdto.PasswordChangeRequestDto;
-import com.iitgn.entryexit.models.requestdto.PendingRequestSelfDto;
 import com.iitgn.entryexit.models.requestdto.SignUpDto;
 import com.iitgn.entryexit.models.responses.SingleLineResponse;
 import com.iitgn.entryexit.services.EmailService;
 import com.iitgn.entryexit.services.UserService;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
@@ -21,8 +19,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,15 +33,21 @@ public class UserController {
     private final SimpleMailMessage simpleMailMessage;
     private final EmailService emailService;
 
+    public Long getCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return Long.parseLong(auth.getName());
+    }
+
     @PreAuthorize("hasAuthority('READ_USERS_PRIVILEGE')")
-    @GetMapping("/api/users")
+    @GetMapping("/api/users/all")
     public ResponseEntity<List<User>> getAllUsers(@RequestParam int offset, @RequestParam int limit) {
         List<User> users = userService.getAllUsers(offset, limit);
-        if(users.isEmpty()){
+        if (users.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
+
 
     @PreAuthorize("hasAuthority('READ_SINGLE_USER_PRIVILEGE')")
     @GetMapping("/api/users/{id}/details")
@@ -50,24 +56,21 @@ public class UserController {
         return user.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PreAuthorize("hasAuthority('UPDATE_USER_PRIVILEGE')")
-    @GetMapping("/api/users/{id}/reset-password")
-    public ResponseEntity<SingleLineResponse> resetPasswordById(@PathVariable Long id) {
-
-
+    @PreAuthorize("hasAuthority('RESET_PASSWORD_PRIVILEGE')")
+    @GetMapping("/api/users/reset-password")
+    public ResponseEntity<SingleLineResponse> resetPasswordById() {
+        Long id = getCurrentUser();
         User user = userService.getUserById(id).orElse(null);
-        if(user == null){
+        if (user == null) {
             return new ResponseEntity<>(new SingleLineResponse("User not found"), HttpStatus.NOT_FOUND);
         }
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
 
-        if(!currentPrincipalName.equals(id.toString())){
+        if (!currentPrincipalName.equals(id.toString())) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
-        // TODO : Send email to user with new password
         String newPassword = emailService.generateCommonLangPassword();
         simpleMailMessage.setSubject("Password Reset");
         simpleMailMessage.setText("Your new password is " + newPassword);
@@ -82,41 +85,30 @@ public class UserController {
         return new ResponseEntity<>(new SingleLineResponse("Password reset successfully"), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('READ_SELF_PRIVILEGE')")
-    @GetMapping("/api/users/{id}")
-    public ResponseEntity<User> getSelfById(@PathVariable Long id) {
-        // get the current logged in user
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalName = authentication.getName();
 
-        if(!currentPrincipalName.equals(id.toString())){
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-
+    @PreAuthorize("hasAuthority('READ_SELF_USER_PRIVILEGE')")
+    @GetMapping("/api/users")
+    public ResponseEntity<User> getSelfById() {
+        Long id = getCurrentUser();
         Optional<User> user = userService.getUserById(id);
         return user.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PreAuthorize("hasAuthority('CHANGE_PASSWORD_PRIVILEGE')")
-    @PutMapping("/api/users/{id}/password")
-    public ResponseEntity<SingleLineResponse> changePasswordById(@PathVariable Long id, @RequestBody PasswordChangeRequestDto passwordChangeRequestDto) {
+    @PutMapping("/api/users/password")
+    public ResponseEntity<SingleLineResponse> changePasswordById(@RequestBody PasswordChangeRequestDto passwordChangeRequestDto) {
         // encode the password using bcrypt
-
+        Long id = getCurrentUser();
         User user = userService.getUserById(id).orElse(null);
-        if(user == null){
+        if (user == null) {
             return new ResponseEntity<>(new SingleLineResponse("User not found"), HttpStatus.NOT_FOUND);
         }
 
-//        Role role = user.getRole();
-//        if(role.getName().equals("ROLE_ADMIN")){
-//            return new ResponseEntity<>(new SingleLineResponse("Admin password cannot be changed"), HttpStatus.BAD_REQUEST);
-//        }
-
-        if(!passwordEncoder.matches(passwordChangeRequestDto.getOldPassword(), user.getPassword())){
+        if (!passwordEncoder.matches(passwordChangeRequestDto.getOldPassword(), user.getPassword())) {
             return new ResponseEntity<>(new SingleLineResponse("Old password is incorrect"), HttpStatus.BAD_REQUEST);
         }
 
-        if(passwordChangeRequestDto.getNewPassword().equals(passwordChangeRequestDto.getOldPassword())){
+        if (passwordChangeRequestDto.getNewPassword().equals(passwordChangeRequestDto.getOldPassword())) {
             return new ResponseEntity<>(new SingleLineResponse("New password cannot be same as old password"), HttpStatus.BAD_REQUEST);
         }
 
@@ -144,7 +136,7 @@ public class UserController {
             return new ResponseEntity<>(new SingleLineResponse("Password must contain at least one special character"), HttpStatus.BAD_REQUEST);
         }
 
-        if(passwordChangeRequestDto.getNewPassword().contains(" ")){
+        if (passwordChangeRequestDto.getNewPassword().contains(" ")) {
             return new ResponseEntity<>(new SingleLineResponse("Password cannot contain spaces"), HttpStatus.BAD_REQUEST);
         }
 
@@ -156,7 +148,7 @@ public class UserController {
             return new ResponseEntity<>(new SingleLineResponse("New password cannot contain first name"), HttpStatus.BAD_REQUEST);
         }
 
-        if(passwordChangeRequestDto.getNewPassword().contains(user.getLastName())){
+        if (passwordChangeRequestDto.getNewPassword().contains(user.getLastName())) {
             return new ResponseEntity<>(new SingleLineResponse("New password cannot contain last name"), HttpStatus.BAD_REQUEST);
         }
 
@@ -170,7 +162,7 @@ public class UserController {
     @DeleteMapping("/api/users/{id}")
     public ResponseEntity<SingleLineResponse> deleteUserById(@PathVariable Long id) {
         User user = userService.getUserById(id).orElse(null);
-        if(user == null){
+        if (user == null) {
             return new ResponseEntity<>(new SingleLineResponse("User not found"), HttpStatus.NOT_FOUND);
         }
         userService.deleteUserById(user);
@@ -183,7 +175,7 @@ public class UserController {
     @PutMapping("/api/users/{id}")
     public ResponseEntity<User> updateUserById(@PathVariable Long id, @RequestBody SignUpDto signUpDto) {
         Optional<User> userTemp = userService.getUserById(id);
-        if(userTemp.isEmpty()){
+        if (userTemp.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         userService.updateUserById(id, signUpDto);
@@ -196,24 +188,15 @@ public class UserController {
     public ResponseEntity<SingleLineResponse> updateUserRoleById(@PathVariable Long id, @RequestBody NewRoleDto newRoleDto) {
 
         Optional<User> userTemp = userService.getUserById(id);
-        if(userTemp.isEmpty()){
+        if (userTemp.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        if(userService.changeRoleById(id, newRoleDto.getNewRole())){
+        if (userService.changeRoleById(id, newRoleDto.getNewRole())) {
             return new ResponseEntity<>(new SingleLineResponse("Role changed successfully"), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
-
-//    @PreAuthorize("hasAuthority('RAISE_REQUEST_PRIVILEGE')")
-    @PostMapping("/api/users/{id}/raise-request")
-    public ResponseEntity<SingleLineResponse> raiseRequest(@PathVariable Long id, @RequestBody PendingRequestSelfDto pendingRequestSelfDto) {
-        userService.raiseRequest(id, pendingRequestSelfDto);
-        return new ResponseEntity<>(new SingleLineResponse("Request raised successfully"), HttpStatus.OK);
-    }
-
-
 
 }
 

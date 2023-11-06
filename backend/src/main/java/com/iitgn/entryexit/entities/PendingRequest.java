@@ -42,11 +42,10 @@ public class PendingRequest {
 
     private String reason;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private RequestDetails requestDetails;
-
     @JsonIgnore
     @ManyToOne
     private User user;
 
+    @OneToOne(mappedBy = "pendingRequest", cascade = CascadeType.ALL)
+    private RequestDetails requestDetails;
 }
