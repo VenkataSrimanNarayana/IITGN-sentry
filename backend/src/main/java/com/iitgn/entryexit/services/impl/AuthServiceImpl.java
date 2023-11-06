@@ -66,7 +66,7 @@ public class AuthServiceImpl implements AuthService {
                 houseNo(signUpDto.getHouseNo()).
                 area(signUpDto.getArea()).
                 landmark(signUpDto.getLandmark()).
-                pincode(signUpDto.getPincode()).
+                pinCode(signUpDto.getPincode()).
                 townCity(signUpDto.getTownCity()).
                 state(signUpDto.getState()).
                 country(signUpDto.getCountry()).

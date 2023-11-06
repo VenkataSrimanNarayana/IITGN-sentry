@@ -107,6 +107,11 @@ public class PendingRequestServiceImpl implements PendingRequestService {
         return null;
     }
 
+    @Override
+    public void updateRequest(PendingRequest pendingRequest) {
+        pendingRequestRepository.save(pendingRequest);
+    }
+
 
 }
 

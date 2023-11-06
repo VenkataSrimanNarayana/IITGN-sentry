@@ -19,5 +19,7 @@ public interface PendingRequestService {
     List<PendingRequest> findPendingRequestByUserId(Long id);
 
     PendingRequest findById(Long requestId);
+
+    void updateRequest(PendingRequest pendingRequest);
 }
 

@@ -39,7 +39,7 @@ public class User implements UserDetails {
 
     private String landmark;
 
-    private int pincode;
+    private int pinCode;
 
     private String townCity;
 

@@ -53,7 +53,7 @@ public class SetupDataLoader implements
             return;
 
         Privilege privilege1 = createPrivilegeIfNotFound("READ_SINGLE_USER_PRIVILEGE");
-        Privilege privilege2 = createPrivilegeIfNotFound("READ_SELF_PRIVILEGE");
+        Privilege privilege2 = createPrivilegeIfNotFound("READ_SELF_USER_PRIVILEGE");
         Privilege privilege3 = createPrivilegeIfNotFound("CHANGE_PASSWORD_PRIVILEGE");
         Privilege privilege4 = createPrivilegeIfNotFound("DELETE_USER_PRIVILEGE");
         Privilege privilege5 = createPrivilegeIfNotFound("READ_USERS_PRIVILEGE");
@@ -75,7 +75,6 @@ public class SetupDataLoader implements
         Optional<Role> adminRole = roleRepository.findByName("ROLE_ADMIN");
 
 
-
         User user = User.builder().id(20110242)
                 .firstName("Zeeshan Snehil")
                 .lastName("Bhagat")
@@ -85,7 +84,7 @@ public class SetupDataLoader implements
                 .houseNo("H-102")
                 .country("India")
                 .landmark("IIT Gandhinagar")
-                .pincode(382355)
+                .pinCode(382355)
                 .state("Gujarat")
                 .townCity("Gandhinagar")
                 .build();

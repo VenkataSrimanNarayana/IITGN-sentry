@@ -2,8 +2,12 @@ package com.iitgn.entryexit.entities;
 
 // vehicle_visitor_logs(vehicle_no, visitor_id, first_name, last_name, mobile_no, remarks, in_date, in_time, out_date, out_time)
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Setter
@@ -11,7 +15,12 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Table()
 public class UserVisitorLog {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long userVisitorLogId;
 
     private String vehicleNo;
 
@@ -19,15 +28,35 @@ public class UserVisitorLog {
 
     private String lastName;
 
-    private long mobileNo;
-
-    private String remarks;
+    private String mobileNo;
 
     private String purpose;
 
-    private long visitorId;
+    private String houseNo;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long userVisitorLogId;
+    private String area;
+
+    private String landmark;
+
+    private int pinCode;
+
+    private String townCity;
+
+    private String state;
+
+    private String country;
+
+    @JsonFormat(pattern="yyyy-MM-dd")
+    private LocalDate inDate;
+
+    @JsonFormat(pattern="yyyy-MM-dd")
+    private LocalDate outDate;
+
+    @JsonFormat(pattern="HH:mm")
+    private LocalTime inTime;
+
+    @JsonFormat(pattern="HH:mm")
+    private LocalTime outTime;
+
+
 }

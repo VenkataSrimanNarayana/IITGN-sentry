@@ -48,13 +48,13 @@ public class PendingRequest {
 
     private String vehicleNo;
 
-//    @OneToOne
-//    @JoinColumn(name = "user_visitor_log_id")
-//    private UserVisitorLog userVisitorLog;
+    @OneToOne
+    @JoinColumn(name = "user_visitor_log_id")
+    private UserVisitorLog userVisitorLog;
 
-//    @OneToOne
-//    @JoinColumn(name = "user_vehicle_log_id")
-//    private UserVehicleLog userVehicleLog;
+    @OneToOne
+    @JoinColumn(name = "user_vehicle_log_id")
+    private UserVehicleLog userVehicleLog;
 
     private boolean isEntry;
 

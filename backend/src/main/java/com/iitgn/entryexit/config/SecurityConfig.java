@@ -1,7 +1,6 @@
 package com.iitgn.entryexit.config;
 
 import com.iitgn.entryexit.security.JwtAuthenticationFilter;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -65,14 +64,6 @@ public class SecurityConfig {
                                 .requestMatchers("/webjars/**").permitAll()
                                 .anyRequest().authenticated()
                 ).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-        http.exceptionHandling()
-                .authenticationEntryPoint(
-                        (request, response, ex) -> response.sendError(
-                                HttpServletResponse.SC_UNAUTHORIZED,
-                                ex.getMessage()
-                        )
-                );
 
         http.addFilterBefore(JwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
