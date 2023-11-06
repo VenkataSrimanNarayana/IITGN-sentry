@@ -6,6 +6,7 @@ import com.iitgn.entryexit.models.responses.SingleLineResponse;
 import com.iitgn.entryexit.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,7 @@ public class RoomController {
 
     private final UserService userService;
 
+    @PreAuthorize("hasAuthority('ROOM_PRIVILEGE')")
     @PostMapping("/{id}")
     public ResponseEntity<SingleLineResponse> userRegisterRoom(@PathVariable Long id, @RequestBody Room room){
         Optional<User> user = userService.getUserById(id);
@@ -33,6 +35,7 @@ public class RoomController {
         }
     }
 
+    @PreAuthorize("hasAuthority('ROOM_PRIVILEGE')")
     @GetMapping("/{id}")
     public ResponseEntity<Room> getRoom(@PathVariable Long id){
         Optional<User> user = userService.getUserById(id);
@@ -44,6 +47,7 @@ public class RoomController {
         }
     }
 
+    @PreAuthorize("hasAuthority('ROOM_PRIVILEGE')")
     @DeleteMapping("/{id}")
     public ResponseEntity<SingleLineResponse> deleteRoomAllocation(@PathVariable Long id){
         Optional<User> user = userService.getUserById(id);

@@ -1,7 +1,10 @@
 package com.iitgn.entryexit.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -31,9 +34,9 @@ public class UserVehicleLog {
 
     private String lastName;
 
-    private long mobileNo;
+    private String mobileNo;
 
-    private String remarks;
+    private boolean isPickup;
 
     private LocalDate inDate;
 
@@ -42,5 +45,10 @@ public class UserVehicleLog {
     private LocalDate outDate;
 
     private LocalTime outTime;
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "user_id")
+    private User user;
 
 }

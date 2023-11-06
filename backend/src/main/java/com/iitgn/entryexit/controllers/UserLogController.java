@@ -9,6 +9,7 @@ import com.iitgn.entryexit.services.UserLogService;
 import com.iitgn.entryexit.spring.utils.UtilityFunctions;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,7 @@ public class UserLogController {
     private final PendingRequestService pendingRequestService;
     private final UserLogService userLogService;
 
+    @PreAuthorize("hasAuthority('LOG_PRIVILEGE')")
     @PostMapping("/{id}")
     public ResponseEntity<SingleLineResponse> logUser(@PathVariable Long id){
         PendingRequest pendingRequest = pendingRequestService.findById(id);
@@ -77,24 +79,28 @@ public class UserLogController {
         return ResponseEntity.ok().body(new SingleLineResponse("User Logged"));
     }
 
+    @PreAuthorize("hasAuthority('DELETE_LOG_PRIVILEGE')")
     @DeleteMapping("/{id}")
     public ResponseEntity<SingleLineResponse> deleteUserLog(@PathVariable Long id){
         userLogService.deleteUserLog(id);
         return ResponseEntity.ok().body(new SingleLineResponse("User Log Deleted"));
     }
 
+    @PreAuthorize("hasAuthority('READ_LOG_PRIVILEGE')")
     @GetMapping("/all")
     public ResponseEntity<List<UserLog>> getAllLogs(){
         List<UserLog> userLogs = userLogService.getAllLogs();
         return ResponseEntity.ok().body(userLogs);
     }
 
+    @PreAuthorize("hasAuthority('READ_USER_LOG_PRIVILEGE')")
     @GetMapping("/user/all")
     public ResponseEntity<List<UserLog>> getAllLogsOfUser(){
         Long userId = getCurrentUser();
         List<UserLog> userLogs = userLogService.getAllLogsOfUser(userId);
         return ResponseEntity.ok().body(userLogs);
     }
+
 
 
 

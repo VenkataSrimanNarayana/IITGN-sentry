@@ -3,11 +3,14 @@ package com.iitgn.entryexit.services.impl;
 import com.iitgn.entryexit.entities.PendingRequest;
 import com.iitgn.entryexit.entities.RequestDetails;
 import com.iitgn.entryexit.entities.User;
+import com.iitgn.entryexit.entities.VehicleRequestDetails;
 import com.iitgn.entryexit.models.requestdto.PendingRequestOtherDto;
 import com.iitgn.entryexit.models.requestdto.PendingRequestSelfDto;
+import com.iitgn.entryexit.models.requestdto.PendingRequestVehicleDto;
 import com.iitgn.entryexit.repositories.PendingRequestRepository;
 import com.iitgn.entryexit.repositories.RequestDetailsRepository;
 import com.iitgn.entryexit.repositories.UserRepository;
+import com.iitgn.entryexit.repositories.VehicleRequestDetailsRepository;
 import com.iitgn.entryexit.services.PendingRequestService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +26,7 @@ public class PendingRequestServiceImpl implements PendingRequestService {
     private final PendingRequestRepository pendingRequestRepository;
     private final RequestDetailsRepository requestDetailsRepository;
     private final UserRepository userRepository;
+    private final VehicleRequestDetailsRepository VehicleRequestDetailsRepository;
 
     @Override
     public void raiseRequestSelf(Long id, PendingRequestSelfDto pendingRequestSelfDto) {
@@ -44,6 +48,36 @@ public class PendingRequestServiceImpl implements PendingRequestService {
     }
 
     @Override
+    public void raiseRequestVehicle(Long id, PendingRequestVehicleDto requestVehicleDto) {
+        final Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            PendingRequest pendingRequest = PendingRequest.builder()
+                    .validFromDate(requestVehicleDto.getValidFromDate())
+                    .validFromTime(requestVehicleDto.getValidFromTime())
+                    .validUptoDate(requestVehicleDto.getValidUptoDate())
+                    .validUptoTime(requestVehicleDto.getValidUptoTime())
+                    .isEntry(true)
+                    .vehicleNo("taxi")
+                    .reason("taxi")
+                    .requestType("vehicle")
+                    .build();
+
+            VehicleRequestDetails vehicleRequestDetails = VehicleRequestDetails.builder()
+                    .vehicleNo(requestVehicleDto.getVehicleNo())
+                    .firstName(requestVehicleDto.getFirstName())
+                    .lastName(requestVehicleDto.getLastName())
+                    .mobileNo(requestVehicleDto.getMobileNo())
+                    .isPickup(requestVehicleDto.isPickUp())
+                    .build();
+
+            pendingRequest.setUser(user.get());
+            pendingRequestRepository.save(pendingRequest);
+            vehicleRequestDetails.setPendingRequest(pendingRequest);
+            VehicleRequestDetailsRepository.save(vehicleRequestDetails);
+        }
+    }
+
+    @Override
     public void raiseRequestOther(Long id, PendingRequestOtherDto requestOtherDto) {
         final Optional<User> user = userRepository.findById(id);
 
@@ -53,7 +87,7 @@ public class PendingRequestServiceImpl implements PendingRequestService {
                     .validFromTime(requestOtherDto.getValidFromTime())
                     .validUptoDate(requestOtherDto.getValidUptoDate())
                     .vehicleNo(requestOtherDto.getVehicleNo())
-                    .isEntry(requestOtherDto.isEntry())
+                    .isEntry(true)
                     .validUptoTime(requestOtherDto.getValidUptoTime())
                     .reason(requestOtherDto.getReason())
                     .requestType("other")

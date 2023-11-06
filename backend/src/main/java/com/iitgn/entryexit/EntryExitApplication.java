@@ -13,8 +13,6 @@ public class EntryExitApplication {
 
 	@Bean
 	public CommandLineRunner commandLineRunner() {
-		return (args) -> {
-			System.out.println("I am Running Successfully");
-		};
+		return (args) -> System.out.println("I am Running Successfully");
 	}
 }

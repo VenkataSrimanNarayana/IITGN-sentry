@@ -60,6 +60,9 @@ public class PendingRequest {
 
     @OneToOne(mappedBy = "pendingRequest", cascade = CascadeType.ALL)
     private RequestDetails requestDetails;
+
+    @OneToOne(mappedBy = "pendingRequest", cascade = CascadeType.ALL)
+    private VehicleRequestDetails vehicleRequestDetails;
 }
 
 

@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Data
-public class PendingRequestOtherDto {
+public class PendingRequestVehicleDto {
     @JsonFormat(pattern="HH:mm")
     private LocalTime validFromTime;
     @JsonFormat(pattern="yyyy-MM-dd")
@@ -22,21 +22,9 @@ public class PendingRequestOtherDto {
 
     private String lastName;
 
-    private String houseNo;
-
-    private String area;
-
-    private String landmark;
-
-    private int pinCode;
-
-    private String townCity;
-
-    private String state;
-
-    private String country;
-
     private String mobileNo;
 
     private String vehicleNo;
+
+    private boolean isPickUp;
 }

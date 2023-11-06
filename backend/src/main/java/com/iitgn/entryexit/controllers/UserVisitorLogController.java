@@ -8,6 +8,7 @@ import com.iitgn.entryexit.services.PendingRequestService;
 import com.iitgn.entryexit.services.UserVisitorLogService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -30,23 +31,17 @@ public class UserVisitorLogController {
     }
 
     public boolean checkValidity(LocalTime validFromTime, LocalDate validFromDate, LocalTime validUptoTime, LocalDate validUptoDate){
-        LocalTime currentTime = LocalTime.now();
-        LocalDate currentDate = LocalDate.now();
         // compare current time with validFromTime and validFromDate
-        
         
         if(LocalDate.now().isBefore(validFromDate) && LocalTime.now().isBefore(validFromTime)){
             return true;
         }
         // compare current time with validUptoTime and validUptoDate
-        if(LocalDate.now().isAfter(validUptoDate) && LocalTime.now().isAfter(validUptoTime)){
-            return true;
-        }
-
-        return false;
+        return LocalDate.now().isAfter(validUptoDate) && LocalTime.now().isAfter(validUptoTime);
     }
 
 
+    @PreAuthorize("hasAuthority('LOG_PRIVILEGE')")
     @PostMapping("/{id}")
     public ResponseEntity<SingleLineResponse> logUserVisitor(@PathVariable Long id) {
         PendingRequest pendingRequest = pendingRequestService.findById(id);
@@ -101,6 +96,7 @@ public class UserVisitorLogController {
     }
 
 
+    @PreAuthorize("hasAuthority('DELETE_LOG_PRIVILEGE')")
     @DeleteMapping("/{id}")
     public ResponseEntity<SingleLineResponse> deleteRequest(@PathVariable Long id) {
         UserVisitorLog userVisitorLog = userVisitorLogService.findById(id);
@@ -111,7 +107,9 @@ public class UserVisitorLogController {
         return ResponseEntity.ok().body(new SingleLineResponse("UserVisitorLog deleted successfully"));
     }
 
+
     //delete all
+    @PreAuthorize("hasAuthority('DELETE_LOG_PRIVILEGE')")
     @DeleteMapping("/all")
     public ResponseEntity<SingleLineResponse> deleteAllUserVisitorLogs() {
         userVisitorLogService.deleteAllUserVisitorLogs();
@@ -119,10 +117,8 @@ public class UserVisitorLogController {
     }
 
 
-
-
-
     //get all the userVisitorLogs by user id
+    @PreAuthorize("hasAuthority('READ_USER_LOG_PRIVILEGE')")
     @GetMapping("/user/all")
     public ResponseEntity<List<UserVisitorLog>> getUserVisitorLogsByUserId() {
         Long id = getCurrentUser();
@@ -133,7 +129,9 @@ public class UserVisitorLogController {
         return ResponseEntity.ok().body(userVisitorLogs);
     }
 
+
     //get mapping to get all user_visitor_logs
+    @PreAuthorize("hasAuthority('READ_LOG_PRIVILEGE')")
     @GetMapping("/all")
     public ResponseEntity<List<UserVisitorLog>> getAllUserVisitorLogs() {
         List<UserVisitorLog> userVisitorLogs = userVisitorLogService.findAllUserVisitorLogs();
@@ -142,10 +140,5 @@ public class UserVisitorLogController {
         }
         return ResponseEntity.ok().body(userVisitorLogs);
     }
-
-
-
-
-
 
 }

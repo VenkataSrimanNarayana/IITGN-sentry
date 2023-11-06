@@ -39,7 +39,7 @@ public class UserController {
 
 
 
-    @PreAuthorize("hasAuthority('READ_USERS_PRIVILEGE')")
+    @PreAuthorize("hasAuthority('READ_ACCOUNT_PRIVILEGE')")
     @GetMapping("/api/users/all")
     public ResponseEntity<List<User>> getAllUsers(@RequestParam int offset, @RequestParam int limit) {
         List<User> users = userService.getAllUsers(offset, limit);
@@ -50,14 +50,15 @@ public class UserController {
     }
 
 
-    @PreAuthorize("hasAuthority('READ_SINGLE_USER_PRIVILEGE')")
+    @PreAuthorize("hasAuthority('READ_ACCOUNT_PRIVILEGE')")
     @GetMapping("/api/users/{id}/details")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         Optional<User> user = userService.getUserById(id);
         return user.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PreAuthorize("hasAuthority('RESET_PASSWORD_PRIVILEGE')")
+
+    @PreAuthorize("hasAuthority('RESET_USER_PASSWORD_PRIVILEGE')")
     @GetMapping("/api/users/reset-password")
     public ResponseEntity<SingleLineResponse> resetPasswordById() {
         Long id = getCurrentUser();
@@ -87,7 +88,7 @@ public class UserController {
     }
 
 
-    @PreAuthorize("hasAuthority('READ_SELF_USER_PRIVILEGE')")
+    @PreAuthorize("hasAuthority('READ_USER_ACCOUNT_PRIVILEGE')")
     @GetMapping("/api/users")
     public ResponseEntity<User> getSelfById() {
         Long id = getCurrentUser();
@@ -95,7 +96,7 @@ public class UserController {
         return user.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PreAuthorize("hasAuthority('CHANGE_PASSWORD_PRIVILEGE')")
+    @PreAuthorize("hasAuthority('CHANGE_USER_PASSWORD_PRIVILEGE')")
     @PutMapping("/api/users/password")
     public ResponseEntity<SingleLineResponse> changePasswordById(@RequestBody PasswordChangeRequestDto passwordChangeRequestDto) {
         // encode the password using bcrypt
@@ -159,7 +160,7 @@ public class UserController {
     }
 
 
-    @PreAuthorize("hasAuthority('DELETE_USER_PRIVILEGE')")
+    @PreAuthorize("hasAuthority('DELETE_ACCOUNT_PRIVILEGE')")
     @DeleteMapping("/api/users/{id}")
     public ResponseEntity<SingleLineResponse> deleteUserById(@PathVariable Long id) {
         User user = userService.getUserById(id).orElse(null);
