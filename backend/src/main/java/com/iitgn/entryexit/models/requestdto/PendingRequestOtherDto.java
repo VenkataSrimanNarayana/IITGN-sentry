@@ -39,4 +39,6 @@ public class PendingRequestOtherDto {
     private String mobileNo;
 
     private String vehicleNo;
+
+    private boolean isEntry;
 }

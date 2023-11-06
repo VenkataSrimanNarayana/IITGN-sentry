@@ -33,4 +33,8 @@ public class UserLog {
     private String blockName;
 
     private int roomNo;
+
+    @ManyToOne
+    private User user;
+
 }

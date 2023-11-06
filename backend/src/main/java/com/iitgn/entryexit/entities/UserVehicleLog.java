@@ -2,7 +2,6 @@ package com.iitgn.entryexit.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -21,7 +20,7 @@ import java.time.LocalTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class VehicleUserLog {
+public class UserVehicleLog {
 
     @Id
     private long VehicleUserLogId;

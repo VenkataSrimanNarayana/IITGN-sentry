@@ -20,5 +20,9 @@ public class PendingRequestSelfDto {
     @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate validUptoDate;
 
+    private boolean isEntry;
+
+    private String vehicleNo;
+
     private String reason;
 }

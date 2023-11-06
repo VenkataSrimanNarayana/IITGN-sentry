@@ -46,6 +46,23 @@ public class PendingRequest {
     @ManyToOne
     private User user;
 
+    private String vehicleNo;
+
+//    @OneToOne
+//    @JoinColumn(name = "user_visitor_log_id")
+//    private UserVisitorLog userVisitorLog;
+
+//    @OneToOne
+//    @JoinColumn(name = "user_vehicle_log_id")
+//    private UserVehicleLog userVehicleLog;
+
+    private boolean isEntry;
+
     @OneToOne(mappedBy = "pendingRequest", cascade = CascadeType.ALL)
     private RequestDetails requestDetails;
 }
+
+
+
+
+

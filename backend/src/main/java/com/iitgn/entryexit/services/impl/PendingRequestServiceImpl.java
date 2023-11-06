@@ -33,6 +33,8 @@ public class PendingRequestServiceImpl implements PendingRequestService {
                     .validFromTime(pendingRequestSelfDto.getValidFromTime())
                     .validUptoDate(pendingRequestSelfDto.getValidUptoDate())
                     .validUptoTime(pendingRequestSelfDto.getValidUptoTime())
+                    .isEntry(pendingRequestSelfDto.isEntry())
+                    .vehicleNo(pendingRequestSelfDto.getVehicleNo())
                     .reason(pendingRequestSelfDto.getReason())
                     .requestType("self")
                     .build();
@@ -50,6 +52,8 @@ public class PendingRequestServiceImpl implements PendingRequestService {
                     .validFromDate(requestOtherDto.getValidFromDate())
                     .validFromTime(requestOtherDto.getValidFromTime())
                     .validUptoDate(requestOtherDto.getValidUptoDate())
+                    .vehicleNo(requestOtherDto.getVehicleNo())
+                    .isEntry(requestOtherDto.isEntry())
                     .validUptoTime(requestOtherDto.getValidUptoTime())
                     .reason(requestOtherDto.getReason())
                     .requestType("other")

@@ -5,7 +5,6 @@ import com.iitgn.entryexit.entities.Email;
 import com.iitgn.entryexit.entities.User;
 import com.iitgn.entryexit.models.requestdto.NewRoleDto;
 import com.iitgn.entryexit.models.requestdto.PasswordChangeRequestDto;
-import com.iitgn.entryexit.models.requestdto.SignUpDto;
 import com.iitgn.entryexit.models.responses.SingleLineResponse;
 import com.iitgn.entryexit.services.EmailService;
 import com.iitgn.entryexit.services.UserService;
@@ -171,16 +170,16 @@ public class UserController {
 
 
     // TODO : Function to be completed
-    @PreAuthorize("hasAuthority('UPDATE_USER_PRIVILEGE')")
-    @PutMapping("/api/users/{id}")
-    public ResponseEntity<User> updateUserById(@PathVariable Long id, @RequestBody SignUpDto signUpDto) {
-        Optional<User> userTemp = userService.getUserById(id);
-        if (userTemp.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        userService.updateUserById(id, signUpDto);
-        return new ResponseEntity<>(userTemp.get(), HttpStatus.OK);
-    }
+//    @PreAuthorize("hasAuthority('UPDATE_USER_PRIVILEGE')")
+//    @PutMapping("/api/users/{id}")
+//    public ResponseEntity<User> updateUserById(@PathVariable Long id, @RequestBody SignUpDto signUpDto) {
+//        Optional<User> userTemp = userService.getUserById(id);
+//        if (userTemp.isEmpty()) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//        userService.updateUserById(id, signUpDto);
+//        return new ResponseEntity<>(userTemp.get(), HttpStatus.OK);
+//    }
 
 
     @PreAuthorize("hasAuthority('ROLE_UPDATE_PRIVILEGE')")

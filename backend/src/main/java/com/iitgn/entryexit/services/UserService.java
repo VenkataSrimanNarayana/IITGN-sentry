@@ -14,7 +14,7 @@ public interface UserService {
 
     Optional<User> getUserById(Long Id);
 
-    void updateUserById(Long id, SignUpDto signUpDto);
+    void updateUserById(Long id, User user);
 
     void changePasswordById(Long id, String password);
 

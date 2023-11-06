@@ -9,7 +9,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -50,11 +49,11 @@ public class User implements UserDetails {
 
     private String userType;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private Set<ContactNumber> contactNumbers;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private Set<Email> emails;
 
@@ -77,16 +76,14 @@ public class User implements UserDetails {
     @JoinColumn(name = "user_id")
     private Set<UserVisitorLog> userVisitorLogs;
 
-
-
-//    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
-//    @JoinColumns(
-//            {
-//                    @JoinColumn(name = "blockName", referencedColumnName = "blockName"),
-//                    @JoinColumn(name = "roomNo", referencedColumnName = "roomNo")
-//            }
-//    )
-//    private Room room;
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinTable(
+            name = "user_room",
+            joinColumns = @JoinColumn(
+                    name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "room_id", referencedColumnName = "id"))
+    private Room room;
 
 
     @Override
@@ -98,7 +95,7 @@ public class User implements UserDetails {
     @JsonIgnore
     @OneToMany
     @JoinColumn(name = "user_id")
-    private Set<VehicleUserLog> vehicleUserLogs;
+    private Set<UserVehicleLog> userVehicleLogs;
 
 
     @JsonIgnore
@@ -117,21 +114,27 @@ public class User implements UserDetails {
         return String.valueOf(this.id);
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isEnabled() {
         return true;

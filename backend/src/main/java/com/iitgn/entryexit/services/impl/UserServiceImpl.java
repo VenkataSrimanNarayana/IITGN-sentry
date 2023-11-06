@@ -34,8 +34,8 @@ public class UserServiceImpl implements UserService {
 
     // All update methods
     @Override
-    public void updateUserById(Long id, SignUpDto signUpDto) {
-//        userRepository.updateUserById(id, signUpDto.getFirstName());
+    public void updateUserById(Long id, User user) {
+        userRepository.save(user);
     }
 
 
