@@ -15,18 +15,13 @@ export default function PersonalDetailsWidget() {
     const [details, setDetails] = useState({} as Details);
     const { data: session } = useSession();
     useEffect(() => {
-        fetch(
-            process.env.NEXT_PUBLIC_BACKEND_URL +
-                "/api/users/" +
-                session?.user.userID,
-            {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: "Bearer " + session?.user.accessToken,
-                },
-            }
-        )
+        fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/users", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + session?.user.accessToken,
+            },
+        })
             .then((res) => res.json())
             .then((data) => setDetails(data));
     }, []);
