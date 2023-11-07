@@ -1,5 +1,6 @@
 package com.iitgn.entryexit.entities;
 
+import com.iitgn.entryexit.models.id.ContactNumberId;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,14 +14,12 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "contact_number")
+@IdClass(ContactNumberId.class)
 public class ContactNumber {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
     private String type;
 
+    @Id
     private String phone;
 
 }

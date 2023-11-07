@@ -1,12 +1,15 @@
 package com.iitgn.entryexit.services.impl;
 
+import com.iitgn.entryexit.entities.PendingRequest;
 import com.iitgn.entryexit.entities.User;
-import com.iitgn.entryexit.models.requestdto.PendingRequestDto;
+import com.iitgn.entryexit.models.requestdto.PendingRequestSelfDto;
 import com.iitgn.entryexit.models.requestdto.SignUpDto;
 import com.iitgn.entryexit.repositories.UserRepository;
 import com.iitgn.entryexit.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,8 +34,8 @@ public class UserServiceImpl implements UserService {
 
     // All update methods
     @Override
-    public void updateUserById(Long id, SignUpDto signUpDto) {
-//        userRepository.updateUserById(id, signUpDto.getFirstName());
+    public void updateUserById(Long id, User user) {
+        userRepository.save(user);
     }
 
 
@@ -55,7 +58,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void raiseRequest(Long id, PendingRequestDto pendingRequestDto) {
-//        userRepository.raiseRequest(id, pendingRequestDto);
+    public void raiseRequest(Long id, PendingRequestSelfDto pendingRequestSelfDto) {
+        Optional<User> userTemp = userRepository.findById(id);
+        if(userTemp.isPresent()){
+            User user = userTemp.get();
+            PendingRequest pendingRequest = PendingRequest.builder()
+                    .validFromDate(pendingRequestSelfDto.getValidFromDate())
+                    .validFromTime(pendingRequestSelfDto.getValidFromTime())
+                    .validUptoDate(pendingRequestSelfDto.getValidUptoDate())
+                    .validUptoTime(pendingRequestSelfDto.getValidUptoTime())
+                    .reason(pendingRequestSelfDto.getReason())
+                    .build();
+
+            user.getPendingRequest().add(pendingRequest);
+            userRepository.save(user);
+        }
     }
 }

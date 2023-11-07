@@ -1,11 +1,7 @@
 package com.iitgn.entryexit.entities;
 
 //Room Table: room(block_no, room_no)
-import com.iitgn.entryexit.models.id.RoomId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -19,11 +15,13 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@IdClass(RoomId.class)
 @Table(name = "room")
 public class Room {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String blockName;
-    @Id
+
     private int roomNo;
 }

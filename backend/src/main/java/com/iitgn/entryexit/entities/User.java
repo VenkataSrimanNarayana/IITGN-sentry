@@ -9,7 +9,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -40,7 +39,7 @@ public class User implements UserDetails {
 
     private String landmark;
 
-    private int pincode;
+    private int pinCode;
 
     private String townCity;
 
@@ -50,11 +49,11 @@ public class User implements UserDetails {
 
     private String userType;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private Set<ContactNumber> contactNumbers;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private Set<Email> emails;
 
@@ -64,25 +63,26 @@ public class User implements UserDetails {
     private Set<UserLog> userLogs;
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private Set<PendingRequest> pendingRequest;
-
 
     @JsonBackReference
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "role_id")
     private Role role;
 
-
+    @JsonIgnore
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private Set<UserVisitorLog> userVisitorLogs;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
-    @JoinColumns(
-            {
-                    @JoinColumn(name = "blockName", referencedColumnName = "blockName"),
-                    @JoinColumn(name = "roomNo", referencedColumnName = "roomNo")
-            }
-    )
+    @JoinTable(
+            name = "user_room",
+            joinColumns = @JoinColumn(
+                    name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "room_id", referencedColumnName = "id"))
     private Room room;
 
 
@@ -92,6 +92,21 @@ public class User implements UserDetails {
                 new SimpleGrantedAuthority(privilege.getName())).collect(Collectors.toList());
     }
 
+    @JsonIgnore
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private Set<UserVehicleLog> userVehicleLogs;
+
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            name = "visited_for",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "visitor_id")
+    )
+    private Set<Visitor> visitors;
+
 
     @JsonIgnore
     @Override
@@ -99,21 +114,27 @@ public class User implements UserDetails {
         return String.valueOf(this.id);
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isEnabled() {
         return true;

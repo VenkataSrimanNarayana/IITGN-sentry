@@ -11,7 +11,7 @@ import lombok.Getter;
 
 
 //Visitor Table:
-//        visitor(visitor_id, first_name, last_name, mobile_no, house_no, area, Landmark, Pincode, Town_city, State, Country)
+//        visitor(visitor_id, first_name, last_name, mobile_no, house_no, area, Landmark, PinCode, Town_city, State, Country)
 
 @Entity
 @Setter
@@ -23,26 +23,5 @@ public class Visitor {
 
     @Id
     private long visitorId;
-
-    private String firstName;
-
-    private String lastName;
-
-    private String mobileNo;
-
-    private String houseNo;
-
-    private String area;
-
-    private String landmark;
-
-    private int pincode;
-
-    private String townCity;
-
-    private String state;
-
-    private String country;
-
 
 }

@@ -66,7 +66,7 @@ public class AuthServiceImpl implements AuthService {
                 houseNo(signUpDto.getHouseNo()).
                 area(signUpDto.getArea()).
                 landmark(signUpDto.getLandmark()).
-                pincode(signUpDto.getPincode()).
+                pinCode(signUpDto.getPincode()).
                 townCity(signUpDto.getTownCity()).
                 state(signUpDto.getState()).
                 country(signUpDto.getCountry()).
@@ -80,13 +80,13 @@ public class AuthServiceImpl implements AuthService {
 
         user.setRole(role.get());
 
-        ContactNumber contactNumber = ContactNumber.builder().phone(signUpDto.getMobileNo()).build();
+        ContactNumber contactNumber = ContactNumber.builder().type("personal").phone(signUpDto.getMobileNo()).build();
         Set<ContactNumber> contactNumbers = new HashSet<>();
         contactNumbers.add(contactNumber);
         user.setContactNumbers(contactNumbers);
 
         Set<Email> emails = new HashSet<>();
-        Email email = Email.builder().email(signUpDto.getEmail()).build();
+        Email email = Email.builder().type("college").email(signUpDto.getEmail()).build();
         emails.add(email);
         user.setEmails(emails);
 

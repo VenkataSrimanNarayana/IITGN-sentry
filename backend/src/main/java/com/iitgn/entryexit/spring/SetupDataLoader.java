@@ -1,6 +1,7 @@
 package com.iitgn.entryexit.spring;
 
 import com.iitgn.entryexit.entities.*;
+import com.iitgn.entryexit.repositories.PendingRequestRepository;
 import com.iitgn.entryexit.repositories.PrivilegeRepository;
 import com.iitgn.entryexit.repositories.RoleRepository;
 import com.iitgn.entryexit.repositories.UserRepository;
@@ -12,6 +13,8 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 
 // READ_SINGLE_USER_PRIVILEGE
@@ -39,6 +42,8 @@ public class SetupDataLoader implements
 
     private final PasswordEncoder passwordEncoder;
 
+    private final PendingRequestRepository pendingRequestRepository;
+
     @Override
     @Transactional
     public void onApplicationEvent(@NonNull  ContextRefreshedEvent event) {
@@ -46,30 +51,55 @@ public class SetupDataLoader implements
         if (alreadySetup)
             return;
 
-        Privilege privilege1 = createPrivilegeIfNotFound("READ_SINGLE_USER_PRIVILEGE");
-        Privilege privilege2 = createPrivilegeIfNotFound("READ_SELF_PRIVILEGE");
-        Privilege privilege3 = createPrivilegeIfNotFound("CHANGE_PASSWORD_PRIVILEGE");
-        Privilege privilege4 = createPrivilegeIfNotFound("DELETE_USER_PRIVILEGE");
-        Privilege privilege5 = createPrivilegeIfNotFound("READ_USERS_PRIVILEGE");
-        Privilege privilege6 = createPrivilegeIfNotFound("UPDATE_USER_PRIVILEGE");
-        Privilege privilege7 = createPrivilegeIfNotFound("ROLE_UPDATE_PRIVILEGE");
+
+
+        Privilege privilege1 = createPrivilegeIfNotFound("RAISE_PREQUEST_PRIVILEGE");
+        Privilege privilege2 = createPrivilegeIfNotFound("READ_PREQUEST_PRIVILEGE");
+        Privilege privilege3 = createPrivilegeIfNotFound("READ_USER_PREQUEST_PRIVILEGE");
+        Privilege privilege4 = createPrivilegeIfNotFound("DELETE_USER_PREQUEST_PRIVILEGE");
+        Privilege privilege5 = createPrivilegeIfNotFound("DELETE_PREQUEST_PRIVILEGE");
+
+        Privilege privilege6 = createPrivilegeIfNotFound("ROOM_PRIVILEGE");
+
+        Privilege privilege7 = createPrivilegeIfNotFound("READ_ACCOUNT_PRIVILEGE");
+        Privilege privilege8 = createPrivilegeIfNotFound("READ_USER_ACCOUNT_PRIVILEGE");
+        Privilege privilege9 = createPrivilegeIfNotFound("RESET_USER_PASSWORD_PRIVILEGE");
+        Privilege privilege10 = createPrivilegeIfNotFound("CHANGE_USER_PASSWORD_PRIVILEGE");
+        Privilege privilege11 = createPrivilegeIfNotFound("DELETE_ACCOUNT_PRIVILEGE");
+        Privilege privilege12 = createPrivilegeIfNotFound("ROLE_UPDATE_PRIVILEGE");
+
+        Privilege privilege13 = createPrivilegeIfNotFound("READ_LOG_PRIVILEGE");
+        Privilege privilege14 = createPrivilegeIfNotFound("READ_USER_LOG_PRIVILEGE");
+        Privilege privilege15 = createPrivilegeIfNotFound("LOG_PRIVILEGE");
+        Privilege privilege16 = createPrivilegeIfNotFound("DELETE_LOG_PRIVILEGE");
+
+
+
+
 
 
         List<Privilege> userPrivileges = Arrays.asList(
-                privilege2, privilege3, privilege6);
+                privilege1, privilege4, privilege3, privilege8, privilege9, privilege10, privilege14);
+
+        List<Privilege> securityPrivileges = Arrays.asList(privilege2, privilege15, privilege13, privilege1,
+                privilege4, privilege3, privilege8, privilege9, privilege10, privilege14);
 
         List<Privilege> adminPrivileges = Arrays.asList(
-                privilege1, privilege2, privilege3, privilege4, privilege5, privilege6, privilege7);
+                privilege1, privilege2, privilege3, privilege4, privilege5, privilege6,
+                privilege7, privilege8, privilege9, privilege10, privilege11, privilege12, privilege13, privilege14,
+                privilege15, privilege16);
 
 
         createRoleIfNotFound("ROLE_ADMIN", new HashSet<>(adminPrivileges));
         createRoleIfNotFound("ROLE_USER", new HashSet<>(userPrivileges));
+        createRoleIfNotFound("ROLE_SECURITY", new HashSet<>(securityPrivileges));
 
         Optional<Role> adminRole = roleRepository.findByName("ROLE_ADMIN");
+        Optional<Role> userRole = roleRepository.findByName("ROLE_USER");
+        Optional<Role> securityRole = roleRepository.findByName("ROLE_SECURITY");
 
 
-
-        User user = User.builder().id(20110242)
+        User user = User.builder().id(20110067)
                 .firstName("Zeeshan Snehil")
                 .lastName("Bhagat")
                 .password(passwordEncoder.encode("test"))
@@ -78,7 +108,7 @@ public class SetupDataLoader implements
                 .houseNo("H-102")
                 .country("India")
                 .landmark("IIT Gandhinagar")
-                .pincode(382355)
+                .pinCode(382355)
                 .state("Gujarat")
                 .townCity("Gandhinagar")
                 .build();
@@ -92,8 +122,8 @@ public class SetupDataLoader implements
 
 
         // Set Room
-        Room room = Room.builder().blockName("H").roomNo(102).build();
-        user.setRoom(room);
+//        Room room = Room.builder().blockName("H").roomNo(102).build();
+//        user.setRoom(room);
 
         // Set Contact Numbers
         ContactNumber contactNumber = ContactNumber.builder().phone("9434614611").type("personal").build();
@@ -101,9 +131,29 @@ public class SetupDataLoader implements
         contactNumbers.add(contactNumber);
         user.setContactNumbers(contactNumbers);
 
+        // give a localdate time object
+
+
+        PendingRequest pendingRequest1 = PendingRequest.builder().reason("i am going").validUptoTime(LocalTime.now()).
+                validUptoDate(LocalDate.now()).validFromDate(LocalDate.now()).validFromTime(LocalTime.now()).requestType("self").build();
+
+        PendingRequest pendingRequest2 = PendingRequest.builder().reason("i am going").validUptoTime(LocalTime.now()).
+                validUptoDate(LocalDate.now()).validFromDate(LocalDate.now()).validFromTime(LocalTime.now()).requestType("self").build();
+
         // Set Role
         user.setRole(adminRole.orElse(null));
+
+        // Set Pending Request
+
+        // save the user
         userRepository.save(user);
+
+        pendingRequest1.setUser(user);
+        pendingRequest2.setUser(user);
+
+        pendingRequestRepository.save(pendingRequest1);
+        pendingRequestRepository.save(pendingRequest2);
+
         alreadySetup = true;
     }
 

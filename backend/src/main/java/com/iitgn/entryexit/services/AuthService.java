@@ -7,6 +7,4 @@ public interface AuthService {
     String login(LoginDto loginDto);
 
     String userSignup(SignUpDto signUpDto);
-
-//    String securitySignUp(SignUpDto signUpDto);
 }
