@@ -6,49 +6,45 @@ declare global {
         name: string;
     };
     type Details = {
-        id: "number";
-        firstName: "string";
-        lastName: "string";
-        houseNo: "string";
-        area: "string";
-        landmark: "string";
-        pincode: "number";
-        townCity: "string";
-        state: "string";
-        country: "string";
-        userType: "string";
-        contactNumbers: [
-            {
-                id: "number";
-                type: "string";
-                phone: "string";
-            }
-        ];
-        emails: [
-            {
-                type: "string";
-                email: "string";
-            }
-        ];
+        id: number;
+        firstName: string;
+        lastName: string;
+        houseNo: string;
+        area: string;
+        landmark: string;
+        pincode: number;
+        townCity: string;
+        state: string;
+        country: string;
+        userType: string;
+        contactNumbers: {
+            id: number;
+            type: string;
+            phone: string;
+        }[];
+        emails: {
+            type: string;
+            email: string;
+        }[];
         role: {
-            id: "number";
-            name: "string";
-            users: ["string"];
+            id: number;
+            name: string;
+            users: [string];
             privileges: [
                 {
-                    id: "number";
-                    name: "string";
-                    roles: ["string"];
+                    id: number;
+                    name: string;
+                    roles: [string];
                 }
             ];
         };
         room: {
-            blockName: "string";
-            roomNo: "number";
+            blockName: string;
+            roomNo: number;
         };
         authorities: [
             {
-                authority: "string";
+                authority: string;
             }
         ];
         accountNonExpired: "bool";

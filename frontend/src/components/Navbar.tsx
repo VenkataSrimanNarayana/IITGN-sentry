@@ -27,6 +27,7 @@ export default function Navbar({ links }: { links: LinkName[] }) {
     };
 
     const handleLogout = () => {
+        handleMenuClose();
         signOut();
     };
 
@@ -82,13 +83,14 @@ export default function Navbar({ links }: { links: LinkName[] }) {
                     >
                         <MenuItem
                             onClick={() => {
-                                router.push("/settings");
+                                router.push("/profile");
+                                handleMenuClose();
                             }}
                         >
                             <IconButton color="inherit">
                                 <SettingsIcon />
                             </IconButton>
-                            Settings
+                            Profile
                         </MenuItem>
                         <MenuItem onClick={handleLogout}>
                             <IconButton color="inherit">
