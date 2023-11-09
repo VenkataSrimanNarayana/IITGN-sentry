@@ -33,30 +33,38 @@ public class PendingRequest {
     @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate validFromDate;
 
+    @JsonFormat(pattern="HH:mm")
     private LocalTime validUptoTime;
 
     @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate validUptoDate;
 
+    @Column(nullable = false)
     private String requestType;
 
+    @Column(length = 1000)
     private String reason;
+
+    @Column(nullable = false)
+    private boolean isEntry;
 
     @JsonIgnore
     @ManyToOne
     private User user;
 
+
     private String vehicleNo;
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "user_visitor_log_id")
     private UserVisitorLog userVisitorLog;
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "user_vehicle_log_id")
     private UserVehicleLog userVehicleLog;
 
-    private boolean isEntry;
 
     @OneToOne(mappedBy = "pendingRequest", cascade = CascadeType.ALL)
     private RequestDetails requestDetails;

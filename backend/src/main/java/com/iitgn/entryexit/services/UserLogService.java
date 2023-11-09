@@ -1,6 +1,7 @@
 package com.iitgn.entryexit.services;
 
 import com.iitgn.entryexit.entities.UserLog;
+import com.iitgn.entryexit.models.responses.UserLogResponse;
 
 import java.util.List;
 
@@ -9,7 +10,7 @@ public interface UserLogService {
 
     void deleteUserLog(Long id);
 
-    List<UserLog> getAllLogs();
+    List<UserLogResponse> getAllLogs();
 
     List<UserLog> getAllLogsOfUser(Long userId);
 }

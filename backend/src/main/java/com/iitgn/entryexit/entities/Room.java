@@ -21,7 +21,9 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String blockName;
 
+    @Column(nullable = false)
     private int roomNo;
 }

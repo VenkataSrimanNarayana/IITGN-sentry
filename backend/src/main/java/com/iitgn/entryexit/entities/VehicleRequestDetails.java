@@ -14,6 +14,7 @@ public class VehicleRequestDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long requestId;
 
+
     private String firstName;
 
     private String lastName;

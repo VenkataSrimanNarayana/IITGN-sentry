@@ -16,6 +16,7 @@ import lombok.*;
 @Table(name = "contact_number")
 @IdClass(ContactNumberId.class)
 public class ContactNumber {
+
     @Id
     private String type;
 

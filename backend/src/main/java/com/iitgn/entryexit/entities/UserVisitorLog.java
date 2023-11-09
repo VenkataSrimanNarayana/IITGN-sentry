@@ -23,36 +23,50 @@ public class UserVisitorLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long userVisitorLogId;
 
+    @Column
     private String vehicleNo;
 
+    @Column(length = 50, nullable = false)
     private String firstName;
 
+    @Column(length = 50, nullable = false)
     private String lastName;
 
+    @Column(length = 10, nullable = false)
     private String mobileNo;
 
+    @Column(length = 1000)
     private String purpose;
 
+    @Column(length = 1000)
     private String houseNo;
 
+    @Column(length = 1000)
     private String area;
 
+    @Column(length = 1000)
     private String landmark;
 
+    @Column(nullable = false)
     private int pinCode;
 
+    @Column(length = 1000)
     private String townCity;
 
+    @Column(length = 1000, nullable = false)
     private String state;
 
+    @Column(length = 1000, nullable = false)
     private String country;
 
+    @Column(nullable = false)
     @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate inDate;
 
     @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate outDate;
 
+    @Column(nullable = false)
     @JsonFormat(pattern="HH:mm")
     private LocalTime inTime;
 

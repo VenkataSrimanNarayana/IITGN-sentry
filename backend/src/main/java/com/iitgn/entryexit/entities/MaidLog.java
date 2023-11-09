@@ -1,5 +1,7 @@
 package com.iitgn.entryexit.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.*;
@@ -23,11 +25,19 @@ public class MaidLog {
     @Id
     private long maidLogId;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Column(nullable = false)
     private LocalDate inDate;
 
+    @JsonFormat(pattern = "HH:mm")
+    @Column(nullable = false)
     private LocalTime inTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Column(nullable = false)
     private LocalDate outDate;
 
+    @JsonFormat(pattern = "HH:mm")
+    @Column(nullable = false)
     private LocalTime outTime;
 }

@@ -26,27 +26,38 @@ public class User implements UserDetails {
     @Id
     private long id;
 
+    @Column(length = 50, nullable = false)
     private String firstName;
 
+    @Column(length = 50, nullable = false)
     private String lastName;
 
     @JsonIgnore
+    @Column(nullable = false)
     private String password;
 
+    @Column(length = 10)
     private String houseNo;
 
+    @Column(length = 30)
     private String area;
 
+    @Column(length = 30)
     private String landmark;
 
+    @Column(nullable = false)
     private int pinCode;
 
+    @Column(length = 30)
     private String townCity;
 
+    @Column(length = 30, nullable = false)
     private String state;
 
+    @Column(length = 30, nullable = false)
     private String country;
 
+    @Column(length = 10, nullable = false)
     private String userType;
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -96,16 +107,6 @@ public class User implements UserDetails {
     @OneToMany
     @JoinColumn(name = "user_id")
     private Set<UserVehicleLog> userVehicleLogs;
-
-
-    @JsonIgnore
-    @ManyToMany
-    @JoinTable(
-            name = "visited_for",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "visitor_id")
-    )
-    private Set<Visitor> visitors;
 
 
     @JsonIgnore

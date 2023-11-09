@@ -4,6 +4,7 @@ import com.iitgn.entryexit.entities.PendingRequest;
 import com.iitgn.entryexit.entities.User;
 import com.iitgn.entryexit.entities.UserLog;
 import com.iitgn.entryexit.models.responses.SingleLineResponse;
+import com.iitgn.entryexit.models.responses.UserLogResponse;
 import com.iitgn.entryexit.services.PendingRequestService;
 import com.iitgn.entryexit.services.UserLogService;
 import com.iitgn.entryexit.spring.utils.UtilityFunctions;
@@ -88,9 +89,9 @@ public class UserLogController {
 
     @PreAuthorize("hasAuthority('READ_LOG_PRIVILEGE')")
     @GetMapping("/all")
-    public ResponseEntity<List<UserLog>> getAllLogs(){
-        List<UserLog> userLogs = userLogService.getAllLogs();
-        return ResponseEntity.ok().body(userLogs);
+    public ResponseEntity<List<UserLogResponse>> getAllLogs(){
+        List<UserLogResponse> userLogResponses = userLogService.getAllLogs();
+        return ResponseEntity.ok().body(userLogResponses);
     }
 
     @PreAuthorize("hasAuthority('READ_USER_LOG_PRIVILEGE')")

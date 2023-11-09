@@ -23,6 +23,7 @@ public class Privilege {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(length = 50, nullable = false, unique = true)
     private String name;
 
     @ManyToMany(mappedBy = "privileges")

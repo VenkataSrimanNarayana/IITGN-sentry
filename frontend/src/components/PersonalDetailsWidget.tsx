@@ -14,6 +14,8 @@ export default function PersonalDetailsWidget() {
     // fetch the details from the server
     const [details, setDetails] = useState({} as Details);
     const { data: session } = useSession();
+
+
     useEffect(() => {
         fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/users", {
             method: "GET",
@@ -25,6 +27,8 @@ export default function PersonalDetailsWidget() {
             .then((res) => res.json())
             .then((data) => setDetails(data));
     }, []);
+
+    // console.log(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/users");
     return (
         <Paper
             elevation={3}

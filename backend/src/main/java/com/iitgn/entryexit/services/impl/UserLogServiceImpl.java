@@ -1,6 +1,7 @@
 package com.iitgn.entryexit.services.impl;
 
 import com.iitgn.entryexit.entities.UserLog;
+import com.iitgn.entryexit.models.responses.UserLogResponse;
 import com.iitgn.entryexit.repositories.UserLogRepository;
 import com.iitgn.entryexit.services.UserLogService;
 import lombok.AllArgsConstructor;
@@ -25,8 +26,8 @@ public class UserLogServiceImpl implements UserLogService {
     }
 
     @Override
-    public List<UserLog> getAllLogs() {
-        return userLogRepository.findAll();
+    public List<UserLogResponse> getAllLogs() {
+        return userLogRepository.findCustomDataFromUserLog();
     }
 
     @Override

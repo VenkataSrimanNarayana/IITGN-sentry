@@ -42,6 +42,7 @@ public class PendingRequestServiceImpl implements PendingRequestService {
                     .reason(pendingRequestSelfDto.getReason())
                     .requestType("self")
                     .build();
+
             pendingRequest.setUser(user.get());
             pendingRequestRepository.save(pendingRequest);
         }

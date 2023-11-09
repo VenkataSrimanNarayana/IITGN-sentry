@@ -10,7 +10,23 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             name: "home",
             link: "/",
         },
+
+        {
+            name : "generate request",
+            link : "/generate-request"
+        },
+        {
+            name : "all requests",
+            link : "/all-requests"
+        },
+
+        {
+            name : "all users",
+            link : "/all-logs"
+        }
     ];
+
+
 
     return (
         <html>

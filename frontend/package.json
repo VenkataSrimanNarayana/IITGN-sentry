@@ -19,7 +19,8 @@
     "next": "latest",
     "next-auth": "^4.24.4",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "react-qr-code": "^2.0.12"
   },
   "devDependencies": {
     "@types/node": "latest",

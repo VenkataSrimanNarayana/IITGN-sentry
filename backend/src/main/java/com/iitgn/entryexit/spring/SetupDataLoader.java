@@ -1,7 +1,6 @@
 package com.iitgn.entryexit.spring;
 
 import com.iitgn.entryexit.entities.*;
-import com.iitgn.entryexit.repositories.PendingRequestRepository;
 import com.iitgn.entryexit.repositories.PrivilegeRepository;
 import com.iitgn.entryexit.repositories.RoleRepository;
 import com.iitgn.entryexit.repositories.UserRepository;
@@ -13,8 +12,6 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.*;
 
 // READ_SINGLE_USER_PRIVILEGE
@@ -32,25 +29,18 @@ import java.util.*;
 public class SetupDataLoader implements
         ApplicationListener<ContextRefreshedEvent> {
 
-    boolean alreadySetup = false;
-
     private final UserRepository userRepository;
-
     private final RoleRepository roleRepository;
-
     private final PrivilegeRepository privilegeRepository;
-
     private final PasswordEncoder passwordEncoder;
-
-    private final PendingRequestRepository pendingRequestRepository;
+    boolean alreadySetup = false;
 
     @Override
     @Transactional
-    public void onApplicationEvent(@NonNull  ContextRefreshedEvent event) {
+    public void onApplicationEvent(@NonNull ContextRefreshedEvent event) {
 
         if (alreadySetup)
             return;
-
 
 
         Privilege privilege1 = createPrivilegeIfNotFound("RAISE_PREQUEST_PRIVILEGE");
@@ -74,10 +64,6 @@ public class SetupDataLoader implements
         Privilege privilege16 = createPrivilegeIfNotFound("DELETE_LOG_PRIVILEGE");
 
 
-
-
-
-
         List<Privilege> userPrivileges = Arrays.asList(
                 privilege1, privilege4, privilege3, privilege8, privilege9, privilege10, privilege14);
 
@@ -99,60 +85,46 @@ public class SetupDataLoader implements
         Optional<Role> securityRole = roleRepository.findByName("ROLE_SECURITY");
 
 
-        User user = User.builder().id(20110067)
-                .firstName("Zeeshan Snehil")
-                .lastName("Bhagat")
-                .password(passwordEncoder.encode("test"))
-                .userType("Student")
-                .area("IIT Gandhinagar")
-                .houseNo("H-102")
-                .country("India")
-                .landmark("IIT Gandhinagar")
-                .pinCode(382355)
-                .state("Gujarat")
-                .townCity("Gandhinagar")
-                .build();
+        // Create Admin User
+        Optional<User> user = userRepository.findById(20110067L);
 
+        if (user.isEmpty()) {
+            User user1 = User.builder().id(20110067)
+                    .firstName("Zeeshan Snehil")
+                    .lastName("Bhagat")
+                    .password(passwordEncoder.encode("test"))
+                    .userType("Student")
+                    .area("IIT Gandhinagar")
+                    .houseNo("H-102")
+                    .country("India")
+                    .landmark("IIT Gandhinagar")
+                    .pinCode(382355)
+                    .state("Gujarat")
+                    .townCity("Gandhinagar")
+                    .build();
 
-        // Set Emails
-        Email email = Email.builder().email("zeeshan.snehil@iitgn.ac.in").type("college").build();
-        Set<Email> emails = new HashSet<>();
-        emails.add(email);
-        user.setEmails(emails);
+            // Set Emails
+            Email email = Email.builder().email("zeeshan.snehil@iitgn.ac.in").type("college").build();
+            Set<Email> emails = new HashSet<>();
+            emails.add(email);
+            user1.setEmails(emails);
 
+            // Set Contact Numbers
+            ContactNumber contactNumber = ContactNumber.builder().phone("9434614611").type("personal").build();
+            Set<ContactNumber> contactNumbers = new HashSet<>();
+            contactNumbers.add(contactNumber);
+            user1.setContactNumbers(contactNumbers);
 
-        // Set Room
-//        Room room = Room.builder().blockName("H").roomNo(102).build();
-//        user.setRoom(room);
+            // Set User Roles
+            if (adminRole.isEmpty()) {
+                System.out.println("User Role is empty");
+            } else {
+                Role role = adminRole.get();
+                user1.setRole(role);
+                userRepository.save(user1);
+            }
+        }
 
-        // Set Contact Numbers
-        ContactNumber contactNumber = ContactNumber.builder().phone("9434614611").type("personal").build();
-        Set<ContactNumber> contactNumbers = new HashSet<>();
-        contactNumbers.add(contactNumber);
-        user.setContactNumbers(contactNumbers);
-
-        // give a localdate time object
-
-
-        PendingRequest pendingRequest1 = PendingRequest.builder().reason("i am going").validUptoTime(LocalTime.now()).
-                validUptoDate(LocalDate.now()).validFromDate(LocalDate.now()).validFromTime(LocalTime.now()).requestType("self").build();
-
-        PendingRequest pendingRequest2 = PendingRequest.builder().reason("i am going").validUptoTime(LocalTime.now()).
-                validUptoDate(LocalDate.now()).validFromDate(LocalDate.now()).validFromTime(LocalTime.now()).requestType("self").build();
-
-        // Set Role
-        user.setRole(adminRole.orElse(null));
-
-        // Set Pending Request
-
-        // save the user
-        userRepository.save(user);
-
-        pendingRequest1.setUser(user);
-        pendingRequest2.setUser(user);
-
-        pendingRequestRepository.save(pendingRequest1);
-        pendingRequestRepository.save(pendingRequest2);
 
         alreadySetup = true;
     }

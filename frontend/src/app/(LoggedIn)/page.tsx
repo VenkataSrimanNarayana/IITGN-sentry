@@ -1,11 +1,13 @@
 "use client";
 import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
 import { CircularProgress } from "@mui/material";
 import { Container } from "@mui/material";
+import {useRouter} from "next/navigation";
 import PersonalDetailsWidget from "@/components/PersonalDetailsWidget";
 export default function Home() {
+    const router = useRouter();
     const { status } = useSession();
+    console.log(status);
     if (status === "loading") {
         return (
             <>
@@ -22,7 +24,7 @@ export default function Home() {
             </>
         );
     } else if (status === "unauthenticated") {
-        redirect("/login");
+        router.push("/login");
     }
     return <PersonalDetailsWidget />;
 }
