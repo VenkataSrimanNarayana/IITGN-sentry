@@ -63,6 +63,9 @@ public class SetupDataLoader implements
         Privilege privilege15 = createPrivilegeIfNotFound("LOG_PRIVILEGE");
         Privilege privilege16 = createPrivilegeIfNotFound("DELETE_LOG_PRIVILEGE");
 
+        Privilege privilege17 = createPrivilegeIfNotFound("ROLES_PRIVILEGE");
+        Privilege privilege18 = createPrivilegeIfNotFound("PRIVILEGES_PRIVILEGE");
+
 
         List<Privilege> userPrivileges = Arrays.asList(
                 privilege1, privilege4, privilege3, privilege8, privilege9, privilege10, privilege14);
@@ -73,7 +76,7 @@ public class SetupDataLoader implements
         List<Privilege> adminPrivileges = Arrays.asList(
                 privilege1, privilege2, privilege3, privilege4, privilege5, privilege6,
                 privilege7, privilege8, privilege9, privilege10, privilege11, privilege12, privilege13, privilege14,
-                privilege15, privilege16);
+                privilege15, privilege16, privilege17, privilege18);
 
 
         createRoleIfNotFound("ROLE_ADMIN", new HashSet<>(adminPrivileges));

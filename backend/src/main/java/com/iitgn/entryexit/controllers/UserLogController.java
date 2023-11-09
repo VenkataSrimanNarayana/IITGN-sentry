@@ -22,7 +22,7 @@ import java.util.List;
 // user_logs(user_id, room_no, block_no, purpose, is_entry, date, time, vehicle_no)
 
 @RestController
-@RequestMapping("/api/user-logs")
+@RequestMapping("/api/user-log")
 @AllArgsConstructor
 public class UserLogController {
 

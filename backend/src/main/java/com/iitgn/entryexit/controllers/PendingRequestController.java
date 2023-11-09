@@ -46,7 +46,7 @@ public class PendingRequestController {
     }
 
     @PreAuthorize("hasAuthority('RAISE_PREQUEST_PRIVILEGE')")
-    @PostMapping("/user/raise-vehicle")
+    @PostMapping("/raise-vehicle")
     public ResponseEntity<SingleLineResponse> raiseVehicleRequest(@RequestBody PendingRequestVehicleDto requestVehicleDto){
         Long id = getCurrentUser();
         pendingRequestService.raiseRequestVehicle(id, requestVehicleDto);
