@@ -9,7 +9,11 @@ export interface Request {
     vehicleNo: string;
     userVisitorLog: string;
     userVehicleLog: string;
-    requestDetails: string;
-    vehicleRequestDetails: string;
+    requestDetails: {
+      
+    };
+    vehicleRequestDetails: {
+
+    };
     entry: boolean;
   }

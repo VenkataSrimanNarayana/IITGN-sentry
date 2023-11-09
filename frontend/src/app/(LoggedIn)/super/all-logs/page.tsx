@@ -7,9 +7,9 @@ import { useRouter } from "next/navigation";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import UserRequestGenerate from "@/components/GenerateRequests/UserRequestGenerate";
-import VehicleRequestGenerate from "@/components/GenerateRequests/VehicleRequestGenerate";
-import VisitorRequestGenerate from "@/components/GenerateRequests/VisitorRequestGenerate";
+import AllUserLogs from "@/components/SuperLogs/AllUserLogs";
+import AllVisiterLogs from "@/components/SuperLogs/AllVisitorLogs";
+import AllVehicleLogs from "@/components/SuperLogs/AllVehicleLogs";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -55,7 +55,7 @@ export default function GetAllPendingRequests() {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            height: "100vh", // Make the container take the full viewport height
+            height: "100vh",
           }}
         >
           <CircularProgress />
@@ -83,19 +83,19 @@ export default function GetAllPendingRequests() {
           onChange={handleChange}
           aria-label="basic tabs example"
         >
-          <Tab label="Self" {...a11yProps(0)} />
-          <Tab label="Vehicle" {...a11yProps(1)} />
-          <Tab label="Visitor" {...a11yProps(2)} />
+          <Tab label="user logs" {...a11yProps(0)} />
+          <Tab label="vehicle logs" {...a11yProps(1)} />
+          <Tab label="visitor logs" {...a11yProps(2)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <UserRequestGenerate />
+        <AllUserLogs />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <VehicleRequestGenerate />
+        <AllVehicleLogs />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
-        <VisitorRequestGenerate />
+        <AllVisiterLogs />
       </CustomTabPanel>
     </Box>
   );

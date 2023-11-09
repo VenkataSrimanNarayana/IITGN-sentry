@@ -27,11 +27,10 @@ const DataGridWithPagination = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + `/api/user-logs/all?limit=${limit}&offset=${offset}`, 
+        const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + `/api/user-log/user/all?limit=${limit}&offset=${offset}`, 
         {
           method: "GET",
           headers: {
-
             "Content-Type": "application/json",
             Authorization: `Bearer ${session?.user.accessToken}`,
           },
@@ -79,8 +78,3 @@ const DataGridWithPagination = () => {
 };
 
 export default DataGridWithPagination;
-
-
-
-
-

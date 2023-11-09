@@ -1,15 +1,16 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { Typography, CircularProgress, Container } from "@mui/material";
+import { Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import AllUserLogs from "@/components/Logs/AllUserLogs";
-import AllVisiterLogs from "@/components/Logs/AllVisitorLogs";
-import AllVehicleLogs from "@/components/Logs/AllVehicleLogs";
+import { CircularProgress, Container } from "@mui/material";
+import SelfRequests from "@/components/UserRequests/SelfRequests";
+import VehicleRequests from "@/components/UserRequests/VehicleRequests";
+import VisitorRequests from "@/components/UserRequests/VisitorRequests";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -83,19 +84,19 @@ export default function GetAllPendingRequests() {
           onChange={handleChange}
           aria-label="basic tabs example"
         >
-          <Tab label="student logs" {...a11yProps(0)} />
-          <Tab label="vehicle logs" {...a11yProps(1)} />
-          <Tab label="visitor logs" {...a11yProps(2)} />
+          <Tab label="user requests" {...a11yProps(0)} />
+          <Tab label="vehicle requests" {...a11yProps(1)} />
+          <Tab label="visitor requests" {...a11yProps(2)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <AllUserLogs />
+        <SelfRequests />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <AllVehicleLogs />
+        <VehicleRequests />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
-        <AllVisiterLogs />
+        <VisitorRequests />
       </CustomTabPanel>
     </Box>
   );

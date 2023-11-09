@@ -21,7 +21,7 @@ const handler = NextAuth({
             },
             async authorize(credentials, req) {
                 const backend_login_url =
-                    process.env.BACKEND_URL + "/api/auth/login";
+                    process.env.NEXT_PUBLIC_BACKEND_URL + "/api/auth/login";
                 const res = await fetch(backend_login_url, {
                     method: "POST",
                     headers: {

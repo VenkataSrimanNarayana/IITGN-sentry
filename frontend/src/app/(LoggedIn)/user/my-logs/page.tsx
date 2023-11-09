@@ -1,16 +1,15 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useSession } from "next-auth/react";
-import { Typography } from "@mui/material";
+import { Typography, CircularProgress, Container } from "@mui/material";
 import { useRouter } from "next/navigation";
 
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import { CircularProgress, Container } from "@mui/material";    
-import StudentAllPendingRequests from "@/components/AllSelfRequests";
-import VehiclePendingRequests from "@/components/AllVehicleRequests";
-import VisitorPendingRequests from "@/components/AllVisitorRequests";
+import UserSelfLogs from "@/components/UserLogs/UserSelfLogs";
+import UserVehicleLogs from "@/components/UserLogs/UserVehicleLogs";
+import UserVisitorLogs from "@/components/UserLogs/UserVisitorLogs";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -38,7 +37,6 @@ function CustomTabPanel(props: TabPanelProps) {
   );
 }
 
-
 export default function GetAllPendingRequests() {
   const { data: session, status } = useSession();
   const [requests, setRequests] = useState([]);
@@ -57,7 +55,7 @@ export default function GetAllPendingRequests() {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            height: "100vh", // Make the container take the full viewport height
+            height: "100vh",
           }}
         >
           <CircularProgress />
@@ -73,7 +71,6 @@ export default function GetAllPendingRequests() {
     };
   }
 
-
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -86,19 +83,19 @@ export default function GetAllPendingRequests() {
           onChange={handleChange}
           aria-label="basic tabs example"
         >
-          <Tab label="student requests" {...a11yProps(0)} />
-          <Tab label="vehicle requests" {...a11yProps(1)} />
-          <Tab label="visitor requests" {...a11yProps(2)} />
+          <Tab label="user logs" {...a11yProps(0)} />
+          <Tab label="vehicle logs" {...a11yProps(1)} />
+          <Tab label="visitor logs" {...a11yProps(2)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-      <StudentAllPendingRequests/>
+        <UserSelfLogs />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <VehiclePendingRequests/>
+        <UserVehicleLogs />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
-        <VisitorPendingRequests />
+        <UserVisitorLogs />
       </CustomTabPanel>
     </Box>
   );

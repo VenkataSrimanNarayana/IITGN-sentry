@@ -1,20 +1,29 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
-import { Pagination } from '@mui/material'
+import { DataGrid, GridApi } from '@mui/x-data-grid';
+import { Button, IconButton, Pagination } from '@mui/material'
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
 const columns = [
-  { field: 'userLogId', headerName: 'User Log ID', width: 130 },
-  { field: 'purpose', headerName: 'Purpose', width: 200 },
-  { field: 'eventDate', headerName: 'Event Date', width: 150 },
-  { field: 'eventTime', headerName: 'Event Time', width: 150 },
-  { field: 'vehicleNo', headerName: 'Vehicle No', width: 150 },
-  { field: 'blockName', headerName: 'Block Name', width: 150 },
-  { field: 'roomNo', headerName: 'Room No', width: 130 },
-  { field: 'userId', headerName: 'User', width: 150 },
-  { field: 'entry', headerName: 'Entry', width: 130 },
+  {field : 'vehicleNo', headerName: 'Vehicle No', width: 200},
+  {field : 'firstName', headerName: 'First Name', width: 200},
+  {field : 'lastName', headerName: 'Last Name', width: 200},
+  {field : 'mobileNo', headerName: 'Mobile No', width: 200},
+  {field : 'inDate', headerName: 'In Date', width: 200},
+  {field : 'inTime', headerName: 'In Time', width: 200},
+  {field : 'outDate', headerName: 'Out Date', width: 200},
+  {field : 'outTime', headerName: 'Out Time', width: 200},
+  {field : 'pickup', headerName: 'Pickup', width: 200},
+  {field : 'vehicleUserLogId', headerName: 'Vehicle User Log ID', width: 200},
+  {
+    field: "action",
+    headerName: "Action",
+    sortable: false,
+    renderCell: (params) => {
+      <IconButton></IconButton>
+    }
+  },
 ];
 
 const DataGridWithPagination = () => {
@@ -24,10 +33,11 @@ const DataGridWithPagination = () => {
   const [offset, setOffset] = useState(0);
   const router = useRouter();
 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + `/api/user-logs/all?limit=${limit}&offset=${offset}`, 
+        const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + `/api/user-vehicle-log/user/all?limit=${limit}&offset=${offset}`, 
         {
           method: "GET",
           headers: {
@@ -50,7 +60,7 @@ const DataGridWithPagination = () => {
   console.log(jsonData);
 
   function getRowId(row : any) {
-    return row.userLogId;
+    return row.vehicleUserLogId;
   }
 
   return (

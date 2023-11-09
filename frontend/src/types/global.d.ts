@@ -12,7 +12,7 @@ declare global {
         houseNo: string;
         area: string;
         landmark: string;
-        pincode: number;
+        pinCode: number;
         townCity: string;
         state: string;
         country: string;

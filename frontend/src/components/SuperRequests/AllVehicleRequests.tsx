@@ -15,9 +15,8 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-// import { fetchData } from "@/api/pending-requests-api/fetchData";
 
-export default function StudentAllPendingRequests() {
+export default function AllVehicleRequests() {
   const [requests, setRequests] = useState([]);
   const { data: session, status } = useSession();
 
@@ -30,13 +29,12 @@ export default function StudentAllPendingRequests() {
   const postData = async (id: number) => {
     try {
       const response = await fetch(
-        process.env.NEXT_PUBLIC_BACKEND_URL + `/api/user-visitor-log/${id}`,
+        process.env.NEXT_PUBLIC_BACKEND_URL + `/api/user-vehicle-log/${id}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${session?.user.accessToken}`,
-            // Add any other headers if needed
           },
         }
       );
@@ -44,7 +42,18 @@ export default function StudentAllPendingRequests() {
       const responseData = await response.json().then(() => {}); // Assuming the response is JSON
       console.log("Response data:", responseData);
       if (response.ok) {
-        setRequests(requests.filter((request) => request.requestId !== id));
+        setRequests((prevRequests) => {
+            const updatedRequests = prevRequests.filter((request) => {
+              if (request.entry === true) {
+                return {
+                  ...request,
+                  entry: false
+                };
+              }
+              return false;
+            });
+            return updatedRequests;
+          });
       }
       // Handle the response data or return it as needed
       return responseData;
@@ -109,7 +118,7 @@ export default function StudentAllPendingRequests() {
     <>
       <TableContainer component={Paper}>
         <Typography variant="h6" style={{ marginBottom: "16px" }}>
-          All Students Requests
+          All User Requests
         </Typography>
         <Table>
           <TableHead>
@@ -127,25 +136,25 @@ export default function StudentAllPendingRequests() {
           <TableBody>
             {requests.map((requests: Request) => (
               <TableRow>
-                {requests && requests.requestType === "other" && (
+                {requests && requests.requestType === "vehicle" && (
                   <>
                     <TableCell>{requests.requestId}</TableCell>
                     <TableCell>{requests.reason}</TableCell>
-                    {requests.requestDetails.vehicleNo === null ? (
+                    {requests.vehicleRequestDetails.vehicleNo === null ? (
                       <TableCell>NA</TableCell>
                     ) : (
                       <TableCell>
-                        {requests.requestDetails.vehicleNo}
+                        {requests.vehicleRequestDetails.vehicleNo}
                       </TableCell>
                     )}
                     <TableCell>
-                      {requests.requestDetails.firstName}
+                      {requests.vehicleRequestDetails.firstName}
                     </TableCell>
                     <TableCell>
-                      {requests.requestDetails.lastName}
+                      {requests.vehicleRequestDetails.lastName}
                     </TableCell>
                     <TableCell>
-                      {requests.requestDetails.mobileNo}
+                      {requests.vehicleRequestDetails.mobileNo}
                     </TableCell>
                     <TableCell>{requests.entry ? "entry" : "exit"}</TableCell>
                     <TableCell>

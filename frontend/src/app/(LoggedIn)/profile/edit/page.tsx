@@ -5,29 +5,23 @@ import { redirect } from "next/navigation";
 import ProfileForm from "@/components/ProfileForm";
 
 export default function Settings() {
-    const { status } = useSession();
-    if (status === "loading") {
-        return (
-            <>
-                <Container
-                    sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        height: "100vh",
-                    }}
-                >
-                    <CircularProgress />
-                </Container>
-            </>
-        );
-    } else if (status === "unauthenticated") {
-        redirect("/login");
-    }
-
+  const { status } = useSession();
+  if (status === "loading") {
     return (
-        <>
-            <ProfileForm />
-        </>
+      <Container
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </Container>
     );
+  } else if (status === "unauthenticated") {
+    redirect("/login");
+  }
+
+  return <ProfileForm />;
 }

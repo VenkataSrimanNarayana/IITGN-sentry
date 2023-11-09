@@ -1,15 +1,16 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { Typography, CircularProgress, Container } from "@mui/material";
+import { Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import UserRequestGenerate from "@/components/GenerateRequests/UserRequestGenerate";
-import VehicleRequestGenerate from "@/components/GenerateRequests/VehicleRequestGenerate";
-import VisitorRequestGenerate from "@/components/GenerateRequests/VisitorRequestGenerate";
+import { CircularProgress, Container } from "@mui/material";
+import AllUserRequests from "@/components/SuperRequests/AllUserRequests";
+import AllVehicleRequests from "@/components/SuperRequests/AllVehicleRequests";
+import AllVisitorRequests from "@/components/SuperRequests/AllVisitorRequests";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -83,19 +84,19 @@ export default function GetAllPendingRequests() {
           onChange={handleChange}
           aria-label="basic tabs example"
         >
-          <Tab label="Self" {...a11yProps(0)} />
-          <Tab label="Vehicle" {...a11yProps(1)} />
-          <Tab label="Visitor" {...a11yProps(2)} />
+          <Tab label="user requests" {...a11yProps(0)} />
+          <Tab label="vehicle requests" {...a11yProps(1)} />
+          <Tab label="visitor requests" {...a11yProps(2)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <UserRequestGenerate />
+        <AllUserRequests />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <VehicleRequestGenerate />
+        <AllVehicleRequests />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
-        <VisitorRequestGenerate />
+        <AllVisitorRequests />
       </CustomTabPanel>
     </Box>
   );

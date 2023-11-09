@@ -174,7 +174,7 @@ const ProfileForm = () => {
                 type="text"
                 name="pincode"
                 label="Pincode"
-                value={formData.pincode}
+                value={formData.pinCode}
                 onChange={handleChange}
             />
             <CustomTextField
