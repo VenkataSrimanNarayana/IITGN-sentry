@@ -14,16 +14,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 
-// READ_SINGLE_USER_PRIVILEGE
-//
-//READ_SELF_PRIVILEGE
-//
-//CHANGE_PASSWORD_PRIVILEGE
-//
-//DELETE_USER_PRIVILEGE
-//
-//READ_USERS_PRIVILEGE
-
 @Component
 @RequiredArgsConstructor
 public class SetupDataLoader implements
@@ -43,28 +33,28 @@ public class SetupDataLoader implements
             return;
 
 
-        Privilege privilege1 = createPrivilegeIfNotFound("RAISE_PREQUEST_PRIVILEGE");
-        Privilege privilege2 = createPrivilegeIfNotFound("READ_PREQUEST_PRIVILEGE");
-        Privilege privilege3 = createPrivilegeIfNotFound("READ_USER_PREQUEST_PRIVILEGE");
-        Privilege privilege4 = createPrivilegeIfNotFound("DELETE_USER_PREQUEST_PRIVILEGE");
-        Privilege privilege5 = createPrivilegeIfNotFound("DELETE_PREQUEST_PRIVILEGE");
+        Privilege privilege1 = createPrivilegeIfNotFound("RAISE_PREQUEST_PRIVILEGE", "Raise request available to any who is registered a user");
+        Privilege privilege2 = createPrivilegeIfNotFound("READ_PREQUEST_PRIVILEGE", "This privilege allows to read all the requests raised by any user");
+        Privilege privilege3 = createPrivilegeIfNotFound("READ_USER_PREQUEST_PRIVILEGE", "This privilege allows to read all the requests raised by a user himself");
+        Privilege privilege4 = createPrivilegeIfNotFound("DELETE_USER_PREQUEST_PRIVILEGE", "This privilege allows to delete all the requests raised by a user himself");
+        Privilege privilege5 = createPrivilegeIfNotFound("DELETE_PREQUEST_PRIVILEGE", "This privilege allows to delete all the requests raised by any user");
 
-        Privilege privilege6 = createPrivilegeIfNotFound("ROOM_PRIVILEGE");
+        Privilege privilege6 = createPrivilegeIfNotFound("ROOM_PRIVILEGE", "This privilege allows to read all the rooms available in the system");
 
-        Privilege privilege7 = createPrivilegeIfNotFound("READ_ACCOUNT_PRIVILEGE");
-        Privilege privilege8 = createPrivilegeIfNotFound("READ_USER_ACCOUNT_PRIVILEGE");
-        Privilege privilege9 = createPrivilegeIfNotFound("RESET_USER_PASSWORD_PRIVILEGE");
-        Privilege privilege10 = createPrivilegeIfNotFound("CHANGE_USER_PASSWORD_PRIVILEGE");
-        Privilege privilege11 = createPrivilegeIfNotFound("DELETE_ACCOUNT_PRIVILEGE");
-        Privilege privilege12 = createPrivilegeIfNotFound("ROLE_UPDATE_PRIVILEGE");
+        Privilege privilege7 = createPrivilegeIfNotFound("READ_ACCOUNT_PRIVILEGE", "This privilege allows to read all the accounts available in the system");
+        Privilege privilege8 = createPrivilegeIfNotFound("READ_USER_ACCOUNT_PRIVILEGE", "This privilege allows to read all the accounts of a user by himself");
+        Privilege privilege9 = createPrivilegeIfNotFound("RESET_USER_PASSWORD_PRIVILEGE", "This privilege allows to reset password of a user");
+        Privilege privilege10 = createPrivilegeIfNotFound("CHANGE_USER_PASSWORD_PRIVILEGE", "This privilege allows to change password of a user");
+        Privilege privilege11 = createPrivilegeIfNotFound("DELETE_ACCOUNT_PRIVILEGE", "This privilege allows to delete account of a user");
+        Privilege privilege12 = createPrivilegeIfNotFound("ROLE_UPDATE_PRIVILEGE", "This privilege allows to update role of a user");
 
-        Privilege privilege13 = createPrivilegeIfNotFound("READ_LOG_PRIVILEGE");
-        Privilege privilege14 = createPrivilegeIfNotFound("READ_USER_LOG_PRIVILEGE");
-        Privilege privilege15 = createPrivilegeIfNotFound("LOG_PRIVILEGE");
-        Privilege privilege16 = createPrivilegeIfNotFound("DELETE_LOG_PRIVILEGE");
+        Privilege privilege13 = createPrivilegeIfNotFound("READ_LOG_PRIVILEGE", "This privilege allows to read all the logs available in the system");
+        Privilege privilege14 = createPrivilegeIfNotFound("READ_USER_LOG_PRIVILEGE", "This privilege allows to read all the logs of a user by himself");
+        Privilege privilege15 = createPrivilegeIfNotFound("LOG_PRIVILEGE", "This privilege allows to log any event in the system");
+        Privilege privilege16 = createPrivilegeIfNotFound("DELETE_LOG_PRIVILEGE", "This privilege allows to delete all the logs of a user by himself");
 
-        Privilege privilege17 = createPrivilegeIfNotFound("ROLES_PRIVILEGE");
-        Privilege privilege18 = createPrivilegeIfNotFound("PRIVILEGES_PRIVILEGE");
+        Privilege privilege17 = createPrivilegeIfNotFound("ROLES_PRIVILEGE", "This privilege allows to read all the roles available in the system");
+        Privilege privilege18 = createPrivilegeIfNotFound("PRIVILEGES_PRIVILEGE", "This privilege allows to read all the privileges available in the system");
 
 
         List<Privilege> userPrivileges = Arrays.asList(
@@ -84,8 +74,8 @@ public class SetupDataLoader implements
         createRoleIfNotFound("ROLE_SECURITY", new HashSet<>(securityPrivileges));
 
         Optional<Role> adminRole = roleRepository.findByName("ROLE_ADMIN");
-        Optional<Role> userRole = roleRepository.findByName("ROLE_USER");
-        Optional<Role> securityRole = roleRepository.findByName("ROLE_SECURITY");
+        roleRepository.findByName("ROLE_USER");
+        roleRepository.findByName("ROLE_SECURITY");
 
 
         // Create Admin User
@@ -133,12 +123,12 @@ public class SetupDataLoader implements
     }
 
     @Transactional
-    public Privilege createPrivilegeIfNotFound(String name) {
+    public Privilege createPrivilegeIfNotFound(String name, String description) {
 
         Optional<Privilege> privilegeTemp = privilegeRepository.findByName(name);
 
         return privilegeTemp.orElseGet(() -> {
-            Privilege privilege1 = Privilege.builder().name(name).build();
+            Privilege privilege1 = Privilege.builder().name(name).description(description).build();
             privilegeRepository.save(privilege1);
             return privilege1;
         });

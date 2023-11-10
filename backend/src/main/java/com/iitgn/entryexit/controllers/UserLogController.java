@@ -34,6 +34,10 @@ public class UserLogController {
     private final PendingRequestService pendingRequestService;
     private final UserLogService userLogService;
 
+
+//    @PreAuthorize("hasAuthority('LOG_PRIVILEGE')")
+
+
     @PreAuthorize("hasAuthority('LOG_PRIVILEGE')")
     @PostMapping("/{id}")
     public ResponseEntity<SingleLineResponse> logUser(@PathVariable Long id){

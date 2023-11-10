@@ -19,4 +19,9 @@ public class PrivilegeServiceImpl implements PrivilegeService {
     public List<Privilege> getAllPrivileges() {
         return privilegeRepository.findAll();
     }
+
+    @Override
+    public List<Privilege> getPrivileges(List<Integer> privilegeIds) {
+        return privilegeRepository.findAllById(privilegeIds);
+    }
 }
