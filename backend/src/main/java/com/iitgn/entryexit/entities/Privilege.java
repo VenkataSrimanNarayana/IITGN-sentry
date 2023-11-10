@@ -1,6 +1,7 @@
 package com.iitgn.entryexit.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,6 +27,10 @@ public class Privilege {
     @Column(length = 50, nullable = false, unique = true)
     private String name;
 
+    @Column(length = 100, nullable = false)
+    private String description;
+
+    @JsonIgnore
     @ManyToMany(mappedBy = "privileges")
     private Set<Role> roles;
 }

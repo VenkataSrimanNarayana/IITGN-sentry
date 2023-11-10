@@ -31,6 +31,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       name: "User Requests",
       link: "/user/my-requests",
     },
+    {
+      name : "Register User",
+      link : "/register-user"
+    }
   ];
 
   return (

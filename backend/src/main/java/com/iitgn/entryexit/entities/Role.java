@@ -25,6 +25,7 @@ public class Role {
     @Column(length = 50, nullable = false, unique = true)
     private String name;
 
+    @JsonIgnore
     @JsonManagedReference
     @OneToMany(mappedBy = "role")
     private Set<User> users;
