@@ -108,7 +108,6 @@ public class User implements UserDetails {
     @JoinColumn(name = "user_id")
     private Set<UserVehicleLog> userVehicleLogs;
 
-
     @JsonIgnore
     @Override
     public String getUsername() {

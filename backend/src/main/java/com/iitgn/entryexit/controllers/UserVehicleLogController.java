@@ -117,4 +117,12 @@ public class UserVehicleLogController {
         return ResponseEntity.ok().body(userVehicleLogs);
     }
 
+
+    @PreAuthorize("hasAuthority('LOG_PRIVILEGE')")
+    @PostMapping("/visitor/manual-log")
+    public ResponseEntity<SingleLineResponse> logVisitor(@RequestBody UserVehicleLog userVisitorLog) {
+        userVehicleLogService.saveUserVehicleLog(userVisitorLog);
+        return ResponseEntity.ok().body(new SingleLineResponse("Visitor Logged"));
+    }
+
 }

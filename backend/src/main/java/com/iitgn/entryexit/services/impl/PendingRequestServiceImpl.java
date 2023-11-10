@@ -1,7 +1,7 @@
 package com.iitgn.entryexit.services.impl;
 
 import com.iitgn.entryexit.entities.PendingRequest;
-import com.iitgn.entryexit.entities.RequestDetails;
+import com.iitgn.entryexit.entities.VisitorRequestDetails;
 import com.iitgn.entryexit.entities.User;
 import com.iitgn.entryexit.entities.VehicleRequestDetails;
 import com.iitgn.entryexit.models.requestdto.PendingRequestOtherDto;
@@ -94,7 +94,7 @@ public class PendingRequestServiceImpl implements PendingRequestService {
                     .requestType("other")
                     .build();
 
-            RequestDetails requestDetails = RequestDetails.builder()
+            VisitorRequestDetails visitorRequestDetails = VisitorRequestDetails.builder()
                     .firstName(requestOtherDto.getFirstName())
                     .lastName(requestOtherDto.getLastName())
                     .houseNo(requestOtherDto.getHouseNo())
@@ -109,8 +109,8 @@ public class PendingRequestServiceImpl implements PendingRequestService {
                     .build();
             pendingRequest.setUser(user.get());
             pendingRequestRepository.save(pendingRequest);
-            requestDetails.setPendingRequest(pendingRequest);
-            requestDetailsRepository.save(requestDetails);
+            visitorRequestDetails.setPendingRequest(pendingRequest);
+            requestDetailsRepository.save(visitorRequestDetails);
         }
     }
 

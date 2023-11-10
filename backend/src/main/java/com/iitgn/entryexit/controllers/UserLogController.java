@@ -3,10 +3,12 @@ package com.iitgn.entryexit.controllers;
 import com.iitgn.entryexit.entities.PendingRequest;
 import com.iitgn.entryexit.entities.User;
 import com.iitgn.entryexit.entities.UserLog;
+import com.iitgn.entryexit.models.requestdto.UserLogDto;
 import com.iitgn.entryexit.models.responses.SingleLineResponse;
 import com.iitgn.entryexit.models.responses.UserLogResponse;
 import com.iitgn.entryexit.services.PendingRequestService;
 import com.iitgn.entryexit.services.UserLogService;
+import com.iitgn.entryexit.services.UserService;
 import com.iitgn.entryexit.spring.utils.UtilityFunctions;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 // user_logs(user_id, room_no, block_no, purpose, is_entry, date, time, vehicle_no)
 
@@ -33,6 +36,7 @@ public class UserLogController {
 
     private final PendingRequestService pendingRequestService;
     private final UserLogService userLogService;
+    private final UserService userService;
 
 
 //    @PreAuthorize("hasAuthority('LOG_PRIVILEGE')")
@@ -104,6 +108,25 @@ public class UserLogController {
         Long userId = getCurrentUser();
         List<UserLog> userLogs = userLogService.getAllLogsOfUser(userId);
         return ResponseEntity.ok().body(userLogs);
+    }
+
+    @PreAuthorize("hasAuthority('LOG_PRIVILEGE')")
+    @PostMapping("/user/log-manual")
+    public ResponseEntity<SingleLineResponse> logUserManual(@RequestBody UserLogDto userLogDto){
+        UserLog userLog = UserLog.builder().isEntry(userLogDto.isEntry()).roomNo(userLogDto.getRoomNo())
+                .blockName(userLogDto.getBlockName()).eventDate(userLogDto.getEventDate())
+                .eventTime(userLogDto.getEventTime()).purpose(userLogDto.getPurpose())
+                .vehicleNo(userLogDto.getVehicleNo()).build();
+
+        Optional<User> user = userService.getUserById(userLogDto.getUserId());
+
+        if(user.isEmpty()){
+            return ResponseEntity.badRequest().body(new SingleLineResponse("Invalid User"));
+        }
+
+        userLog.setUser(user.get());
+        userLogService.saveUserLog(userLog);
+        return ResponseEntity.ok().body(new SingleLineResponse("User Logged"));
     }
 
 

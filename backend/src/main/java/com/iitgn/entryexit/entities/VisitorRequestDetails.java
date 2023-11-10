@@ -1,7 +1,6 @@
 package com.iitgn.entryexit.entities;
 
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,7 +16,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class RequestDetails {
+public class VisitorRequestDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,7 +1,7 @@
 package com.iitgn.entryexit.controllers;
 
 import com.iitgn.entryexit.entities.PendingRequest;
-import com.iitgn.entryexit.entities.RequestDetails;
+import com.iitgn.entryexit.entities.VisitorRequestDetails;
 import com.iitgn.entryexit.entities.UserVisitorLog;
 import com.iitgn.entryexit.models.responses.SingleLineResponse;
 import com.iitgn.entryexit.services.PendingRequestService;
@@ -58,23 +58,23 @@ public class UserVisitorLogController {
         boolean isEntry = pendingRequest.isEntry();
 
         if(isEntry){
-            RequestDetails requestDetails = pendingRequest.getRequestDetails();
+            VisitorRequestDetails visitorRequestDetails = pendingRequest.getVisitorRequestDetails();
 
             UserVisitorLog userVisitorLog = UserVisitorLog.builder()
                     .purpose(pendingRequest.getReason())
                     .inTime(LocalTime.now())
                     .inDate(LocalDate.now())
-                    .firstName(requestDetails.getFirstName())
-                    .lastName(requestDetails.getLastName())
-                    .mobileNo(requestDetails.getMobileNo())
-                    .area(requestDetails.getArea())
-                    .houseNo(requestDetails.getHouseNo())
-                    .landmark(requestDetails.getLandmark())
-                    .pinCode(requestDetails.getPinCode())
-                    .state(requestDetails.getState())
-                    .townCity(requestDetails.getTownCity())
-                    .country(requestDetails.getCountry())
-                    .state(requestDetails.getState())
+                    .firstName(visitorRequestDetails.getFirstName())
+                    .lastName(visitorRequestDetails.getLastName())
+                    .mobileNo(visitorRequestDetails.getMobileNo())
+                    .area(visitorRequestDetails.getArea())
+                    .houseNo(visitorRequestDetails.getHouseNo())
+                    .landmark(visitorRequestDetails.getLandmark())
+                    .pinCode(visitorRequestDetails.getPinCode())
+                    .state(visitorRequestDetails.getState())
+                    .townCity(visitorRequestDetails.getTownCity())
+                    .country(visitorRequestDetails.getCountry())
+                    .state(visitorRequestDetails.getState())
                     .vehicleNo(pendingRequest.getVehicleNo())
                     .build();
 

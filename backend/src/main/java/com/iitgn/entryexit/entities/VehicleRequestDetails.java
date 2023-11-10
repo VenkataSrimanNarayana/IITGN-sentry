@@ -23,6 +23,7 @@ public class VehicleRequestDetails {
 
     private String vehicleNo;
 
+    @Column(nullable = false)
     private boolean isPickup;
 
     @JsonIgnore
