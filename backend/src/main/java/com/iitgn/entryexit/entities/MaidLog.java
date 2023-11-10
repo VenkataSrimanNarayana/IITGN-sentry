@@ -1,13 +1,12 @@
 package com.iitgn.entryexit.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.UUID;
 
 
 //Maid Logs Table:
@@ -23,7 +22,8 @@ import java.time.LocalTime;
 public class MaidLog {
 
     @Id
-    private long maidLogId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID maidLogId;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(nullable = false)

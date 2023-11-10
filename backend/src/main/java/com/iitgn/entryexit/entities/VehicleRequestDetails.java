@@ -3,6 +3,9 @@ package com.iitgn.entryexit.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.UUID;
+
 @Entity
 @Setter
 @Getter
@@ -11,8 +14,8 @@ import lombok.*;
 @NoArgsConstructor
 public class VehicleRequestDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long requestId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID requestId;
 
 
     private String firstName;

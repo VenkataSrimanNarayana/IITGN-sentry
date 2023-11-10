@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.UUID;
+
 
 //Request Details Table:
 //        req_details(request_id, first_name, last_name, house_no, area, Landmark, Pincode, Town_city, State, Country, mobile_no, vehicle_no)
@@ -19,8 +21,8 @@ import lombok.*;
 public class VisitorRequestDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long requestId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID requestId;
 
     @Column(length = 50, nullable = false)
     private String firstName;

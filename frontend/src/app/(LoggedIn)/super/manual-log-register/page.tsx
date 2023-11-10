@@ -11,6 +11,11 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 
+import UserLog  from "@/components/SuperLogs/ManualLogAdd/UserLog";
+
+import VehicleLog from "@/components/SuperLogs/ManualLogAdd/VehicleLog";
+import VisitorLog from "@/components/SuperLogs/UserLogs/VisitorLog";
+
 function CustomTabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
 
@@ -83,10 +88,13 @@ export default function ManualLogAdd() {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
+        <UserLog></UserLog>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
+        <VehicleLog></VehicleLog>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
+        <VisitorLog></VisitorLog>
       </CustomTabPanel>
     </Box>
   );

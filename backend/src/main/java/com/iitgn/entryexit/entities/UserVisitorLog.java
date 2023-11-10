@@ -9,6 +9,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.UUID;
 
 @Entity
 @Setter
@@ -20,8 +21,8 @@ import java.time.LocalTime;
 public class UserVisitorLog {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long userVisitorLogId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID userVisitorLogId;
 
     @Column
     private String vehicleNo;

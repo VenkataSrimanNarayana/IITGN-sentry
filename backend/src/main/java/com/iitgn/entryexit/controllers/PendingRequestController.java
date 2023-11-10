@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/pending-requests")
@@ -55,7 +56,7 @@ public class PendingRequestController {
 
     @PreAuthorize("hasAuthority('DELETE_USER_PREQUEST_PRIVILEGE')")
     @DeleteMapping("/user/{requestId}")
-    public ResponseEntity<SingleLineResponse> raiseRequest(@PathVariable Long requestId){
+    public ResponseEntity<SingleLineResponse> raiseRequest(@PathVariable UUID requestId){
         Long id = getCurrentUser();
         PendingRequest pendingRequest = pendingRequestService.findById(requestId);
         if(pendingRequest.getUser().getId() != id){
@@ -67,7 +68,7 @@ public class PendingRequestController {
 
     @PreAuthorize("hasAuthority('DELETE_PREQUEST_PRIVILEGE')")
     @DeleteMapping("/{requestId}")
-    public ResponseEntity<SingleLineResponse> deleteRequest(@PathVariable Long requestId){
+    public ResponseEntity<SingleLineResponse> deleteRequest(@PathVariable UUID requestId){
         pendingRequestService.deleteRequest(requestId);
         return new ResponseEntity<>(new SingleLineResponse("Request deleted successfully"), HttpStatus.OK);
     }
@@ -95,7 +96,7 @@ public class PendingRequestController {
 
     @PreAuthorize("hasAuthority('READ_PREQUEST_PRIVILEGE')")
     @GetMapping("/{requestId}")
-    public ResponseEntity<PendingRequest> getPendingRequestById(@PathVariable Long requestId){
+    public ResponseEntity<PendingRequest> getPendingRequestById(@PathVariable UUID requestId){
         PendingRequest pendingRequest = pendingRequestService.findById(requestId);
         if(pendingRequest == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -105,7 +106,7 @@ public class PendingRequestController {
 
     @PreAuthorize("hasAuthority('READ_USER_PREQUEST_PRIVILEGE')")
     @GetMapping("/user/{requestId}")
-    public ResponseEntity<PendingRequest> getPendingUserPendingRequest(@PathVariable Long requestId){
+    public ResponseEntity<PendingRequest> getPendingUserPendingRequest(@PathVariable UUID requestId){
         PendingRequest pendingRequest = pendingRequestService.findById(requestId);
         if(pendingRequest == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

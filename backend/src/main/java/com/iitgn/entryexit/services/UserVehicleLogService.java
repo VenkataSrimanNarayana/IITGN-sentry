@@ -3,13 +3,14 @@ package com.iitgn.entryexit.services;
 import com.iitgn.entryexit.entities.UserVehicleLog;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface UserVehicleLogService {
     void saveUserVehicleLog(UserVehicleLog userVehicleLog);
 
-    UserVehicleLog findById(Long id);
+    UserVehicleLog findById(UUID id);
 
-    void deleteUserVehicleLog(Long id);
+    void deleteUserVehicleLog(UUID id);
 
     void deleteAllUserVehicleLogs();
 

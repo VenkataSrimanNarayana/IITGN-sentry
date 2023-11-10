@@ -12,6 +12,7 @@ import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.UUID;
 
 // Vehicle Visitor Logs Table:
 // vehicle_visitor_logs(vehicle_no, user_id, first_name, last_name, mobile_no, remarks, in_date, in_time, out_date, out_time)
@@ -24,9 +25,9 @@ import java.time.LocalTime;
 @NoArgsConstructor
 public class UserVehicleLog {
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Id
-    private long VehicleUserLogId;
+    private UUID VehicleUserLogId;
 
     @Column(nullable = false)
     private String vehicleNo;

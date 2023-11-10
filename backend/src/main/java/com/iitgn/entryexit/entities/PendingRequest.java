@@ -11,6 +11,7 @@ import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.UUID;
 
 //Pending Request Table:
         // pending_request(request_id, Valid_from_time, Valid_from_date, Valid_upto_time, Valid_upto_date, req_type)
@@ -24,9 +25,9 @@ import java.time.LocalTime;
 @Table(name = "pending_request")
 public class PendingRequest {
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Id
-    private long requestId;
+    private UUID requestId;
 
     private LocalTime validFromTime;
 

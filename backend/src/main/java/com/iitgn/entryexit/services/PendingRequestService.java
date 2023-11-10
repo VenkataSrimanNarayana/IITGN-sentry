@@ -6,6 +6,7 @@ import com.iitgn.entryexit.models.requestdto.PendingRequestSelfDto;
 import com.iitgn.entryexit.models.requestdto.PendingRequestVehicleDto;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface PendingRequestService {
 
@@ -17,11 +18,11 @@ public interface PendingRequestService {
 
     void raiseRequestOther(Long id, PendingRequestOtherDto requestOtherDto);
 
-    void deleteRequest(Long requestId);
+    void deleteRequest(UUID requestId);
 
     List<PendingRequest> findPendingRequestByUserId(Long id);
 
-    PendingRequest findById(Long requestId);
+    PendingRequest findById(UUID requestId);
 
     void updateRequest(PendingRequest pendingRequest);
 

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.UUID;
 
 
 @Data
@@ -14,7 +15,7 @@ import java.time.LocalTime;
 @NoArgsConstructor
 public class UserLogResponse {
 
-    private long userLogId;
+    private UUID userLogId;
 
     private String purpose;
 

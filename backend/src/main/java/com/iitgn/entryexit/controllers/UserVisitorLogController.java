@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/user-visitor-log")
@@ -43,7 +44,7 @@ public class UserVisitorLogController {
 
     @PreAuthorize("hasAuthority('LOG_PRIVILEGE')")
     @PostMapping("/{id}")
-    public ResponseEntity<SingleLineResponse> logUserVisitor(@PathVariable Long id) {
+    public ResponseEntity<SingleLineResponse> logUserVisitor(@PathVariable UUID id) {
         PendingRequest pendingRequest = pendingRequestService.findById(id);
         if (pendingRequest == null) {
             return ResponseEntity.badRequest().body(new SingleLineResponse("Invalid Request"));
@@ -98,7 +99,7 @@ public class UserVisitorLogController {
 
     @PreAuthorize("hasAuthority('DELETE_LOG_PRIVILEGE')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<SingleLineResponse> deleteRequest(@PathVariable Long id) {
+    public ResponseEntity<SingleLineResponse> deleteRequest(@PathVariable UUID id) {
         UserVisitorLog userVisitorLog = userVisitorLogService.findById(id);
         if (userVisitorLog == null) {
             return ResponseEntity.badRequest().body(new SingleLineResponse("UserVisitorLog id not Found"));

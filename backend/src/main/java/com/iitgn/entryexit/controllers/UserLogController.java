@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 // user_logs(user_id, room_no, block_no, purpose, is_entry, date, time, vehicle_no)
 
@@ -44,7 +45,7 @@ public class UserLogController {
 
     @PreAuthorize("hasAuthority('LOG_PRIVILEGE')")
     @PostMapping("/{id}")
-    public ResponseEntity<SingleLineResponse> logUser(@PathVariable Long id){
+    public ResponseEntity<SingleLineResponse> logUser(@PathVariable UUID id){
         PendingRequest pendingRequest = pendingRequestService.findById(id);
         if(pendingRequest == null){
             return ResponseEntity.badRequest().body(new SingleLineResponse("Invalid Request"));
@@ -104,9 +105,9 @@ public class UserLogController {
 
     @PreAuthorize("hasAuthority('READ_USER_LOG_PRIVILEGE')")
     @GetMapping("/user/all")
-    public ResponseEntity<List<UserLog>> getAllLogsOfUser(){
+    public ResponseEntity<List<UserLogResponse>> getAllLogsOfUser(){
         Long userId = getCurrentUser();
-        List<UserLog> userLogs = userLogService.getAllLogsOfUser(userId);
+        List<UserLogResponse> userLogs = userLogService.getAllLogsOfUser(userId);
         return ResponseEntity.ok().body(userLogs);
     }
 

@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -23,12 +24,12 @@ public class UserVisitorLogServiceImpl implements UserVisitorLogService {
     }
 
     @Override
-    public UserVisitorLog findById(Long id) {
+    public UserVisitorLog findById(UUID id) {
         return userVisitorLogRepository.findById(id).orElse(null);
     }
 
     @Override
-    public void deleteUserVisitorLog(Long id) {
+    public void deleteUserVisitorLog(UUID id) {
         userVisitorLogRepository.deleteById(id);
     }
 

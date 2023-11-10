@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @AllArgsConstructor
 @Service
@@ -115,7 +116,7 @@ public class PendingRequestServiceImpl implements PendingRequestService {
     }
 
     @Override
-    public void deleteRequest(Long requestId) {
+    public void deleteRequest(UUID requestId) {
         pendingRequestRepository.deleteById(requestId);
     }
 
@@ -135,7 +136,7 @@ public class PendingRequestServiceImpl implements PendingRequestService {
     }
 
     @Override
-    public PendingRequest findById(Long requestId) {
+    public PendingRequest findById(UUID requestId) {
         if(pendingRequestRepository.findById(requestId).isPresent()){
             return pendingRequestRepository.findById(requestId).get();
         }

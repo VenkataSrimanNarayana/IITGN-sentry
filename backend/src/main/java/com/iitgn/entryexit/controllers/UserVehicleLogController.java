@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -42,7 +43,7 @@ public class UserVehicleLogController {
 
     @PreAuthorize("hasAuthority('LOG_PRIVILEGE')")
     @PostMapping("/{id}")
-    public ResponseEntity<SingleLineResponse> logUserVehicle(@PathVariable Long id) {
+    public ResponseEntity<SingleLineResponse> logUserVehicle(@PathVariable UUID id) {
         PendingRequest pendingRequest = pendingRequestService.findById(id);
         if (pendingRequest == null) {
             return ResponseEntity.badRequest().body(new SingleLineResponse("Invalid Request"));
@@ -79,7 +80,7 @@ public class UserVehicleLogController {
 
     @PreAuthorize("hasAuthority('DELETE_LOG_PRIVILEGE')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<SingleLineResponse> deleteRequest(@PathVariable Long id){
+    public ResponseEntity<SingleLineResponse> deleteRequest(@PathVariable UUID id){
         UserVehicleLog userVehicleLog = userVehicleLogService.findById(id);
         if(userVehicleLog == null){
             return ResponseEntity.badRequest().body(new SingleLineResponse("UserVehicleLog id not Found"));

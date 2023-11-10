@@ -12,5 +12,5 @@ public interface UserLogService {
 
     List<UserLogResponse> getAllLogs();
 
-    List<UserLog> getAllLogsOfUser(Long userId);
+    List<UserLogResponse> getAllLogsOfUser(Long userId);
 }

@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.UUID;
 
 // user_logs(user_id, room_no, block_no, purpose, is_entry, date, time, vehicle_no)
 
@@ -19,9 +20,9 @@ import java.time.LocalTime;
 @Table(name = "user_log")
 public class UserLog {
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Id
-    private long userLogId;
+    private UUID userLogId;
 
     @Column(nullable = false)
     private String purpose;

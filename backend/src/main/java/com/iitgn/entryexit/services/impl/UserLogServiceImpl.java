@@ -31,7 +31,7 @@ public class UserLogServiceImpl implements UserLogService {
     }
 
     @Override
-    public List<UserLog> getAllLogsOfUser(Long userId) {
+    public List<UserLogResponse> getAllLogsOfUser(Long userId) {
         return userLogRepository.findAllByUserId(userId);
     }
 }

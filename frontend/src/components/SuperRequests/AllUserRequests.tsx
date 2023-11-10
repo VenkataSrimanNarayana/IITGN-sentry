@@ -23,7 +23,7 @@ export default function AllUserRequests() {
   const postData = async (id: number) => {
     try {
       const response = await fetch(
-        process.env.NEXT_PUBLIC_BACKEND_URL + `/api/user-logs/${id}`,
+        process.env.NEXT_PUBLIC_BACKEND_URL + `/api/user-log/${id}`,
         {
           method: "POST",
           headers: {

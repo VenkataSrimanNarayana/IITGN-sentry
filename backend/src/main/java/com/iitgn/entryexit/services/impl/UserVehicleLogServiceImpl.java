@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -19,12 +20,12 @@ public class UserVehicleLogServiceImpl implements UserVehicleLogService {
     }
 
     @Override
-    public UserVehicleLog findById(Long id) {
+    public UserVehicleLog findById(UUID id) {
         return userVehicleLogRepository.findById(id).orElse(null);
     }
 
     @Override
-    public void deleteUserVehicleLog(Long id) {
+    public void deleteUserVehicleLog(UUID id) {
         userVehicleLogRepository.deleteById(id);
     }
 

@@ -45,7 +45,7 @@ const DataGridWithPagination = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + `/api/user-vehicle-log/all?limit=${limit}&offset=${offset}`, 
+        const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + `/api/user-vehicle-log/all`, 
         {
           method: "GET",
           headers: {
