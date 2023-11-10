@@ -22,7 +22,6 @@ const DataGridWithPagination = () => {
   const [jsonData, setData] = useState([]);
   const [limit, setLimit] = useState(5); 
   const [offset, setOffset] = useState(0);
-  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {

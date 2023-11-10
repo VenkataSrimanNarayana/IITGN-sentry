@@ -4,6 +4,9 @@ import Provider from "@/components/Provider";
 import "public/global.css";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+
+  // TODO : // conditinal rendering of links
+
   const links = [
     {
       name: "Home",
@@ -34,6 +37,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     {
       name : "Register User",
       link : "/register-user"
+    },
+    {
+      name : "Add new Role",
+      link : "/super/add-role"
+    },
+    {
+      name : "Manual Entry",
+      link : "/super/manual-log-register"
     }
   ];
 
