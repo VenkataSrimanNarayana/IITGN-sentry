@@ -29,7 +29,7 @@ export default function AllVehicleRequests() {
   const postData = async (id: number) => {
     try {
       const response = await fetch(
-        process.env.NEXT_PUBLIC_BACKEND_URL + `/api/user-vehicle-log/${id}`,
+        process.env.NEXT_PUBLIC_BACKEND_URL + `/api/pending-requests/${id}`,
         {
           method: "POST",
           headers: {
@@ -102,6 +102,7 @@ export default function AllVehicleRequests() {
         throw new Error("Network response was not ok");
       }
       const responseData = await response.json();
+      fetchData(0, 100);
     } catch (error) {
       console.error("Error deleting data:", error);
       throw error;

@@ -77,7 +77,7 @@ const Form = () => {
 
     // Check if the response is ok
     if(response.ok){
-        // alert("Request generated successfully");
+        alert("Request generated successfully");
         router.push("/");
     }else{
         alert(data.message);

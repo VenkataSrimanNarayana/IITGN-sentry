@@ -102,14 +102,14 @@ export default function VisitorRequests() {
                   <>
                     <TableCell>{requests.requestId}</TableCell>
                     <TableCell>{requests.reason}</TableCell>
-                    {requests.requestDetails.vehicleNo === null ? (
+                    {requests.visitorRequestDetails.vehicleNo === null ? (
                       <TableCell>NA</TableCell>
                     ) : (
-                      <TableCell>{requests.requestDetails.vehicleNo}</TableCell>
+                      <TableCell>{requests.visitorRequestDetails.vehicleNo}</TableCell>
                     )}
-                    <TableCell>{requests.requestDetails.firstName}</TableCell>
-                    <TableCell>{requests.requestDetails.lastName}</TableCell>
-                    <TableCell>{requests.requestDetails.mobileNo}</TableCell>
+                    <TableCell>{requests.visitorRequestDetails.firstName}</TableCell>
+                    <TableCell>{requests.visitorRequestDetails.lastName}</TableCell>
+                    <TableCell>{requests.visitorRequestDetails.mobileNo}</TableCell>
                     <TableCell>{requests.entry ? "entry" : "exit"}</TableCell>
                     <TableCell>
                       <IconButton

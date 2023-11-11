@@ -72,6 +72,7 @@ export default function AllVisitorRequests() {
       }
       const responseData = await response.json();
       setRequests(responseData);
+      console.log(responseData);
     } catch (error) {
       console.error("Error fetching data: ", error);
     }
@@ -131,21 +132,21 @@ export default function AllVisitorRequests() {
                   <>
                     <TableCell>{requests.requestId}</TableCell>
                     <TableCell>{requests.reason}</TableCell>
-                    {requests.requestDetails.vehicleNo === null ? (
+                    {requests.visitorRequestDetails.vehicleNo === null ? (
                       <TableCell>NA</TableCell>
                     ) : (
                       <TableCell>
-                        {requests.requestDetails.vehicleNo}
+                        {requests.visitorRequestDetails.vehicleNo}
                       </TableCell>
                     )}
                     <TableCell>
-                      {requests.requestDetails.firstName}
+                      {requests.visitorRequestDetails.firstName}
                     </TableCell>
                     <TableCell>
-                      {requests.requestDetails.lastName}
+                      {requests.visitorRequestDetails.lastName}
                     </TableCell>
                     <TableCell>
-                      {requests.requestDetails.mobileNo}
+                      {requests.visitorRequestDetails.mobileNo}
                     </TableCell>
                     <TableCell>{requests.entry ? "entry" : "exit"}</TableCell>
                     <TableCell>

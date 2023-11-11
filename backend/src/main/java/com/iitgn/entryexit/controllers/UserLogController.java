@@ -91,7 +91,7 @@ public class UserLogController {
 
     @PreAuthorize("hasAuthority('DELETE_LOG_PRIVILEGE')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<SingleLineResponse> deleteUserLog(@PathVariable Long id){
+    public ResponseEntity<SingleLineResponse> deleteUserLog(@PathVariable UUID id){
         userLogService.deleteUserLog(id);
         return ResponseEntity.ok().body(new SingleLineResponse("User Log Deleted"));
     }

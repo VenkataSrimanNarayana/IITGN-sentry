@@ -20,12 +20,26 @@ const CustomTextField = (props: any) => {
   );
 };
 
+function getCurrentDateTime() {
+  const now = new Date();
+
+  // Format time as "12:30"
+  const hours = now.getHours() % 12 || 12;
+  const minutes = now.getMinutes();
+  const eventTime = `${hours}:${minutes < 10 ? "0" : ""}${minutes}`;
+
+  const year = now.getFullYear();
+  const month = (now.getMonth() + 1).toString().padStart(2, "0"); // Months are zero-indexed
+  const day = now.getDate().toString().padStart(2, "0");
+  const eventDate = `${year}-${month}-${day}`;
+
+  return {
+    eventTime,
+    eventDate,
+  };
+}
 
 const Form = () => {
-  const [validFromTime, setValidFromTime] = useState();
-  const [validFromDate, setValidFromDate] = useState();
-  const [validUptoTime, setValidUptoTime] = useState();
-  const [validUptoDate, setValidUptoDate] = useState();
   const [reason, setReason] = useState();
   const [firstName, setFirstName] = useState();
   const [lastName, setLastName] = useState();
@@ -39,11 +53,11 @@ const Form = () => {
   const handleSubmit = async (event: Event) => {
     event.preventDefault();
 
+    const { eventTime, eventDate } = getCurrentDateTime();
+
     const formData = {
-      validFromTime,
-      validFromDate,
-      validUptoTime,
-      validUptoDate,
+      eventTime,
+      eventDate,
       vehicleNo,
       reason,
       firstName,
@@ -54,7 +68,8 @@ const Form = () => {
 
     // Send the form data to the API here
     const response = await fetch(
-      process.env.NEXT_PUBLIC_BACKEND_URL + "/api/pending-requests/user/raise-vehicle",
+      process.env.NEXT_PUBLIC_BACKEND_URL +
+        "/api/pending-requests/user/raise-vehicle",
       {
         method: "POST",
         headers: {
@@ -200,10 +215,10 @@ const Form = () => {
             <label htmlFor="pickUp">Pick up</label>
           </div>
         </FormControl>
-        
-          <Button type="submit" onClick={handleSubmit}>
-            Submit
-          </Button>
+
+        <Button type="submit" onClick={handleSubmit}>
+          Submit
+        </Button>
       </form>
     </Container>
   );

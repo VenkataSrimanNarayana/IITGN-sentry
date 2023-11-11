@@ -4,35 +4,7 @@ import { DataGrid, GridApi } from '@mui/x-data-grid';
 import { Button, IconButton, Pagination } from '@mui/material'
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-
-const columns = [
-  {field : 'vehicleNo', headerName: 'Vehicle No', width: 200},
-  {field : 'firstName', headerName: 'First Name', width: 200},
-  {field : 'lastName', headerName: 'Last Name', width: 200},
-  {field : 'mobileNo', headerName: 'Mobile No', width: 200},
-  {field : 'inDate', headerName: 'In Date', width: 200},
-  {field : 'inTime', headerName: 'In Time', width: 200},
-  {field : 'outDate', headerName: 'Out Date', width: 200},
-  {field : 'outTime', headerName: 'Out Time', width: 200},
-  {field : 'pickup', headerName: 'Pickup', width: 200},
-  {field : 'vehicleUserLogId', headerName: 'Vehicle User Log ID', width: 200},
-  {
-    field: "action",
-    headerName: "Action",
-    sortable: false,
-    renderCell: (params) => {
-
-
-      // give a onclick function which call a api to delete the row
-
-      // return 
-      // return a icon button of delete
-      // return a icon button of edit
-
-      <IconButton></IconButton>
-    }
-  },
-];
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const DataGridWithPagination = () => {
   const { data: session, status } = useSession();
@@ -41,31 +13,81 @@ const DataGridWithPagination = () => {
   const [offset, setOffset] = useState(0);
   const router = useRouter();
 
+  const fetchData = async () => {
+    try {
+      const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + `/api/user-vehicle-log/all`, 
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session?.user.accessToken}`,
+        },
+      }
+      
+      );
+      const jsonData = await response.json();
+      setData(jsonData);
+    } catch (error) {
+      console.error('Error fetching data: ', error);
+    }
+  };
+
+  const deleteLog = async (id: number) => {
+    try {
+      const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + `/api/user-vehicle-log/${id}`, 
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session?.user.accessToken}`,
+        },
+      }
+      
+      );
+      const jsonData = await response.json();
+      console.log(jsonData);
+      fetchData();
+    } catch (error) {
+      console.error('Error fetching data: ', error);
+    }
+  }
+  
+  const columns = [
+    {field : 'vehicleNo', headerName: 'Vehicle No', width: 200},
+    {field : 'firstName', headerName: 'First Name', width: 200},
+    {field : 'lastName', headerName: 'Last Name', width: 200},
+    {field : 'mobileNo', headerName: 'Mobile No', width: 200},
+    {field : 'inDate', headerName: 'In Date', width: 200},
+    {field : 'inTime', headerName: 'In Time', width: 200},
+    {field : 'outDate', headerName: 'Out Date', width: 200},
+    {field : 'outTime', headerName: 'Out Time', width: 200},
+    {field : 'pickup', headerName: 'Pickup', width: 200},
+    {field : 'vehicleUserLogId', headerName: 'Vehicle User Log ID', width: 200},
+    {
+      field: "action",
+      headerName: "Action",
+      sortable: false,
+      renderCell: (params) => {
+        return (
+          <>
+            <IconButton
+              aria-label="delete"
+              onClick={() => {
+                deleteLog(params.row.vehicleUserLogId);
+              }}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </>
+        );
+      }
+    },
+  ];
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + `/api/user-vehicle-log/all`, 
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${session?.user.accessToken}`,
-          },
-        }
-        
-        );
-        const jsonData = await response.json();
-        setData(jsonData);
-      } catch (error) {
-        console.error('Error fetching data: ', error);
-      }
-    };
-
     fetchData();
   }, [offset, limit, status]);
 
-  console.log(jsonData);
 
   function getRowId(row : any) {
     return row.vehicleUserLogId;

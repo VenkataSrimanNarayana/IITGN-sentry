@@ -54,6 +54,17 @@ public class RoleController {
         roleService.deleteRole(role);
     }
 
-//    @PostMapping("/delete_privileges/{id}")
-
+    @PostMapping("/update")
+    public ResponseEntity<SingleLineResponse> updateRole(@RequestBody AddRoleRequestDto addRoleRequestDto){
+        if(roleService.findByName(addRoleRequestDto.getRoleName()).isPresent()){
+            Role role = roleService.findByName(addRoleRequestDto.getRoleName()).get();
+            List<Privilege> privileges = privilegeService.getPrivileges(addRoleRequestDto.getPrivilegeIds());
+            Set<Privilege> privilegeSet = Set.copyOf(privileges);
+            role.setPrivileges(privilegeSet);
+            roleService.addRole(role);
+            return new ResponseEntity<>(new SingleLineResponse("Role updated successfully"), HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(new SingleLineResponse("Role does not exist"), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

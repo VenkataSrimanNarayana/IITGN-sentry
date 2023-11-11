@@ -101,7 +101,7 @@ import {
                     <>
                       <TableCell>{requests.requestId}</TableCell>
                       <TableCell>{requests.reason}</TableCell>
-                      {requests.vehicleRequestDetails.vehicleNo === null ? (
+                      {requests.vehicleRequestDetails === null ? (
                         <TableCell>NA</TableCell>
                       ) : (
                         <TableCell>

@@ -14,9 +14,9 @@ import { useRouter } from "next/navigation";
 import UserLog  from "@/components/SuperLogs/ManualLogAdd/UserLog";
 
 import VehicleLog from "@/components/SuperLogs/ManualLogAdd/VehicleLog";
-import VisitorLog from "@/components/SuperLogs/UserLogs/VisitorLog";
+import VisitorLog from "@/components/SuperLogs/ManualLogAdd/VisitorLog";
 
-function CustomTabPanel(props: TabPanelProps) {
+function CustomTabPanel(props: any) {
   const { children, value, index, ...other } = props;
 
   return (
@@ -37,10 +37,9 @@ function CustomTabPanel(props: TabPanelProps) {
 }
 
 export default function ManualLogAdd() {
-  const { data: session, status } = useSession();
-  const [requests, setRequests] = useState([]);
+  const { status } = useSession();
   const router = useRouter();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
 
   if (status === "unauthenticated") {
     router.push("/login");
@@ -48,8 +47,7 @@ export default function ManualLogAdd() {
 
   if (status == "loading") {
     return (
-      <>
-        <Container
+      <Container
           sx={{
             display: "flex",
             justifyContent: "center",
@@ -59,7 +57,6 @@ export default function ManualLogAdd() {
         >
           <CircularProgress />
         </Container>
-      </>
     );
   }
 

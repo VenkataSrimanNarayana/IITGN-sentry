@@ -29,6 +29,7 @@ public class PendingRequest {
     @Id
     private UUID requestId;
 
+    @JsonFormat(pattern="HH:mm")
     private LocalTime validFromTime;
 
     @JsonFormat(pattern="yyyy-MM-dd")

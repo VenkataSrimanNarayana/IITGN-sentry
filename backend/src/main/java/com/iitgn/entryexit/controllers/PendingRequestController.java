@@ -77,9 +77,6 @@ public class PendingRequestController {
     @GetMapping("/all")
     public ResponseEntity<List<PendingRequest>> getPendingRequests(@RequestParam int offset, @RequestParam int limit){
         List<PendingRequest> pendingRequestList = pendingRequestService.findAllPendingRequests(offset, limit);
-        if(pendingRequestList.isEmpty()){
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
         return new ResponseEntity<>(pendingRequestList, HttpStatus.OK);
     }
 
@@ -88,9 +85,6 @@ public class PendingRequestController {
     public ResponseEntity<List<PendingRequest>> getPendingRequestSelf(){
         Long id = getCurrentUser();
         List<PendingRequest> pendingRequestList = pendingRequestService.findPendingRequestByUserId(id);
-        if(pendingRequestList.isEmpty()){
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
         return new ResponseEntity<>(pendingRequestList, HttpStatus.OK);
     }
 

@@ -54,7 +54,7 @@ const Form = () => {
 
     // Send the form data to the API here
     const response = await fetch(
-      process.env.NEXT_PUBLIC_BACKEND_URL + "/api/pending-requests/user/raise-vehicle",
+      process.env.NEXT_PUBLIC_BACKEND_URL + "/api/pending-requests/raise-vehicle",
       {
         method: "POST",
         headers: {
@@ -69,7 +69,7 @@ const Form = () => {
 
     // Check if the response is ok
     if (response.ok) {
-      // alert("Request generated successfully");
+      alert("Request generated successfully");
       router.push("/");
     } else {
       alert(data.message);

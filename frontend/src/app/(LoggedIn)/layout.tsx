@@ -14,7 +14,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     },
 
     {
-      name: "Raise request",
+      name: "Raise Request",
       link: "/generate-request",
     },
 

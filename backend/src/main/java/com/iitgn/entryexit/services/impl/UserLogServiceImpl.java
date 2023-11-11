@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -21,7 +22,7 @@ public class UserLogServiceImpl implements UserLogService {
     }
 
     @Override
-    public void deleteUserLog(Long id) {
+    public void deleteUserLog(UUID id) {
         userLogRepository.deleteById(id);
     }
 
