@@ -43,6 +43,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       link : "/super/add-role"
     },
     {
+      name : "Edit Role",
+      link : "/super/edit-role"
+    },
+    {
       name : "Manual Entry",
       link : "/super/manual-log-register"
     }

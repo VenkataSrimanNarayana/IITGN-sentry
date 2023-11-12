@@ -15,11 +15,12 @@ import java.util.Optional;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/user/room")
+@PreAuthorize("hasAuthority('ROOM_PRIVILEGE')")
 public class RoomController {
 
     private final UserService userService;
 
-    @PreAuthorize("hasAuthority('ROOM_PRIVILEGE')")
+
     @PostMapping("/{id}")
     public ResponseEntity<SingleLineResponse> userRegisterRoom(@PathVariable Long id, @RequestBody Room room){
         Optional<User> user = userService.getUserById(id);
@@ -35,7 +36,6 @@ public class RoomController {
         }
     }
 
-    @PreAuthorize("hasAuthority('ROOM_PRIVILEGE')")
     @GetMapping("/{id}")
     public ResponseEntity<Room> getRoom(@PathVariable Long id){
         Optional<User> user = userService.getUserById(id);
@@ -47,7 +47,6 @@ public class RoomController {
         }
     }
 
-    @PreAuthorize("hasAuthority('ROOM_PRIVILEGE')")
     @DeleteMapping("/{id}")
     public ResponseEntity<SingleLineResponse> deleteRoomAllocation(@PathVariable Long id){
         Optional<User> user = userService.getUserById(id);

@@ -38,7 +38,7 @@ function CustomTabPanel(props: TabPanelProps) {
 }
 
 export default function GetAllPendingRequests() {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const [requests, setRequests] = useState([]);
   const router = useRouter();
   const [value, setValue] = React.useState(0);
@@ -49,8 +49,7 @@ export default function GetAllPendingRequests() {
 
   if (status === "loading") {
     return (
-      <>
-        <Container
+      <Container
           sx={{
             display: "flex",
             justifyContent: "center",
@@ -60,7 +59,6 @@ export default function GetAllPendingRequests() {
         >
           <CircularProgress />
         </Container>
-      </>
     );
   }
 

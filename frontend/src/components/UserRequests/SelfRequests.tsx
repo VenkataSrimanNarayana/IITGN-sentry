@@ -10,9 +10,8 @@ import {
   IconButton,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { useEffect } from "react";
 
 export default function SelfRequests() {
   const [requests, setRequests] = useState([]);
@@ -42,7 +41,9 @@ export default function SelfRequests() {
   const deleteData = async (id: number) => {
     try {
       const response = await fetch(
-        process.env.NEXT_PUBLIC_BACKEND_URL + "/api/pending-requests/user/" + id,
+        process.env.NEXT_PUBLIC_BACKEND_URL +
+          "/api/pending-requests/user/" +
+          id,
         {
           method: "DELETE",
           headers: {
@@ -69,49 +70,47 @@ export default function SelfRequests() {
   }, [status]);
 
   return (
-    <>
-      <TableContainer component={Paper}>
-        <Typography variant="h6" style={{ marginBottom: "16px" }}>
-          All User Requests
-        </Typography>
-        <Table>
-          <TableHead>
+    <TableContainer component={Paper}>
+      <Typography variant="h6" style={{ marginBottom: "16px" }}>
+        All User Requests
+      </Typography>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>requestId</TableCell>
+            <TableCell>reason</TableCell>
+            <TableCell>vehicleNo</TableCell>
+            <TableCell>entry</TableCell>
+            <TableCell>actions</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {requests.map((requests: Request) => (
             <TableRow>
-              <TableCell>requestId</TableCell>
-              <TableCell>reason</TableCell>
-              <TableCell>vehicleNo</TableCell>
-              <TableCell>entry</TableCell>
-              <TableCell>actions</TableCell>
+              {requests && requests.requestType === "self" && (
+                <>
+                  <TableCell>{requests.requestId}</TableCell>
+                  <TableCell>{requests.reason}</TableCell>
+                  {requests.vehicleNo === null ? (
+                    <TableCell>NA</TableCell>
+                  ) : (
+                    <TableCell>{requests.vehicleNo}</TableCell>
+                  )}
+                  <TableCell>{requests.entry ? "entry" : "exit"}</TableCell>
+                  <TableCell>
+                    <IconButton
+                      aria-label="delete"
+                      onClick={() => deleteData(requests.requestId)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </>
+              )}
             </TableRow>
-          </TableHead>
-          <TableBody>
-            {requests.map((requests: Request) => (
-              <TableRow>
-                {requests && requests.requestType === "self" && (
-                  <>
-                    <TableCell>{requests.requestId}</TableCell>
-                    <TableCell>{requests.reason}</TableCell>
-                    {requests.vehicleNo === null ? (
-                      <TableCell>NA</TableCell>
-                    ) : (
-                      <TableCell>{requests.vehicleNo}</TableCell>
-                    )}
-                    <TableCell>{requests.entry ? "entry" : "exit"}</TableCell>
-                    <TableCell>
-                      <IconButton
-                        aria-label="delete"
-                        onClick={() => deleteData(requests.requestId)}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </TableCell>
-                  </>
-                )}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 }

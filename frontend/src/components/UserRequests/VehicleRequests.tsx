@@ -10,9 +10,8 @@ import {
     IconButton,
   } from "@mui/material";
   import DeleteIcon from "@mui/icons-material/Delete";
-  import { useState } from "react";
+  import { useState, useEffect } from "react";
   import { useSession } from "next-auth/react";
-  import { useEffect } from "react";
   import { useRouter } from "next/navigation";
   
   export default function VehicleRequests() {
