@@ -131,9 +131,9 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-<!--				<configuration>-->
-<!--					<mainClass>com.iitgn.entryexit.EntryExitApplication</mainClass>-->
-<!--				</configuration>-->
+				<configuration>
+					<mainClass>com.iitgn.entryexit.EntryExitApplication</mainClass>
+				</configuration>
 				<version>2.3.3.RELEASE</version>
 				<executions>
 					<execution>
