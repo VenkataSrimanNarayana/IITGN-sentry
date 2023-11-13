@@ -1,6 +1,7 @@
 package com.iitgn.entryexit.services.impl;
 
 import com.iitgn.entryexit.entities.Role;
+import com.iitgn.entryexit.repositories.PrivilegeRepository;
 import com.iitgn.entryexit.repositories.RoleRepository;
 import com.iitgn.entryexit.services.RoleService;
 import lombok.RequiredArgsConstructor;
@@ -25,12 +26,17 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Role addRole(Role role) {
-        return roleRepository.save(role);
+    public void saveRole(Role role) {
+        roleRepository.save(role);
     }
 
     @Override
     public void deleteRole(Role role) {
         roleRepository.delete(role);
+    }
+
+    @Override
+    public Optional<Role> findById(int id) {
+        return roleRepository.findById(id);
     }
 }

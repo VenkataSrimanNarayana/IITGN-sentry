@@ -30,7 +30,7 @@ public class Role {
     @OneToMany(mappedBy = "role")
     private Set<User> users;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "roles_privileges",
             joinColumns = @JoinColumn(

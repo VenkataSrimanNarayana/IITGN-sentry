@@ -42,16 +42,16 @@ public class PendingRequestController {
     @PostMapping("/raise-other")
     public ResponseEntity<SingleLineResponse> raiseRequestOther(@RequestBody PendingRequestOtherDto requestOtherDto){
         Long id = getCurrentUser();
-        pendingRequestService.raiseRequestOther(id, requestOtherDto);
+        PendingRequest pendingRequest = pendingRequestService.raiseRequestOther(id, requestOtherDto);
         return new ResponseEntity<>(new SingleLineResponse("Request raised successfully"), HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('RAISE_PREQUEST_PRIVILEGE')")
     @PostMapping("/raise-vehicle")
-    public ResponseEntity<SingleLineResponse> raiseVehicleRequest(@RequestBody PendingRequestVehicleDto requestVehicleDto){
+    public ResponseEntity<PendingRequest> raiseVehicleRequest(@RequestBody PendingRequestVehicleDto requestVehicleDto){
         Long id = getCurrentUser();
-        pendingRequestService.raiseRequestVehicle(id, requestVehicleDto);
-        return new ResponseEntity<>(new SingleLineResponse("Request raised successfully"), HttpStatus.OK);
+        PendingRequest pendingRequest = pendingRequestService.raiseRequestVehicle(id, requestVehicleDto);
+        return new ResponseEntity<>(pendingRequest, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('DELETE_USER_PREQUEST_PRIVILEGE')")

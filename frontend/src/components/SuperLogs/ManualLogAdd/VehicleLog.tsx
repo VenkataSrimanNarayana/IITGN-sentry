@@ -22,21 +22,18 @@ const CustomTextField = (props: any) => {
 
 function getCurrentDateTime() {
   const now = new Date();
-
-  // Format time as "12:30"
-  const hours = now.getHours() % 12 || 12;
-  const minutes = now.getMinutes();
-  const eventTime = `${hours}:${minutes < 10 ? "0" : ""}${minutes}`;
-
   const year = now.getFullYear();
-  const month = (now.getMonth() + 1).toString().padStart(2, "0"); // Months are zero-indexed
-  const day = now.getDate().toString().padStart(2, "0");
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+
   const eventDate = `${year}-${month}-${day}`;
+  const eventTime = `${hours}:${minutes}`;
 
   return {
-    eventTime,
-    eventDate,
-  };
+    eventDate, eventTime
+  }
 }
 
 const Form = () => {
@@ -45,7 +42,10 @@ const Form = () => {
   const [lastName, setLastName] = useState();
   const [mobileNo, setMobileNo] = useState();
   const [vehicleNo, setVehicleNo] = useState();
-  const [pickUp, setPickUp] = useState();
+  const [pickUp, setPickUp] = useState(0);
+  const [validUptoDate, setValidUptoDate] = useState();
+  const [validUptoTime, setValidUptoTime] = useState();
+  const [pendingRequest, setPendingRequest] = useState();
 
   const { data: session } = useSession();
   const router = useRouter();
@@ -80,11 +80,10 @@ const Form = () => {
       }
     );
 
-    const data = await response.json();
-
-    // Check if the response is ok
+  
     if (response.ok) {
-      // alert("Request generated successfully");
+      const data = await response.json();
+      setPendingRequest(data);
       router.push("/");
     } else {
       alert(data.message);
@@ -94,29 +93,6 @@ const Form = () => {
   return (
     <Container maxWidth="xs">
       <form onSubmit={handleSubmit}>
-        <FormControl className="form-control">
-          <CustomTextField
-            id="validFromTime"
-            label="Valid from time"
-            type="time"
-            value={validFromTime}
-            onChange={(e) => {
-              setValidFromTime(e.target.value);
-            }}
-          />
-        </FormControl>
-
-        <FormControl className="form-control">
-          <CustomTextField
-            id="validFromDate"
-            label="Valid from date"
-            type="date"
-            value={validFromDate}
-            onChange={(e) => {
-              setValidFromDate(e.target.value);
-            }}
-          />
-        </FormControl>
 
         <FormControl className="form-control">
           <CustomTextField

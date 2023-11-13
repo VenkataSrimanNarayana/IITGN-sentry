@@ -21,24 +21,23 @@ const CustomTextField = (props: any) => {
   );
 };
 
+
 function getCurrentDateTime() {
   const now = new Date();
-
-  // Format time as "12:30"
-  const hours = now.getHours() % 12 || 12;
-  const minutes = now.getMinutes();
-  const eventTime = `${hours}:${minutes < 10 ? "0" : ""}${minutes}`;
-
   const year = now.getFullYear();
-  const month = (now.getMonth() + 1).toString().padStart(2, "0"); // Months are zero-indexed
-  const day = now.getDate().toString().padStart(2, "0");
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+
   const eventDate = `${year}-${month}-${day}`;
+  const eventTime = `${hours}:${minutes}`;
 
   return {
-    eventTime,
-    eventDate,
-  };
+    eventDate, eventTime
+  }
 }
+
 
 const UserLog = () => {
   const [vehicleNo, setVehicleNo] = useState();

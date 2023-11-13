@@ -27,17 +27,15 @@ public class MaidLog {
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(nullable = false)
-    private LocalDate inDate;
+    private LocalDate eventDate;
 
     @JsonFormat(pattern = "HH:mm")
     @Column(nullable = false)
-    private LocalTime inTime;
+    private LocalTime eventTime;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(nullable = false)
-    private LocalDate outDate;
+    private boolean isEntry;
 
-    @JsonFormat(pattern = "HH:mm")
-    @Column(nullable = false)
-    private LocalTime outTime;
+    @ManyToOne
+    private Maid maid;
 }

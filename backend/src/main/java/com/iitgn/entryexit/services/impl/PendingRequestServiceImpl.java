@@ -1,5 +1,4 @@
 package com.iitgn.entryexit.services.impl;
-
 import com.iitgn.entryexit.entities.PendingRequest;
 import com.iitgn.entryexit.entities.VisitorRequestDetails;
 import com.iitgn.entryexit.entities.User;
@@ -50,7 +49,7 @@ public class PendingRequestServiceImpl implements PendingRequestService {
     }
 
     @Override
-    public void raiseRequestVehicle(Long id, PendingRequestVehicleDto requestVehicleDto) {
+    public PendingRequest raiseRequestVehicle(Long id, PendingRequestVehicleDto requestVehicleDto) {
         final Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
             PendingRequest pendingRequest = PendingRequest.builder()
@@ -76,11 +75,14 @@ public class PendingRequestServiceImpl implements PendingRequestService {
             pendingRequestRepository.save(pendingRequest);
             vehicleRequestDetails.setPendingRequest(pendingRequest);
             VehicleRequestDetailsRepository.save(vehicleRequestDetails);
+            return pendingRequest;
+        }else{
+            return null;
         }
     }
 
     @Override
-    public void raiseRequestOther(Long id, PendingRequestOtherDto requestOtherDto) {
+    public PendingRequest raiseRequestOther(Long id, PendingRequestOtherDto requestOtherDto) {
         final Optional<User> user = userRepository.findById(id);
 
         if (user.isPresent()) {
@@ -112,7 +114,9 @@ public class PendingRequestServiceImpl implements PendingRequestService {
             pendingRequestRepository.save(pendingRequest);
             visitorRequestDetails.setPendingRequest(pendingRequest);
             requestDetailsRepository.save(visitorRequestDetails);
+            return pendingRequest;
         }
+        return null;
     }
 
     @Override

@@ -12,11 +12,11 @@ public interface PendingRequestService {
 
     public void raiseRequestSelf(Long id, PendingRequestSelfDto pendingRequestSelfDto);
 
-    void raiseRequestVehicle(Long id, PendingRequestVehicleDto requestVehicleDto);
+    PendingRequest raiseRequestVehicle(Long id, PendingRequestVehicleDto requestVehicleDto);
 
     public List<PendingRequest> findAllPendingRequests(int offset, int limit);
 
-    void raiseRequestOther(Long id, PendingRequestOtherDto requestOtherDto);
+    PendingRequest raiseRequestOther(Long id, PendingRequestOtherDto requestOtherDto);
 
     void deleteRequest(UUID requestId);
 

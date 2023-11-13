@@ -29,15 +29,19 @@ public class PendingRequest {
     @Id
     private UUID requestId;
 
+    @Column(nullable = false)
     @JsonFormat(pattern="HH:mm")
     private LocalTime validFromTime;
 
+    @Column(nullable = false)
     @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate validFromDate;
 
+    @Column(nullable = false)
     @JsonFormat(pattern="HH:mm")
     private LocalTime validUptoTime;
 
+    @Column(nullable = false)
     @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate validUptoDate;
 
@@ -54,7 +58,6 @@ public class PendingRequest {
     @ManyToOne
     private User user;
 
-
     private String vehicleNo;
 
     @JsonIgnore
@@ -66,8 +69,7 @@ public class PendingRequest {
     @OneToOne
     @JoinColumn(name = "user_vehicle_log_id")
     private UserVehicleLog userVehicleLog;
-
-
+    
     @OneToOne(mappedBy = "pendingRequest", cascade = CascadeType.ALL)
     private VisitorRequestDetails visitorRequestDetails;
 
