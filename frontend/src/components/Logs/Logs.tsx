@@ -107,7 +107,7 @@ export default function Log(props: { allowDelete: boolean; logType: string }) {
     }
 
     return (
-        <div style={{ height: 400, width: "100%" }}>
+        <div style={{ height: 400, width: "100%", marginBottom: "5rem" }}>
             <DataGrid
                 getRowId={getRowId}
                 rows={jsonData}
@@ -124,11 +124,6 @@ export default function Log(props: { allowDelete: boolean; logType: string }) {
                         ],
                     },
                 }}
-            />
-            <Pagination
-                count={10}
-                page={offset / limit + 1}
-                onChange={(event, value) => setOffset((value - 1) * limit)}
             />
         </div>
     );

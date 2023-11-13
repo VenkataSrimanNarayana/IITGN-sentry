@@ -132,11 +132,6 @@ const VehicleLogs = ({
                     },
                 }}
             />
-            <Pagination
-                count={10}
-                page={offset / limit + 1}
-                onChange={(event, value) => setOffset((value - 1) * limit)}
-            />
         </div>
     );
 };

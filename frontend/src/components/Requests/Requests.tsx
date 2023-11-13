@@ -14,6 +14,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
+import { DataGrid } from "@mui/x-data-grid";
 
 export default function Requests({
     allowDelete,
@@ -113,96 +114,44 @@ export default function Requests({
     };
 
     useEffect(() => {
-        fetchData(0, 100);
+        fetchData(0, 1000);
     }, [status]);
 
+    const defaultColumns = [
+        {
+            field: "requestId",
+            headerName: "Request ID",
+            width: 150,
+        },
+        { field: "reason", headerName: "Reason", width: 200 },
+        { field: "vehicleNo", headerName: "Vehicle No", width: 150 },
+        { field: "entry", headerName: "Entry", width: 130 },
+        { field: "requestType", headerName: "Request Type", width: 150 },
+        {
+            field: "validFromDate",
+            headerName: "Valid From Date",
+            width: 150,
+        },
+        { field: "validFromTime", headerName: "Valid From Time", width: 150 },
+        {
+            field: "validUptoDate",
+            headerName: "Valid Upto Date",
+            width: 150,
+        },
+        { field: "validUptoTime", headerName: "Valid Upto Time", width: 150 },
+    ];
+
     return (
-        <>
-            <TableContainer component={Paper}>
-                <Typography variant="h6" style={{ marginBottom: "16px" }}>
-                    All user Requests
-                </Typography>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>requestId</TableCell>
-                            <TableCell>reason</TableCell>
-                            <TableCell>vehicleNo</TableCell>
-                            <TableCell>entry</TableCell>
-                            <TableCell>actions</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {requests.map((requests: Request) => (
-                            <TableRow>
-                                {requests &&
-                                    requests.requestType === "self" && (
-                                        <>
-                                            <TableCell>
-                                                {requests.requestId}
-                                            </TableCell>
-                                            <TableCell>
-                                                {requests.reason}
-                                            </TableCell>
-                                            {requests.vehicleNo === null ? (
-                                                <TableCell>NA</TableCell>
-                                            ) : (
-                                                <TableCell>
-                                                    {requests.vehicleNo}
-                                                </TableCell>
-                                            )}
-                                            <TableCell>
-                                                {requests.entry
-                                                    ? "entry"
-                                                    : "exit"}
-                                            </TableCell>
-                                            <TableCell
-                                                sx={{
-                                                    display:
-                                                        allowAccept ||
-                                                        allowDelete
-                                                            ? "flex"
-                                                            : "none",
-                                                }}
-                                            >
-                                                <IconButton
-                                                    sx={{
-                                                        display: allowDelete
-                                                            ? "flex"
-                                                            : "none",
-                                                    }}
-                                                    aria-label="delete"
-                                                    onClick={() =>
-                                                        deleteData(
-                                                            requests.requestId
-                                                        )
-                                                    }
-                                                >
-                                                    <DeleteIcon />
-                                                </IconButton>
-                                                <IconButton
-                                                    sx={{
-                                                        display: allowAccept
-                                                            ? "flex"
-                                                            : "none",
-                                                    }}
-                                                    aria-label="done"
-                                                    onClick={() =>
-                                                        postData(
-                                                            requests.requestId
-                                                        )
-                                                    }
-                                                >
-                                                    <DoneIcon />
-                                                </IconButton>
-                                            </TableCell>
-                                        </>
-                                    )}
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </>
+        <div style={{ width: "100%" }}>
+            <DataGrid
+                getRowId={(row: any) => row.requestId}
+                rows={requests}
+                columns={defaultColumns}
+                pageSize={5}
+                rowsPerPageOptions={[5]}
+                disableSelectionOnClick
+                pageSizeOptions={[5, 10, 20, 50, 100]}
+            />
+        </div>
     );
 }
