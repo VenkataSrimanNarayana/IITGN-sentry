@@ -1,22 +1,23 @@
 "use client";
 import React, { useState } from "react";
 import { useSession } from "next-auth/react";
-import {
-    Typography,
-    CircularProgress,
-    Container,
-    Box,
-    Tabs,
-    Tab,
-} from "@mui/material";
+import { Typography, CircularProgress, Container } from "@mui/material";
 import { useRouter } from "next/navigation";
 
-import UserLog from "@/components/Logs/ManualLogAdd/UserLog";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Box from "@mui/material/Box";
+import Logs from "@/components/Logs/Logs";
+import VisiterLogs from "@/components/Logs/VisitorLogs";
+import VehicleLogs from "@/components/Logs/VehicleLogs";
 
-import VehicleLog from "@/components/Logs/ManualLogAdd/VehicleLog";
-import VisitorLog from "@/components/Logs/ManualLogAdd/VisitorLog";
+interface TabPanelProps {
+    children?: React.ReactNode;
+    index: number;
+    value: number;
+}
 
-function CustomTabPanel(props: any) {
+function CustomTabPanel(props: TabPanelProps) {
     const { children, value, index, ...other } = props;
 
     return (
@@ -36,27 +37,30 @@ function CustomTabPanel(props: any) {
     );
 }
 
-export default function ManualLogAdd() {
-    const { status } = useSession();
+export default function GetAllPendingRequests() {
+    const { data: session, status } = useSession();
+    const [requests, setRequests] = useState([]);
     const router = useRouter();
-    const [value, setValue] = useState(0);
+    const [value, setValue] = React.useState(0);
 
     if (status === "unauthenticated") {
         router.push("/login");
     }
 
-    if (status == "loading") {
+    if (status === "loading") {
         return (
-            <Container
-                sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    height: "100vh",
-                }}
-            >
-                <CircularProgress />
-            </Container>
+            <>
+                <Container
+                    sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "100vh",
+                    }}
+                >
+                    <CircularProgress />
+                </Container>
+            </>
         );
     }
 
@@ -79,19 +83,19 @@ export default function ManualLogAdd() {
                     onChange={handleChange}
                     aria-label="basic tabs example"
                 >
-                    <Tab label="user manual" {...a11yProps(0)} />
-                    <Tab label="vehicle manual" {...a11yProps(1)} />
-                    <Tab label="visitor manual" {...a11yProps(2)} />
+                    <Tab label="user logs" {...a11yProps(0)} />
+                    <Tab label="vehicle logs" {...a11yProps(1)} />
+                    <Tab label="visitor logs" {...a11yProps(2)} />
                 </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0}>
-                <UserLog></UserLog>
+                <Logs isDelete={true} logType="all" />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
-                <VehicleLog></VehicleLog>
+                <VehicleLogs isDelete={true} logType="all" />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
-                <VisitorLog></VisitorLog>
+                <VisiterLogs isDelete={true} logType="all" />
             </CustomTabPanel>
         </Box>
     );

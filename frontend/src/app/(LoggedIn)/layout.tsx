@@ -19,19 +19,19 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
         {
             name: "Super Requests",
-            link: "/super/all-requests",
+            link: "/super/requests",
         },
         {
             name: "Super Logs",
-            link: "/super/all-logs",
+            link: "/super/logs",
         },
         {
             name: "User Logs",
-            link: "/user/my-logs",
+            link: "/user/logs",
         },
         {
             name: "User Requests",
-            link: "/user/my-requests",
+            link: "/user/requests",
         },
         {
             name: "Register User",
@@ -39,11 +39,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         },
         {
             name: "Add new Role",
-            link: "/super/add-role",
+            link: "/role/create",
         },
         {
             name: "Edit Role",
-            link: "/super/edit-role",
+            link: "/role/edit",
         },
         {
             name: "Manual Entry",

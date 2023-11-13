@@ -28,5 +28,5 @@ export default withAuth(
 );
 
 export const config = {
-    matcher: ["/", "/raise-request"],
+    matcher: Object.keys(pageAuthorityMap),
 };
