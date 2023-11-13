@@ -4,6 +4,7 @@ import com.iitgn.entryexit.entities.PendingRequest;
 import com.iitgn.entryexit.models.requestdto.PendingRequestOtherDto;
 import com.iitgn.entryexit.models.requestdto.PendingRequestSelfDto;
 import com.iitgn.entryexit.models.requestdto.PendingRequestVehicleDto;
+import com.iitgn.entryexit.models.responses.PendingRequestResponse;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,7 +15,7 @@ public interface PendingRequestService {
 
     PendingRequest raiseRequestVehicle(Long id, PendingRequestVehicleDto requestVehicleDto);
 
-    public List<PendingRequest> findAllPendingRequests(int offset, int limit);
+    public List<PendingRequestResponse> findAllPendingRequests(int offset, int limit);
 
     PendingRequest raiseRequestOther(Long id, PendingRequestOtherDto requestOtherDto);
 

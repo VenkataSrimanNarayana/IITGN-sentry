@@ -6,6 +6,7 @@ import com.iitgn.entryexit.entities.VehicleRequestDetails;
 import com.iitgn.entryexit.models.requestdto.PendingRequestOtherDto;
 import com.iitgn.entryexit.models.requestdto.PendingRequestSelfDto;
 import com.iitgn.entryexit.models.requestdto.PendingRequestVehicleDto;
+import com.iitgn.entryexit.models.responses.PendingRequestResponse;
 import com.iitgn.entryexit.repositories.PendingRequestRepository;
 import com.iitgn.entryexit.repositories.RequestDetailsRepository;
 import com.iitgn.entryexit.repositories.UserRepository;
@@ -125,8 +126,27 @@ public class PendingRequestServiceImpl implements PendingRequestService {
     }
 
     @Override
-    public List<PendingRequest> findAllPendingRequests(int offset, int limit) {
-        return pendingRequestRepository.findAll(PageRequest.of(offset/limit, limit)).getContent();
+    public List<PendingRequestResponse> findAllPendingRequests(int offset, int limit) {
+        List<PendingRequest> pendingRequests = pendingRequestRepository.findAll(PageRequest.of(offset/limit, limit)).getContent();
+        List<PendingRequestResponse> pendingRequestResponses = new java.util.ArrayList<>();
+        for (PendingRequest pendingRequest :
+                pendingRequests) {
+            PendingRequestResponse pendingRequestResponse = PendingRequestResponse.builder()
+                    .userId(pendingRequest.getUser().getId())
+                    .requestId(pendingRequest.getRequestId())
+                    .validFromDate(pendingRequest.getValidFromDate())
+                    .validFromTime(pendingRequest.getValidFromTime())
+                    .validUptoDate(pendingRequest.getValidUptoDate())
+                    .requestType(pendingRequest.getRequestType())
+                    .validUptoTime(pendingRequest.getValidUptoTime())
+                    .reason(pendingRequest.getReason())
+                    .isEntry(pendingRequest.isEntry())
+                    .vehicleNo(pendingRequest.getVehicleNo())
+                    .vehicleRequestDetails(pendingRequest.getVehicleRequestDetails())
+                    .visitorRequestDetails(pendingRequest.getVisitorRequestDetails()).build();
+            pendingRequestResponses.add(pendingRequestResponse);
+        }
+        return pendingRequestResponses;
     }
 
     @Override

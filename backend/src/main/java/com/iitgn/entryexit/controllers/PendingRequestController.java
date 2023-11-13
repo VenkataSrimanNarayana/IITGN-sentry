@@ -4,6 +4,7 @@ import com.iitgn.entryexit.entities.PendingRequest;
 import com.iitgn.entryexit.models.requestdto.PendingRequestOtherDto;
 import com.iitgn.entryexit.models.requestdto.PendingRequestSelfDto;
 import com.iitgn.entryexit.models.requestdto.PendingRequestVehicleDto;
+import com.iitgn.entryexit.models.responses.PendingRequestResponse;
 import com.iitgn.entryexit.models.responses.SingleLineResponse;
 import com.iitgn.entryexit.services.PendingRequestService;
 
@@ -40,10 +41,10 @@ public class PendingRequestController {
 
     @PreAuthorize("hasAuthority('RAISE_PREQUEST_PRIVILEGE')")
     @PostMapping("/raise-other")
-    public ResponseEntity<SingleLineResponse> raiseRequestOther(@RequestBody PendingRequestOtherDto requestOtherDto){
+    public ResponseEntity<PendingRequest> raiseRequestOther(@RequestBody PendingRequestOtherDto requestOtherDto){
         Long id = getCurrentUser();
         PendingRequest pendingRequest = pendingRequestService.raiseRequestOther(id, requestOtherDto);
-        return new ResponseEntity<>(new SingleLineResponse("Request raised successfully"), HttpStatus.OK);
+        return new ResponseEntity<>(pendingRequest, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('RAISE_PREQUEST_PRIVILEGE')")
@@ -75,8 +76,8 @@ public class PendingRequestController {
 
     @PreAuthorize("hasAuthority('READ_PREQUEST_PRIVILEGE')")
     @GetMapping("/all")
-    public ResponseEntity<List<PendingRequest>> getPendingRequests(@RequestParam int offset, @RequestParam int limit){
-        List<PendingRequest> pendingRequestList = pendingRequestService.findAllPendingRequests(offset, limit);
+    public ResponseEntity<List<PendingRequestResponse>> getPendingRequests(@RequestParam int offset, @RequestParam int limit){
+        List<PendingRequestResponse> pendingRequestList = pendingRequestService.findAllPendingRequests(offset, limit);
         return new ResponseEntity<>(pendingRequestList, HttpStatus.OK);
     }
 
