@@ -37,7 +37,6 @@ const handler = NextAuth({
                     throw new Error(user.message);
                 }
                 if (res.ok && user) {
-                    console.log(user);
                     return user;
                 } else {
                     return null;
@@ -45,12 +44,30 @@ const handler = NextAuth({
             },
         }),
     ],
+    pages: {
+        signIn: "/login",
+    },
     callbacks: {
         async jwt({ token, user, account }) {
             if (account && user) {
+                // Fetching the user privileges from the backend
+                const backend_details_url =
+                    process.env.BACKEND_URL +
+                    "/api/users/" +
+                    parseJwt(user.accessToken).sub +
+                    "/details";
+                const res = await fetch(backend_details_url, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${user.accessToken}`,
+                    },
+                });
+                const data = await res.json();
                 return {
                     ...token,
                     accessToken: user.accessToken,
+                    authorities: data.authorities.map((a) => a.authority),
                 };
             }
 
