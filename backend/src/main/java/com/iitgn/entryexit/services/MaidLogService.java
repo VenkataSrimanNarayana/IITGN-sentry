@@ -13,4 +13,6 @@ public interface MaidLogService {
     MaidLog getMaidLog(UUID id);
 
     void deleteMaidLog(UUID id);
+
+    MaidLog getMaidLogByUserId(Long id);
 }

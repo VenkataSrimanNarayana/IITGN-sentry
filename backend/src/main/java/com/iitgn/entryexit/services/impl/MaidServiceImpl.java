@@ -34,4 +34,9 @@ public class MaidServiceImpl implements MaidService {
     public List<Maid> getAllMaid() {
         return maidRepository.findAll();
     }
+
+    @Override
+    public List<Maid> getMaidByUserId(Long id) {
+        return maidRepository.findMaidByUserId(id);
+    }
 }

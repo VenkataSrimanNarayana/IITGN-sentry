@@ -49,6 +49,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             name: "Manual Entry",
             link: "/super/manual-log-register",
         },
+        {
+            name : "Register Maid",
+            link : "/register-maid",
+        }
     ];
 
     return (

@@ -14,4 +14,6 @@ public interface MaidService {
     void deleteMaid(UUID id);
 
     List<Maid> getAllMaid();
+
+    List<Maid> getMaidByUserId(Long id);
 }

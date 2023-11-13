@@ -8,6 +8,8 @@ import com.iitgn.entryexit.services.MaidService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -22,6 +24,11 @@ public class MaidLogController {
 
     private final MaidLogService maidLogService;
     private final MaidService maidService;
+
+    private Long getCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return Long.parseLong(auth.getName());
+    }
 
 
     @PreAuthorize("hasAuthority('LOG_MAID_PRIVILEGE')")
@@ -48,12 +55,6 @@ public class MaidLogController {
         return ResponseEntity.ok(new SingleLineResponse("Maid Logged Successfully"));
     }
 
-    @PreAuthorize("hasAuthority('READ_ALL_LOG_MAID_PRIVILEGE')")
-    @GetMapping("/all")
-    public ResponseEntity<List<MaidLog>> getAllMaidLog(){
-        return ResponseEntity.ok(maidLogService.getAllMaidLog());
-    }
-
     @PreAuthorize("hasAuthority('DELETE_LOG_MAID_PRIVILEGE')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<SingleLineResponse> deleteMaidLog(@PathVariable UUID id){
@@ -61,11 +62,23 @@ public class MaidLogController {
         return ResponseEntity.ok(new SingleLineResponse("Maid Log Deleted Successfully"));
     }
 
+    @PreAuthorize("hasAuthority('READ_LOG_USER_MAID_PRIVILEGE')")
+    @GetMapping("/user")
+    public ResponseEntity<MaidLog> getAllMaidLogs(){
+        Long id = getCurrentUser();
+        MaidLog maidLog = maidLogService.getMaidLogByUserId(id);
+        if(maidLog == null){
+            return ResponseEntity.notFound().build();
+        }else{
+            return ResponseEntity.ok(maidLog);
+        }
+    }
 
-//    @PreAuthorize("hasAuthority('READ_LOG_MAID_PRIVILEGE')")
-//    @GetMapping("/maid/{id}")
-
-
+    @PreAuthorize("hasAuthority('READ_LOG_MAID_PRIVILEGE')")
+    @GetMapping("/all")
+    public ResponseEntity<List<MaidLog>> getAllMaidLog(){
+        return ResponseEntity.ok(maidLogService.getAllMaidLog());
+    }
     @PreAuthorize("hasAuthority('READ_LOG_MAID_PRIVILEGE')")
     @GetMapping("/{id}")
     public ResponseEntity<MaidLog> getMaidLog(@PathVariable UUID id){

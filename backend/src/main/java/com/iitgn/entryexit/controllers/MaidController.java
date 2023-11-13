@@ -7,6 +7,8 @@ import com.iitgn.entryexit.services.MaidService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -67,6 +69,24 @@ public class MaidController {
             return ResponseEntity.ok(maid);
         }
     }
+
+    @PreAuthorize("hasAuthority('READ_MAID_DETAILS_USER_PRIVILEGE')")
+    @GetMapping("/user")
+    public ResponseEntity<List<Maid>> getAllMaidUser(){
+        Long id = getCurrentUser();
+        List<Maid> maid = maidService.getMaidByUserId(id);
+        if(maid == null){
+            return ResponseEntity.notFound().build();
+        }else{
+            return ResponseEntity.ok(maid);
+        }
+    }
+
+    private Long getCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return Long.parseLong(auth.getName());
+    }
+
 
 
 }

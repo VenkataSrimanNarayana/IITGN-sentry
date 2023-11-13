@@ -2,7 +2,6 @@ package com.iitgn.entryexit.services.impl;
 
 import com.iitgn.entryexit.entities.MaidLog;
 import com.iitgn.entryexit.repositories.MaidLogRepository;
-import com.iitgn.entryexit.repositories.MaidRepository;
 import com.iitgn.entryexit.services.MaidLogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,5 +34,10 @@ public class MaidLogServiceImpl implements MaidLogService {
     @Override
     public void deleteMaidLog(UUID id) {
         maidLogRepository.deleteById(id);
+    }
+
+    @Override
+    public MaidLog getMaidLogByUserId(Long id) {
+        return maidLogRepository.findMaidLogByMaidId(id);
     }
 }
