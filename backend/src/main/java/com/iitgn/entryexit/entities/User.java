@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-// user(user_id, first_name, last_name, house_no, area, Landmark, Pincode, Town_city, State, Country, Type)
+// user(user_id, first_name, last_name, house_no, area, Landmark, pin_code, Town_city, State, Country, Type)
 
 @Getter
 @Setter
@@ -107,6 +107,11 @@ public class User implements UserDetails {
     @OneToMany
     @JoinColumn(name = "user_id")
     private Set<UserVehicleLog> userVehicleLogs;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "worker_id")
+    private Maid maid;
 
     @JsonIgnore
     @Override

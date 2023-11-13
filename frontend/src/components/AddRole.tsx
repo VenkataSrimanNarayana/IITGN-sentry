@@ -1,7 +1,7 @@
 import { Privilege } from "@/types/privilege";
 import { ok } from "assert";
 import { useSession } from "next-auth/react";
-import { useState, useEffect, SetStateAction } from "react";
+import { useState, useEffect, SetStateAction, use } from "react";
 
 const PrivilegesPage = () => {
   const [privileges, setPrivileges] = useState([]);
@@ -42,9 +42,7 @@ const PrivilegesPage = () => {
   };
 
   const removeAllChecked = () => {
-    useEffect(() => {
     setSelectedPrivileges([]);
-    });
   }
 
   console.log(selectedPrivileges);
@@ -73,6 +71,7 @@ const PrivilegesPage = () => {
       if(response.ok){
         setNewRoleName("");
         setSelectedPrivileges([]);
+        removeAllChecked();
       }
       console.log("Role created successfully!");
     } catch (error) {

@@ -58,10 +58,9 @@ public class UserController {
     }
 
 
-    @PreAuthorize("hasAuthority('RESET_USER_PASSWORD_PRIVILEGE')")
-    @GetMapping("/api/users/reset-password")
-    public ResponseEntity<SingleLineResponse> resetPasswordById() {
-        Long id = getCurrentUser();
+    @PreAuthorize("hasAuthority('RESET_PASSWORD_PRIVILEGE')")
+    @GetMapping("/api/users/reset-password/{id}")
+    public ResponseEntity<SingleLineResponse> resetPasswordById(@PathVariable Long id) {
         User user = userService.getUserById(id).orElse(null);
         if (user == null) {
             return new ResponseEntity<>(new SingleLineResponse("User not found"), HttpStatus.NOT_FOUND);
@@ -78,7 +77,6 @@ public class UserController {
         simpleMailMessage.setText("Your new password is " + newPassword);
         String encodedPassword = passwordEncoder.encode(newPassword);
         userService.changePasswordById(id, encodedPassword);
-
         String text = String.format(Objects.requireNonNull(simpleMailMessage.getText()));
 
         Set<Email> emails = user.getEmails();
@@ -182,6 +180,17 @@ public class UserController {
 //        }
 //        userService.updateUserById(id, signUpDto);
 //        return new ResponseEntity<>(userTemp.get(), HttpStatus.OK);
+//    }
+
+//    @PreAuthorize("hasAuthority('UPDATE_USER_PRIVILEGE')")
+//    @PutMapping("/api/users/{id}")
+//    public ResponseEntity<SingleLineResponse> updateUserById(@PathVariable Long id, @RequestBody ) {
+//        Optional<User> userTemp = userService.getUserById(id);
+//        if (userTemp.isEmpty()) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//        userService.updateUserById(id, signUpDto);
+//        return new ResponseEntity<>(new SingleLineResponse("User updated successfully"), HttpStatus.OK);
 //    }
 
 

@@ -23,4 +23,21 @@ public class ContactNumber {
     @Id
     private String phone;
 
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (object == null || getClass() != object.getClass()) {
+            return false;
+        }
+        ContactNumber other = (ContactNumber) object;
+        return type.equals(other.type) && phone.equals(other.phone);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(type, phone);
+    }
+
 }

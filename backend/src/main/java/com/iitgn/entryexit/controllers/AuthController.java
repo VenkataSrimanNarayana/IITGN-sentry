@@ -6,6 +6,7 @@ import com.iitgn.entryexit.models.requestdto.SignUpDto;
 import com.iitgn.entryexit.services.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -29,6 +30,7 @@ public class AuthController {
         return ResponseEntity.ok(jwtAuthResponse);
     }
 
+    @PreAuthorize("hasAuthority('ACCOUNT_SIGNUP_PRIVILEGE')")
     // signup endpoint
     @PostMapping("/signup")
     public ResponseEntity<String> registerUser(@RequestBody SignUpDto signUpDto){

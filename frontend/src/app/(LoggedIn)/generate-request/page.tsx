@@ -39,7 +39,6 @@ function CustomTabPanel(props: TabPanelProps) {
 
 export default function GetAllPendingRequests() {
   const { status } = useSession();
-  const [requests, setRequests] = useState([]);
   const router = useRouter();
   const [value, setValue] = React.useState(0);
 
