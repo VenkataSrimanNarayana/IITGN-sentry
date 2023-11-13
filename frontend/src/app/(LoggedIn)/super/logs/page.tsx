@@ -64,6 +64,11 @@ export default function GetAllPendingRequests() {
         );
     }
 
+    // Decide on delete button
+    const allowDelete: boolean = session?.user?.details.authorities.includes(
+        "DELETE_LOG_PRIVILEGE"
+    ) as boolean;
+
     function a11yProps(index: number) {
         return {
             id: `simple-tab-${index}`,
@@ -89,13 +94,13 @@ export default function GetAllPendingRequests() {
                 </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0}>
-                <Logs isDelete={true} logType="all" />
+                <Logs allowDelete={allowDelete} logType="all" />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
-                <VehicleLogs isDelete={true} logType="all" />
+                <VehicleLogs allowDelete={allowDelete} logType="all" />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
-                <VisiterLogs isDelete={true} logType="all" />
+                <VisiterLogs allowDelete={allowDelete} logType="all" />
             </CustomTabPanel>
         </Box>
     );

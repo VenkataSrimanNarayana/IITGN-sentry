@@ -6,6 +6,7 @@ declare module "next-auth" {
             /** The user's postal address. */
             userID: string;
             accessToken: string;
+            details: Details;
         };
     }
 }

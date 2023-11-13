@@ -1,23 +1,21 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { DataGrid, GridApi } from "@mui/x-data-grid";
-import { Button, IconButton, Pagination } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
+import { IconButton, Pagination } from "@mui/material";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-const DataGridWithPagination = ({
-    isDelete,
+const VehicleLogs = ({
+    allowDelete,
     logType,
 }: {
-    isDelete: boolean;
+    allowDelete: boolean;
     logType: string;
 }) => {
     const { data: session, status } = useSession();
     const [jsonData, setData] = useState([]);
     const [limit, setLimit] = useState(5);
     const [offset, setOffset] = useState(0);
-    const router = useRouter();
     let fetch_url = "";
     if (logType === "self") {
         fetch_url =
@@ -82,7 +80,7 @@ const DataGridWithPagination = ({
         },
     ];
 
-    const columns = isDelete
+    const columns = allowDelete
         ? [
               ...defaultColumns,
               {
@@ -143,4 +141,4 @@ const DataGridWithPagination = ({
     );
 };
 
-export default DataGridWithPagination;
+export default VehicleLogs;

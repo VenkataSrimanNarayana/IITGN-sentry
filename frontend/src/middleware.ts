@@ -20,8 +20,11 @@ export default withAuth(
     },
     {
         callbacks: {
-            authorized: ({ token }) => {
-                return !!(token && token.accessToken);
+            authorized: ({ token, req }) => {
+                return (
+                    !!(token && token.accessToken) ||
+                    req.nextUrl.pathname.startsWith("/login")
+                );
             },
         },
     }

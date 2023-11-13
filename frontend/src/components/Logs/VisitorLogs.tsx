@@ -3,14 +3,13 @@ import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { IconButton, Pagination } from "@mui/material";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-const DataGridWithPagination = ({
-    isDelete,
+const VisitorLogs = ({
+    allowDelete,
     logType,
 }: {
-    isDelete: boolean;
+    allowDelete: boolean;
     logType: string;
 }) => {
     const { data: session, status } = useSession();
@@ -68,7 +67,7 @@ const DataGridWithPagination = ({
         { field: "outDate", headerName: "Out Date", width: 150 },
         { field: "outTime", headerName: "Out Time", width: 150 },
     ];
-    const columns = isDelete
+    const columns = allowDelete
         ? [
               ...defaultColumns,
               {
@@ -150,4 +149,4 @@ const DataGridWithPagination = ({
     );
 };
 
-export default DataGridWithPagination;
+export default VisitorLogs;

@@ -76,11 +76,29 @@ const handler = NextAuth({
 
         async session({ session, token }) {
             if (session.user) {
+                // Fetch the user details from the backend
+                const backend_details_url =
+                    process.env.BACKEND_URL +
+                    "/api/users/" +
+                    parseJwt(token.accessToken as string).sub +
+                    "/details";
+                const res = await fetch(backend_details_url, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token.accessToken}`,
+                    },
+                });
+                const data: Details = await res.json();
                 session.user = {
                     ...session.user,
                     accessToken: token.accessToken,
                     userID: parseJwt(token.accessToken as string).sub,
+                    details: data,
                 } as { [key: string]: unknown };
+                session.user.details.authorities = data.authorities.map(
+                    (a) => a.authority
+                );
             }
 
             return session;

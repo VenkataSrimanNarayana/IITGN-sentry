@@ -5,8 +5,12 @@ import { IconButton, Pagination } from "@mui/material";
 import { useSession } from "next-auth/react";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-export default function Log(props: { isDelete: boolean; logType: string }) {
-    const isDelete = props.isDelete;
+export default function Log(props: { allowDelete: boolean; logType: string }) {
+    const { data: session, status } = useSession({ required: true });
+    const [jsonData, setData] = useState([]);
+    const [limit, setLimit] = useState(5);
+    const [offset, setOffset] = useState(0);
+    const allowDelete = props.allowDelete;
     const logType = props.logType;
 
     let fetch_url = "";
@@ -16,12 +20,6 @@ export default function Log(props: { isDelete: boolean; logType: string }) {
     } else if (logType === "all") {
         fetch_url = process.env.NEXT_PUBLIC_BACKEND_URL + `/api/user-log/all`;
     }
-
-    const { data: session, status } = useSession();
-    const [jsonData, setData] = useState([]);
-    const [limit, setLimit] = useState(5);
-    const [offset, setOffset] = useState(0);
-
     const fetchData = async () => {
         try {
             const response = await fetch(fetch_url, {
@@ -77,7 +75,7 @@ export default function Log(props: { isDelete: boolean; logType: string }) {
         { field: "entry", headerName: "Entry", width: 130 },
     ];
 
-    const columns = isDelete
+    const columns = allowDelete
         ? [
               ...defaultColumns,
               {

@@ -42,14 +42,26 @@ declare global {
             blockName: string;
             roomNo: number;
         };
-        authorities: [
-            {
-                authority: string;
-            }
-        ];
+        authorities: string[];
         accountNonExpired: "bool";
         accountNonLocked: "bool";
         credentialsNonExpired: "bool";
         enabled: "bool";
     };
+    interface Request {
+        requestId: number;
+        userId: number;
+        validFromTime: string;
+        validFromDate: string;
+        validUptoTime: string;
+        validUptoDate: string;
+        requestType: string;
+        reason: string;
+        vehicleNo: string;
+        userVisitorLog: string;
+        userVehicleLog: string;
+        requestDetails: {};
+        vehicleRequestDetails: {};
+        entry: boolean;
+    }
 }
