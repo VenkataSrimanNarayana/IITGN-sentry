@@ -51,12 +51,29 @@ export default function VisitorRequests({
                 }
             );
 
-            const responseData = await response.json().then(() => {}); // Assuming the response is JSON
-            console.log("Response data:", responseData);
+            const responseData = await response.json(); // Assuming the response is JSON
             if (response.ok) {
-                setRequests(
-                    requests.filter((request) => request.requestId !== id)
+                // Get request from the id
+                const request = requests.find(
+                    (request) => request.requestId === id
                 );
+                if (request.entry === true) {
+                    setRequests(
+                        requests.map((request) => {
+                            if (request.requestId === id) {
+                                return {
+                                    ...request,
+                                    entry: false,
+                                };
+                            }
+                            return request;
+                        }) as any
+                    );
+                } else {
+                    setRequests(
+                        requests.filter((request) => request.requestId !== id)
+                    );
+                }
             }
             // Handle the response data or return it as needed
             return responseData;
@@ -124,126 +141,96 @@ export default function VisitorRequests({
         fetchData(0, 100);
     }, [status]);
 
-    //   console.log(requests);
+    const defaultColumns = [
+        { field: "requestId", headerName: "Request ID", width: 150 },
+        {
+            field: "reason",
+            headerName: "Reason",
+            width: 150,
+        },
+        {
+            field: "vehicleNo",
+            valueGetter: (params) => {
+                return `${params.row.visitorRequestDetails.vehicleNo}`;
+            },
+            headerName: "Vehicle No",
+            width: 150,
+        },
+        {
+            field: "firstName",
+            valueGetter: (params) => {
+                return `${params.row.visitorRequestDetails.firstName}`;
+            },
+            headerName: "First Name",
+            width: 150,
+        },
+        {
+            field: "lastName",
+            valueGetter: (params) => {
+                return `${params.row.visitorRequestDetails.lastName}`;
+            },
+            headerName: "Last Name",
+            width: 150,
+        },
+        {
+            field: "mobileNo",
+            valueGetter: (params) => {
+                return `${params.row.visitorRequestDetails.mobileNo}`;
+            },
+            headerName: "Mobile No",
+            width: 150,
+        },
+        {
+            field: "entry",
+            valueGetter: (params) => {
+                return params.row.entry === false ? "exit" : "entry";
+            },
+            headerName: "Entry",
+            width: 150,
+        },
+    ];
 
-    // return (
-    //     <>
-    //         <TableContainer component={Paper}>
-    //             <Typography variant="h6" style={{ marginBottom: "16px" }}>
-    //                 All User Requests
-    //             </Typography>
-    //             <Table>
-    //                 <TableHead>
-    //                     <TableRow>
-    //                         <TableCell>requestId</TableCell>
-    //                         <TableCell>reason</TableCell>
-    //                         <TableCell>vehicleNo</TableCell>
-    //                         <TableCell>firstName</TableCell>
-    //                         <TableCell>lastName</TableCell>
-    //                         <TableCell>mobileNo</TableCell>
-    //                         <TableCell>entry</TableCell>
-    //                         <TableCell>actions</TableCell>
-    //                     </TableRow>
-    //                 </TableHead>
-    //                 <TableBody>
-    //                     {requests.map((requests: Request) => (
-    //                         <TableRow>
-    //                             {requests &&
-    //                                 requests.requestType === "other" && (
-    //                                     <>
-    //                                         <TableCell>
-    //                                             {requests.requestId}
-    //                                         </TableCell>
-    //                                         <TableCell>
-    //                                             {requests.reason}
-    //                                         </TableCell>
-    //                                         {requests.visitorRequestDetails
-    //                                             .vehicleNo === null ? (
-    //                                             <TableCell>NA</TableCell>
-    //                                         ) : (
-    //                                             <TableCell>
-    //                                                 {
-    //                                                     requests
-    //                                                         .visitorRequestDetails
-    //                                                         .vehicleNo
-    //                                                 }
-    //                                             </TableCell>
-    //                                         )}
-    //                                         <TableCell>
-    //                                             {
-    //                                                 requests
-    //                                                     .visitorRequestDetails
-    //                                                     .firstName
-    //                                             }
-    //                                         </TableCell>
-    //                                         <TableCell>
-    //                                             {
-    //                                                 requests
-    //                                                     .visitorRequestDetails
-    //                                                     .lastName
-    //                                             }
-    //                                         </TableCell>
-    //                                         <TableCell>
-    //                                             {
-    //                                                 requests
-    //                                                     .visitorRequestDetails
-    //                                                     .mobileNo
-    //                                             }
-    //                                         </TableCell>
-    //                                         <TableCell>
-    //                                             {requests.entry
-    //                                                 ? "entry"
-    //                                                 : "exit"}
-    //                                         </TableCell>
-    //                                         <TableCell
-    //                                             sx={{
-    //                                                 display:
-    //                                                     allowAccept ||
-    //                                                     allowDelete
-    //                                                         ? "flex"
-    //                                                         : "none",
-    //                                             }}
-    //                                         >
-    //                                             <IconButton
-    //                                                 sx={{
-    //                                                     display: allowDelete
-    //                                                         ? "flex"
-    //                                                         : "none",
-    //                                                 }}
-    //                                                 aria-label="delete"
-    //                                                 onClick={() =>
-    //                                                     deleteData(
-    //                                                         requests.requestId
-    //                                                     )
-    //                                                 }
-    //                                             >
-    //                                                 <DeleteIcon />
-    //                                             </IconButton>
-    //                                             <IconButton
-    //                                                 sx={{
-    //                                                     display: allowAccept
-    //                                                         ? "flex"
-    //                                                         : "none",
-    //                                                 }}
-    //                                                 aria-label="done"
-    //                                                 onClick={() =>
-    //                                                     postData(
-    //                                                         requests.requestId
-    //                                                     )
-    //                                                 }
-    //                                             >
-    //                                                 <DoneIcon />
-    //                                             </IconButton>
-    //                                         </TableCell>
-    //                                     </>
-    //                                 )}
-    //                         </TableRow>
-    //                     ))}
-    //                 </TableBody>
-    //             </Table>
-    //         </TableContainer>
-    //     </>
-    // );
+    const deleteColumn = {
+        field: "delete",
+        headerName: "Delete",
+        width: 100,
+        renderCell: (params: any) => (
+            <strong>
+                <IconButton
+                    aria-label="delete"
+                    onClick={() => {
+                        deleteData(params.row.requestId);
+                    }}
+                >
+                    <DeleteIcon />
+                </IconButton>
+            </strong>
+        ),
+    };
+
+    const acceptColumn = {
+        field: "accept",
+        headerName: "Accept",
+        width: 100,
+        renderCell: (params: any) => (
+            <strong>
+                <IconButton
+                    aria-label="accept"
+                    onClick={() => {
+                        postData(params.row.requestId);
+                    }}
+                >
+                    <DoneIcon />
+                </IconButton>
+            </strong>
+        ),
+    };
+
+    const columns = [
+        ...defaultColumns,
+        ...(allowAccept ? [acceptColumn] : []),
+        ...(allowDelete ? [deleteColumn] : []),
+    ];
 
     return (
         <DataGrid
@@ -251,72 +238,7 @@ export default function VisitorRequests({
             rows={requests.filter(
                 (request: Request) => request.requestType === "other"
             )}
-            columns={[
-                { field: "requestId", headerName: "Request ID", width: 150 },
-                {
-                    field: "reason",
-                    headerName: "Reason",
-                    width: 150,
-                },
-                {
-                    field: "vehicleNo",
-                    valueGetter: (params) => {
-                        return `${params.row.visitorRequestDetails.vehicleNo}`;
-                    },
-                    headerName: "Vehicle No",
-                    width: 150,
-                },
-                {
-                    field: "firstName",
-                    valueGetter: (params) => {
-                        return `${params.row.visitorRequestDetails.firstName}`;
-                    },
-                    headerName: "First Name",
-                    width: 150,
-                },
-                {
-                    field: "lastName",
-                    valueGetter: (params) => {
-                        return `${params.row.visitorRequestDetails.lastName}`;
-                    },
-                    headerName: "Last Name",
-                    width: 150,
-                },
-                {
-                    field: "mobileNo",
-                    valueGetter: (params) => {
-                        return `${params.row.visitorRequestDetails.mobileNo}`;
-                    },
-                    headerName: "Mobile No",
-                    width: 150,
-                },
-                { field: "entry", headerName: "Entry", width: 150 },
-                {
-                    field: "actions",
-                    headerName: "Actions",
-                    width: 150,
-                    renderCell: (params: any) => (
-                        <strong>
-                            <IconButton
-                                aria-label="delete"
-                                onClick={() => {
-                                    deleteData(params.row.requestId);
-                                }}
-                            >
-                                <DeleteIcon />
-                            </IconButton>
-                            <IconButton
-                                aria-label="done"
-                                onClick={() => {
-                                    postData(params.row.requestId);
-                                }}
-                            >
-                                <DoneIcon />
-                            </IconButton>
-                        </strong>
-                    ),
-                },
-            ]}
+            columns={columns}
             pageSize={5}
             rowsPerPageOptions={[5]}
             pagination

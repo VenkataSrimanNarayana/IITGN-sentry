@@ -141,12 +141,52 @@ export default function Requests({
         { field: "validUptoTime", headerName: "Valid Upto Time", width: 150 },
     ];
 
+    const acceptColumn = {
+        field: "accept",
+        headerName: "Accept",
+        width: 100,
+        renderCell: (params: any) => (
+            <strong>
+                <IconButton
+                    aria-label="accept"
+                    onClick={() => {
+                        postData(params.row.requestId);
+                    }}
+                >
+                    <DoneIcon />
+                </IconButton>
+            </strong>
+        ),
+    };
+    const deleteColumn = {
+        field: "delete",
+        headerName: "Delete",
+        width: 100,
+        renderCell: (params: any) => (
+            <strong>
+                <IconButton
+                    aria-label="delete"
+                    onClick={() => {
+                        deleteData(params.row.requestId);
+                    }}
+                >
+                    <DeleteIcon />
+                </IconButton>
+            </strong>
+        ),
+    };
+    const columns = [
+        ...defaultColumns,
+        ...(allowAccept ? [acceptColumn] : []),
+        ...(allowDelete ? [deleteColumn] : []),
+    ];
+
     return (
         <div style={{ width: "100%" }}>
             <DataGrid
                 getRowId={(row: any) => row.requestId}
                 rows={requests}
-                columns={defaultColumns}
+                columns={columns}
                 pageSize={5}
                 rowsPerPageOptions={[5]}
                 disableSelectionOnClick

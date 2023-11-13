@@ -39,31 +39,40 @@ export default function VehicleRequests({
         try {
             const response = await fetch(
                 process.env.NEXT_PUBLIC_BACKEND_URL +
-                    `/api/pending-requests/${id}`,
+                    `/api/user-vehicle-log/${id}`,
                 {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${session?.user.accessToken}`,
+                        // Add any other headers if needed
                     },
                 }
             );
 
-            const responseData = await response.json().then(() => {}); // Assuming the response is JSON
-            console.log("Response data:", responseData);
+            const responseData = await response.json(); // Assuming the response is JSON
             if (response.ok) {
-                setRequests((prevRequests) => {
-                    const updatedRequests = prevRequests.filter((request) => {
-                        if (request.entry === true) {
-                            return {
-                                ...request,
-                                entry: false,
-                            };
-                        }
-                        return false;
-                    });
-                    return updatedRequests;
-                });
+                // Get request from the id
+                const request = requests.find(
+                    (request) => request.requestId === id
+                );
+                if (request.entry === true) {
+                    setRequests(
+                        requests.map((request) => {
+                            if (request.requestId === id) {
+                                return {
+                                    ...request,
+                                    entry: false,
+                                };
+                            }
+                            return request;
+                        }) as any
+                    );
+                } else {
+                    setRequests(
+                        requests.filter((request) => request.requestId !== id)
+                    );
+                }
             }
             // Handle the response data or return it as needed
             return responseData;
@@ -131,124 +140,100 @@ export default function VehicleRequests({
         fetchData(0, 100);
     }, [status]);
 
-    // return (
-    //     <>
-    //         <TableContainer component={Paper}>
-    //             <Typography variant="h6" style={{ marginBottom: "16px" }}>
-    //                 All User Requests
-    //             </Typography>
-    //             <Table>
-    //                 <TableHead>
-    //                     <TableRow>
-    //                         <TableCell>requestId</TableCell>
-    //                         <TableCell>reason</TableCell>
-    //                         <TableCell>vehicleNo</TableCell>
-    //                         <TableCell>firstName</TableCell>
-    //                         <TableCell>lastName</TableCell>
-    //                         <TableCell>mobileNo</TableCell>
-    //                         <TableCell>entry</TableCell>
-    //                         <TableCell>actions</TableCell>
-    //                     </TableRow>
-    //                 </TableHead>
-    //                 <TableBody>
-    //                     {requests.map((requests: Request) => (
-    //                         <TableRow>
-    //                             {requests &&
-    //                                 requests.requestType === "vehicle" && (
-    //                                     <>
-    //                                         <TableCell>
-    //                                             {requests.requestId}
-    //                                         </TableCell>
-    //                                         <TableCell>
-    //                                             {requests.reason}
-    //                                         </TableCell>
-    //                                         {requests.vehicleRequestDetails
-    //                                             .vehicleNo === null ? (
-    //                                             <TableCell>NA</TableCell>
-    //                                         ) : (
-    //                                             <TableCell>
-    //                                                 {
-    //                                                     requests
-    //                                                         .vehicleRequestDetails
-    //                                                         .vehicleNo
-    //                                                 }
-    //                                             </TableCell>
-    //                                         )}
-    //                                         <TableCell>
-    //                                             {
-    //                                                 requests
-    //                                                     .vehicleRequestDetails
-    //                                                     .firstName
-    //                                             }
-    //                                         </TableCell>
-    //                                         <TableCell>
-    //                                             {
-    //                                                 requests
-    //                                                     .vehicleRequestDetails
-    //                                                     .lastName
-    //                                             }
-    //                                         </TableCell>
-    //                                         <TableCell>
-    //                                             {
-    //                                                 requests
-    //                                                     .vehicleRequestDetails
-    //                                                     .mobileNo
-    //                                             }
-    //                                         </TableCell>
-    //                                         <TableCell>
-    //                                             {requests.entry
-    //                                                 ? "entry"
-    //                                                 : "exit"}
-    //                                         </TableCell>
-    //                                         <TableCell
-    //                                             sx={{
-    //                                                 display:
-    //                                                     allowAccept ||
-    //                                                     allowDelete
-    //                                                         ? "flex"
-    //                                                         : "none",
-    //                                             }}
-    //                                         >
-    //                                             <IconButton
-    //                                                 sx={{
-    //                                                     display: allowDelete
-    //                                                         ? "flex"
-    //                                                         : "none",
-    //                                                 }}
-    //                                                 aria-label="delete"
-    //                                                 onClick={() =>
-    //                                                     deleteData(
-    //                                                         requests.requestId
-    //                                                     )
-    //                                                 }
-    //                                             >
-    //                                                 <DeleteIcon />
-    //                                             </IconButton>
-    //                                             <IconButton
-    //                                                 sx={{
-    //                                                     display: allowAccept
-    //                                                         ? "flex"
-    //                                                         : "none",
-    //                                                 }}
-    //                                                 aria-label="done"
-    //                                                 onClick={() =>
-    //                                                     postData(
-    //                                                         requests.requestId
-    //                                                     )
-    //                                                 }
-    //                                             >
-    //                                                 <DoneIcon />
-    //                                             </IconButton>
-    //                                         </TableCell>
-    //                                     </>
-    //                                 )}
-    //                         </TableRow>
-    //                     ))}
-    //                 </TableBody>
-    //             </Table>
-    //         </TableContainer>
-    //     </>
-    // );
+    const defaultColumns = [
+        {
+            field: "requestId",
+            headerName: "Request ID",
+            width: 150,
+        },
+        {
+            field: "reason",
+            headerName: "Reason",
+            width: 150,
+        },
+        {
+            field: "vehicleRequestDetails.vehicleNo",
+            valueGetter: (params) => {
+                return `${params.row.vehicleRequestDetails.vehicleNo}`;
+            },
+            headerName: "Vehicle No.",
+            width: 150,
+        },
+        {
+            field: "vehicleRequestDetails.firstName",
+            valueGetter: (params) => {
+                return `${params.row.vehicleRequestDetails.firstName}`;
+            },
+            headerName: "First Name",
+            width: 150,
+        },
+        {
+            field: "vehicleRequestDetails.lastName",
+            valueGetter: (params) => {
+                return `${params.row.vehicleRequestDetails.lastName}`;
+            },
+            headerName: "Last Name",
+            width: 150,
+        },
+        {
+            field: "vehicleRequestDetails.mobileNo",
+            valueGetter: (params) => {
+                return `${params.row.vehicleRequestDetails.mobileNo}`;
+            },
+            headerName: "Mobile No.",
+            width: 150,
+        },
+        {
+            field: "entry",
+            valueGetter: (params) => {
+                return params.row.entry === false ? "exit" : "entry";
+            },
+            headerName: "Entry",
+            width: 150,
+        },
+    ];
+
+    const deleteColumn = {
+        field: "delete",
+        headerName: "Delete",
+        width: 100,
+        renderCell: (params: any) => (
+            <strong>
+                <IconButton
+                    aria-label="delete"
+                    onClick={() => {
+                        deleteData(params.row.requestId);
+                    }}
+                >
+                    <DeleteIcon />
+                </IconButton>
+            </strong>
+        ),
+    };
+
+    const acceptColumn = {
+        field: "accept",
+        headerName: "Accept",
+        width: 100,
+        renderCell: (params: any) => (
+            <strong>
+                <IconButton
+                    aria-label="accept"
+                    onClick={() => {
+                        postData(params.row.requestId);
+                    }}
+                >
+                    <DoneIcon />
+                </IconButton>
+            </strong>
+        ),
+    };
+
+    const columns = [
+        ...defaultColumns,
+        ...(allowAccept ? [acceptColumn] : []),
+        ...(allowDelete ? [deleteColumn] : []),
+    ];
 
     return (
         <div style={{ height: 400, width: "100%" }}>
@@ -259,91 +244,7 @@ export default function VehicleRequests({
                         return true;
                     }
                 })}
-                columns={[
-                    {
-                        field: "requestId",
-                        headerName: "Request ID",
-                        width: 150,
-                    },
-                    {
-                        field: "reason",
-                        headerName: "Reason",
-                        width: 150,
-                    },
-                    {
-                        field: "vehicleRequestDetails.vehicleNo",
-                        valueGetter: (params) => {
-                            return `${params.row.vehicleRequestDetails.vehicleNo}`;
-                        },
-                        headerName: "Vehicle No.",
-                        width: 150,
-                    },
-                    {
-                        field: "vehicleRequestDetails.firstName",
-                        valueGetter: (params) => {
-                            return `${params.row.vehicleRequestDetails.firstName}`;
-                        },
-                        headerName: "First Name",
-                        width: 150,
-                    },
-                    {
-                        field: "vehicleRequestDetails.lastName",
-                        valueGetter: (params) => {
-                            return `${params.row.vehicleRequestDetails.lastName}`;
-                        },
-                        headerName: "Last Name",
-                        width: 150,
-                    },
-                    {
-                        field: "vehicleRequestDetails.mobileNo",
-                        valueGetter: (params) => {
-                            return `${params.row.vehicleRequestDetails.mobileNo}`;
-                        },
-                        headerName: "Mobile No.",
-                        width: 150,
-                    },
-                    {
-                        field: "entry",
-                        // valueGetter: (params) => {
-                        //     return params.row.entry === "false"
-                        //         ? "exit"
-                        //         : "entry";
-                        // },
-                        headerName: "Entry",
-                        width: 150,
-                    },
-                    {
-                        field: "actions",
-                        headerName: "Actions",
-                        width: 150,
-                        renderCell: (params: any) => (
-                            <>
-                                <IconButton
-                                    sx={{
-                                        display: allowDelete ? "flex" : "none",
-                                    }}
-                                    aria-label="delete"
-                                    onClick={() =>
-                                        deleteData(params.row.requestId)
-                                    }
-                                >
-                                    <DeleteIcon />
-                                </IconButton>
-                                <IconButton
-                                    sx={{
-                                        display: allowAccept ? "flex" : "none",
-                                    }}
-                                    aria-label="done"
-                                    onClick={() =>
-                                        postData(params.row.requestId)
-                                    }
-                                >
-                                    <DoneIcon />
-                                </IconButton>
-                            </>
-                        ),
-                    },
-                ]}
+                columns={columns}
                 pageSize={5}
                 rowsPerPageOptions={[5]}
                 pagination
