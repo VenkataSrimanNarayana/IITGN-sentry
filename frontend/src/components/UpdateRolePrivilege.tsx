@@ -27,6 +27,7 @@ const UpdateRolePrivilege: React.FC = () => {
             }
         );
         const data = await res.json();
+        console.log(data);
         setRole(data);
     };
 
@@ -38,7 +39,6 @@ const UpdateRolePrivilege: React.FC = () => {
     };
 
     const handleSubmit = async (e: { preventDefault: () => void }) => {
-        console.log(selectedRole);
         e.preventDefault();
         try {
             const res = await fetch(
@@ -60,6 +60,7 @@ const UpdateRolePrivilege: React.FC = () => {
 
             if (res.ok) {
                 console.log("Role updated successfully!");
+                fetchRoles();
                 setSelectedPrivileges([]);
                 setSelectedRole("");
                 alert(response.message);
@@ -88,6 +89,7 @@ const UpdateRolePrivilege: React.FC = () => {
         fetchRoles();
         fetchPrivileges();
     }, [status]);
+    console.log("selected", selectedPrivileges);
 
     return (
         // give a map to show all the roles
@@ -95,10 +97,16 @@ const UpdateRolePrivilege: React.FC = () => {
             <FormControl fullWidth>
                 <InputLabel>Role</InputLabel>
                 <Select
-                    defaultValue=""
+                    value={selectedRole}
                     onChange={(value) => {
-                        console.log(value.target.value);
                         setSelectedRole(value.target.value);
+                        // Set the selected privileges to the privileges of the selected role
+                        const selectedRole = role.find(
+                            (r) => r.name === value.target.value
+                        );
+                        setSelectedPrivileges(
+                            selectedRole.privileges.map((p) => p.id)
+                        );
                     }}
                 >
                     {role.map((r) => (
