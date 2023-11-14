@@ -35,14 +35,15 @@ public class RoleController {
 
     @PostMapping("/add")
     public ResponseEntity<SingleLineResponse> addRole(@RequestBody AddRoleRequestDto roleRequest) {
-        if(roleService.findByName(roleRequest.getRoleName()).isPresent()){
+        String name = roleRequest.getRoleName().toUpperCase();
+        if (roleService.findByName(name).isPresent()) {
             return new ResponseEntity<>(new SingleLineResponse("Role already exists"), HttpStatus.BAD_REQUEST);
-        }else if (roleRequest.getPrivilegeIds().isEmpty()){
+        } else if (roleRequest.getPrivilegeIds().isEmpty()) {
             return new ResponseEntity<>(new SingleLineResponse("Privileges cannot be empty"), HttpStatus.BAD_REQUEST);
-        }else if (roleRequest.getRoleName().isEmpty()){
+        } else if (roleRequest.getRoleName().isEmpty()) {
             return new ResponseEntity<>(new SingleLineResponse("Role name cannot be empty"), HttpStatus.BAD_REQUEST);
-        }else{
-            Role role = Role.builder().name("ROLE_"+roleRequest.getRoleName()).build();
+        } else {
+            Role role = Role.builder().name("ROLE_" + name).build();
             List<Privilege> privileges = privilegeService.getPrivileges(roleRequest.getPrivilegeIds());
             Set<Privilege> privilegeSet = new HashSet<>(privileges);
             role.setPrivileges(privilegeSet);
@@ -52,21 +53,18 @@ public class RoleController {
     }
 
 
-
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<SingleLineResponse> deleteRole(@PathVariable int id) {
         Optional<Role> role = roleService.findById(id);
 
-
-
         if (role.isEmpty())
             return new ResponseEntity<>(new SingleLineResponse("Role not found"), HttpStatus.NOT_FOUND);
 
-        if(role.get().getName().equals("ROLE_ADMIN")){
+        if (role.get().getName().equals("ROLE_ADMIN")) {
             return new ResponseEntity<>(new SingleLineResponse("Cannot delete admin role"), HttpStatus.BAD_REQUEST);
         }
 
-        if(role.get().getName().equals("ROLE_USER")){
+        if (role.get().getName().equals("ROLE_USER")) {
             return new ResponseEntity<>(new SingleLineResponse("Cannot delete user role"), HttpStatus.BAD_REQUEST);
         }
 
@@ -76,32 +74,32 @@ public class RoleController {
 
 
     @PostMapping("/update")
-    public ResponseEntity<SingleLineResponse> updateRole(@RequestBody AddRoleRequestDto addRoleRequestDto){
-        if(addRoleRequestDto.getRoleName().isEmpty()){
+    public ResponseEntity<SingleLineResponse> updateRole(@RequestBody AddRoleRequestDto addRoleRequestDto) {
+        if (addRoleRequestDto.getRoleName().isEmpty()) {
             return new ResponseEntity<>(new SingleLineResponse("Role name cannot be empty"), HttpStatus.BAD_REQUEST);
-        }else if (addRoleRequestDto.getPrivilegeIds().isEmpty()){
+        } else if (addRoleRequestDto.getPrivilegeIds().isEmpty()) {
             return new ResponseEntity<>(new SingleLineResponse("Privileges cannot be empty"), HttpStatus.BAD_REQUEST);
         }
 
         if (roleService.findAll().isEmpty())
             return new ResponseEntity<>(new SingleLineResponse("Role not found"), HttpStatus.NOT_FOUND);
 
-        if (addRoleRequestDto.getRoleName().equals("ADMIN")){
+        if (addRoleRequestDto.getRoleName().equals("ROLE_ADMIN")) {
             return new ResponseEntity<>(new SingleLineResponse("Cannot update admin role"), HttpStatus.BAD_REQUEST);
         }
 
-        if (addRoleRequestDto.getRoleName().equals("USER")){
+        if (addRoleRequestDto.getRoleName().equals("ROLE_USER")) {
             return new ResponseEntity<>(new SingleLineResponse("Cannot update user role"), HttpStatus.BAD_REQUEST);
         }
 
-        if(roleService.findByName(addRoleRequestDto.getRoleName()).isPresent()){
+        if (roleService.findByName(addRoleRequestDto.getRoleName()).isPresent()) {
             Role role = roleService.findByName(addRoleRequestDto.getRoleName()).get();
             List<Privilege> privileges = privilegeService.getPrivileges(addRoleRequestDto.getPrivilegeIds());
             Set<Privilege> privilegeSet = new HashSet<>(privileges);
             role.setPrivileges(privilegeSet);
             roleService.saveRole(role);
             return new ResponseEntity<>(new SingleLineResponse("Role updated successfully"), HttpStatus.OK);
-        }else{
+        } else {
             return new ResponseEntity<>(new SingleLineResponse("Role does not exist"), HttpStatus.BAD_REQUEST);
         }
     }

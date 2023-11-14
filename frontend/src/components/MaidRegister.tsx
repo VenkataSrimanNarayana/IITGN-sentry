@@ -1,15 +1,8 @@
 "use client";
-import { useState, useEffect } from "react";
-import {
-  TextField,
-  Button,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from "@mui/material";
-import { Role } from "@/types/role";
+import { useState } from "react";
+import { TextField, Button } from "@mui/material";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function RegisterMaid() {
   const [formData, setFormData] = useState({
@@ -27,12 +20,13 @@ export default function RegisterMaid() {
     email: "",
   });
 
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
+  const router = useRouter();
 
   const postData = async () => {
     try {
       const response = await fetch(
-        process.env.NEXT_PUBLIC_BACKEND_URL + `/api/maids/register/api`,
+        process.env.NEXT_PUBLIC_BACKEND_URL + `/api/maids/register`,
         {
           method: "POST",
           headers: {
@@ -42,8 +36,12 @@ export default function RegisterMaid() {
           body: JSON.stringify(formData),
         }
       );
-      const jsonData = await response.json();
-      console.log(jsonData);
+
+      if (response.ok) {
+        alert("Maid Registered Successfully");
+        router.push("/");
+      }
+      // console.log(jsonData);
     } catch (error) {
       console.error("Error fetching data: ", error);
     }
@@ -181,19 +179,19 @@ export default function RegisterMaid() {
           style={{ marginRight: "20px" }}
           onClick={() => {
             setFormData({
-                firstName: "",
-                lastName: "",
-                houseNo: "",
-                area: "",
-                landmark: "",
-                pinCode: "",
-                townCity: "",
-                state: "",
-                country: "",
-                workDoing: "",
-                mobileNo: "",
-                email: "",
-                });
+              firstName: "",
+              lastName: "",
+              houseNo: "",
+              area: "",
+              landmark: "",
+              pinCode: "",
+              townCity: "",
+              state: "",
+              country: "",
+              workDoing: "",
+              mobileNo: "",
+              email: "",
+            });
           }}
         >
           Reset

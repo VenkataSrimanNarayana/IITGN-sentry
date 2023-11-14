@@ -1,15 +1,14 @@
-import { Privilege } from "@/types/privilege";
-import { ok } from "assert";
 import { useSession } from "next-auth/react";
-import { useState, useEffect, SetStateAction, use } from "react";
+import { useRouter } from "next/navigation";
+import { useState, useEffect, SetStateAction } from "react";
 
 const PrivilegesPage = () => {
   const [privileges, setPrivileges] = useState([]);
   const [newRoleName, setNewRoleName] = useState("");
   const [selectedPrivileges, setSelectedPrivileges] = useState([]);
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
-  const { status } = useSession();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchPrivileges = async () => {
@@ -43,7 +42,7 @@ const PrivilegesPage = () => {
 
   const removeAllChecked = () => {
     setSelectedPrivileges([]);
-  }
+  };
 
   console.log(selectedPrivileges);
 
@@ -57,23 +56,29 @@ const PrivilegesPage = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/roles/add", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session?.user.accessToken}`,
-        },
-        body: JSON.stringify({
-          roleName: newRoleName,
-          privilegeIds: selectedPrivileges,
-        }),
-      }).then((res) => res.json());
-      if(response.ok){
+      const response = await fetch(
+        process.env.NEXT_PUBLIC_BACKEND_URL + "/api/roles/add",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${session?.user.accessToken}`,
+          },
+          body: JSON.stringify({
+            roleName: newRoleName,
+            privilegeIds: selectedPrivileges,
+          }),
+        }
+      ).then((res) => res.json());
+
+      console.log(response);
+      if (response.ok) {
         setNewRoleName("");
         setSelectedPrivileges([]);
         removeAllChecked();
       }
-      console.log("Role created successfully!");
+      alert(response.message);
+      router.push("/");
     } catch (error) {
       console.error("Error creating role:", error);
     }

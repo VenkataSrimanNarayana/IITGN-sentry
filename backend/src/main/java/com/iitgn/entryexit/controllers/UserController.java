@@ -5,6 +5,7 @@ import com.iitgn.entryexit.entities.Email;
 import com.iitgn.entryexit.entities.User;
 import com.iitgn.entryexit.models.requestdto.NewRoleDto;
 import com.iitgn.entryexit.models.requestdto.PasswordChangeRequestDto;
+import com.iitgn.entryexit.models.requestdto.UserDetailsDto;
 import com.iitgn.entryexit.models.responses.SingleLineResponse;
 import com.iitgn.entryexit.services.EmailService;
 import com.iitgn.entryexit.services.UserService;
@@ -173,17 +174,17 @@ public class UserController {
     // TODO : Function to be completed
 //    @PreAuthorize("hasAuthority('UPDATE_USER_PRIVILEGE')")
 //    @PutMapping("/api/users/{id}")
-//    public ResponseEntity<User> updateUserById(@PathVariable Long id, @RequestBody SignUpDto signUpDto) {
+//    public ResponseEntity<User> updateUserById(@PathVariable Long id, @RequestBody UserDetailsDto userDetailsDto) {
 //        Optional<User> userTemp = userService.getUserById(id);
 //        if (userTemp.isEmpty()) {
 //            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 //        }
-//        userService.updateUserById(id, signUpDto);
+//        userService.updateUserById(id, userDetailsDto);
 //        return new ResponseEntity<>(userTemp.get(), HttpStatus.OK);
 //    }
-
-//    @PreAuthorize("hasAuthority('UPDATE_USER_PRIVILEGE')")
-//    @PutMapping("/api/users/{id}")
+//
+//    @PreAuthorize("hasAuthority('UPDATE_USER_USER_PRIVILEGE')")
+//    @PutMapping("/api/users")
 //    public ResponseEntity<SingleLineResponse> updateUserById(@PathVariable Long id, @RequestBody ) {
 //        Optional<User> userTemp = userService.getUserById(id);
 //        if (userTemp.isEmpty()) {
@@ -208,6 +209,27 @@ public class UserController {
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+
+//    @PreAuthorize("hasAuthority('UPDATE_USER_PRIVILEGE')")
+//    @PostMapping("/api/users/{id}/email")
+//    public ResponseEntity<SingleLineResponse> addEmail(@PathVariable Long id, @RequestBody Email email) {
+//        Optional<User> userTemp = userService.getUserById(id);
+//        if (userTemp.isEmpty()) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//        userService.addEmail(id, email);
+//        return new ResponseEntity<>(new SingleLineResponse("Email added successfully"), HttpStatus.OK);
+//    }
+//
+//    @PreAuthorize("hasAuthority('UPDATE_USER_USER_PRIVILEGE')")
+//    @PostMapping("/api/users/email")
+//    public ResponseEntity<SingleLineResponse> addEmail(@RequestBody Email email) {
+//        Long id = getCurrentUser();
+//        userService.addEmail(id, email);
+//        return new ResponseEntity<>(new SingleLineResponse("Email added successfully"), HttpStatus.OK);
+//    }
+
+
 
 }
 

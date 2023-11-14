@@ -1,5 +1,6 @@
 package com.iitgn.entryexit.services;
 
+import com.iitgn.entryexit.entities.Email;
 import com.iitgn.entryexit.entities.User;
 import com.iitgn.entryexit.models.requestdto.PendingRequestSelfDto;
 import com.iitgn.entryexit.models.requestdto.SignUpDto;
@@ -23,4 +24,7 @@ public interface UserService {
     void deleteUserById(User user);
 
     void raiseRequest(Long id, PendingRequestSelfDto pendingRequestSelfDto);
+
+    void addEmail(Long id, Email email);
+
 }

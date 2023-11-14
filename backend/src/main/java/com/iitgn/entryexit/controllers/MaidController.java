@@ -1,9 +1,11 @@
 package com.iitgn.entryexit.controllers;
 
 import com.iitgn.entryexit.entities.Maid;
+import com.iitgn.entryexit.entities.User;
 import com.iitgn.entryexit.models.requestdto.MaidDto;
 import com.iitgn.entryexit.models.responses.SingleLineResponse;
 import com.iitgn.entryexit.services.MaidService;
+import com.iitgn.entryexit.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,7 +13,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -25,16 +29,19 @@ import java.util.UUID;
 public class MaidController {
 
     private final MaidService maidService;
+    private final UserService userService;
 
-    private void maidBuilderSave(@RequestBody MaidDto maidDto) {
-        Maid maid = Maid.builder().firstName(maidDto.getFirstName()).lastName(maidDto.getLastName()).houseNo(maidDto.getHouseNo()).area(maidDto.getArea()).landmark(maidDto.getLandmark()).pinCode(maidDto.getPinCode()).townCity(maidDto.getTownCity()).state(maidDto.getState()).country(maidDto.getCountry()).workDoing(maidDto.getWorkDoing()).mobileNo(maidDto.getMobileNo()).build();
-        maidService.saveMaid(maid);
+    private Maid maidBuilderSave(@RequestBody MaidDto maidDto) {
+        return Maid.builder().firstName(maidDto.getFirstName()).lastName(maidDto.getLastName()).houseNo(maidDto.getHouseNo()).area(maidDto.getArea()).landmark(maidDto.getLandmark()).pinCode(maidDto.getPinCode()).townCity(maidDto.getTownCity()).state(maidDto.getState()).country(maidDto.getCountry()).workDoing(maidDto.getWorkDoing()).mobileNo(maidDto.getMobileNo()).build();
     }
 
     @PreAuthorize("hasAuthority('REGISTER_MAID_PRIVILEGE')")
     @PostMapping("/register")
     public ResponseEntity<SingleLineResponse> registerMaid(@RequestBody MaidDto maidDto) {
-        maidBuilderSave(maidDto);
+        Maid maid = maidBuilderSave(maidDto);
+        Optional<User> user = userService.getUserById(getCurrentUser());
+        user.ifPresent(maid::setUser);
+        maidService.saveMaid(maid);
         return ResponseEntity.ok(new SingleLineResponse("Maid Registered Successfully"));
     }
 
@@ -43,6 +50,7 @@ public class MaidController {
     public ResponseEntity<SingleLineResponse> updateMaid(@RequestBody MaidDto maidDto, @PathVariable UUID id) {
         Maid maid = maidService.getMaid(id);
         maidBuilderSave(maidDto);
+        maidService.saveMaid(maid);
         return ResponseEntity.ok(new SingleLineResponse("Maid Updated Successfully"));
     }
 

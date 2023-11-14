@@ -56,6 +56,20 @@ public class SetupDataLoader implements
         Privilege privilege17 = createPrivilegeIfNotFound("ROLES_PRIVILEGE", "This privilege allows to read all the roles available in the system");
         Privilege privilege18 = createPrivilegeIfNotFound("PRIVILEGES_PRIVILEGE", "This privilege allows to read all the privileges available in the system");
 
+        Privilege privilege19 = createPrivilegeIfNotFound("LOG_MAID_PRIVILEGE", "This privilege allows to log maid entry and exit");
+        Privilege privilege20 = createPrivilegeIfNotFound("DELETE_LOG_MAID_PRIVILEGE", "This privilege allows to delete maid log");
+        Privilege privilege21 = createPrivilegeIfNotFound("READ_LOG_USER_MAID_PRIVILEGE", "This privilege allows to read maid log of a user by himself");
+        Privilege privilege22 = createPrivilegeIfNotFound("READ_LOG_MAID_PRIVILEGE", "This privilege allows to read all the maid logs available in the system");
+
+        Privilege privilege23 = createPrivilegeIfNotFound("REGISTER_MAID_PRIVILEGE", "This privilege allows to register maid");
+        Privilege privilege24 = createPrivilegeIfNotFound("UPDATE_MAID_PRIVILEGE", "This privilege allows to update maid");
+        Privilege privilege25 = createPrivilegeIfNotFound("DELETE_MAID_PRIVILEGE", "This privilege allows to delete maid");
+        Privilege privilege26 = createPrivilegeIfNotFound("READ_MAID_DETAILS_PRIVILEGE", "This privilege allows to read all the maid details available in the system");
+        Privilege privilege27 = createPrivilegeIfNotFound("READ_MAID_DETAILS_USER_PRIVILEGE", "This privilege allows to read maid details of a user by himself");
+        Privilege privilege28 = createPrivilegeIfNotFound("UPDATE_USER_PRIVILEGE", "This privilege allows to update user details of any user");
+        Privilege privilege29 = createPrivilegeIfNotFound("UPDATE_USER_USER_PRIVILEGE", "This privilege allows to read user details of any user");
+
+
 
         List<Privilege> userPrivileges = Arrays.asList(
                 privilege1, privilege4, privilege3, privilege8, privilege9, privilege10, privilege14);
@@ -66,7 +80,9 @@ public class SetupDataLoader implements
         List<Privilege> adminPrivileges = Arrays.asList(
                 privilege1, privilege2, privilege3, privilege4, privilege5, privilege6,
                 privilege7, privilege8, privilege9, privilege10, privilege11, privilege12, privilege13, privilege14,
-                privilege15, privilege16, privilege17, privilege18);
+                privilege15, privilege16, privilege17, privilege18, privilege19, privilege20, privilege21, privilege22, privilege23, privilege24, privilege25, privilege26, privilege27,
+                privilege28, privilege29
+        );
 
 
         createRoleIfNotFound("ROLE_ADMIN", new HashSet<>(adminPrivileges));
@@ -139,11 +155,9 @@ public class SetupDataLoader implements
             String name, Set<Privilege> privileges) {
         Optional<Role> roleTemp = roleRepository.findByName(name);
 
-        roleTemp.orElseGet(() -> {
-            Role role = Role.builder().name(name).build();
-            role.setPrivileges(privileges);
-            roleRepository.save(role);
-            return role;
-        });
+        Role role;
+        role = roleTemp.orElseGet(() -> Role.builder().name(name).build());
+        role.setPrivileges(privileges);
+        roleRepository.save(role);
     }
 }

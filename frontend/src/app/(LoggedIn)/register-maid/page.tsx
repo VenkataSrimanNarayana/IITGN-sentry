@@ -1,6 +1,6 @@
 "use client";
 
-import RegisterUser from "@/components/RegisterUser";
+import RegisterMaid from "@/components/MaidRegister";
 import { CircularProgress, Container } from "@mui/material";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";

@@ -57,8 +57,12 @@ const UpdateRolePrivilege: React.FC = () => {
           }),
         }
       ).then((res) => res.json());
+      
       if (response.ok) {
+        console.log("Role updated successfully! hello");
         setSelectedPrivileges([]);
+        setSelectedRole("");
+        alert(response.message);
       }
       console.log("Role updated successfully!");
     } catch (error) {
@@ -107,7 +111,7 @@ const UpdateRolePrivilege: React.FC = () => {
         </Select>
       </FormControl>
       <FormControl fullWidth>
-        <div style={{ marginBottom: "16px" }}>
+      <div style={{ marginBottom: "16px" }}>
           <h2>Privileges:</h2>
           {privileges.map((privilege) => (
             <div key={privilege.id} style={{ marginBottom: "8px" }}>

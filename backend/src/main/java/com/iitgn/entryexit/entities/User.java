@@ -60,11 +60,11 @@ public class User implements UserDetails {
     @Column(length = 10, nullable = false)
     private String userType;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany
     @JoinColumn(name = "user_id")
     private Set<ContactNumber> contactNumbers;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private Set<Email> emails;
 
@@ -109,8 +109,7 @@ public class User implements UserDetails {
     private Set<UserVehicleLog> userVehicleLogs;
 
     @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "worker_id")
+    @OneToOne
     private Maid maid;
 
     @JsonIgnore

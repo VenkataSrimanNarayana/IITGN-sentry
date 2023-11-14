@@ -1,19 +1,18 @@
 package com.iitgn.entryexit.services.impl;
 
+import com.iitgn.entryexit.entities.Email;
 import com.iitgn.entryexit.entities.PendingRequest;
 import com.iitgn.entryexit.entities.User;
 import com.iitgn.entryexit.models.requestdto.PendingRequestSelfDto;
-import com.iitgn.entryexit.models.requestdto.SignUpDto;
 import com.iitgn.entryexit.repositories.UserRepository;
 import com.iitgn.entryexit.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 
 @Service
@@ -71,6 +70,29 @@ public class UserServiceImpl implements UserService {
                     .build();
 
             user.getPendingRequest().add(pendingRequest);
+            userRepository.save(user);
+        }
+    }
+
+    @Override
+    public void addEmail(Long id, Email emailRequestDto) {
+        Optional<User> userTemp = userRepository.findById(id);
+        if(userTemp.isPresent()){
+            User user = userTemp.get();
+
+            Set<Email> emailList = user.getEmails();
+            for(Email email : emailList){
+                if(email.getType().equals(emailRequestDto.getType())){
+                    email.setEmail(emailRequestDto.getEmail());
+                    userRepository.save(user);
+                    return;
+                }
+            }
+
+            Email email = Email.builder().type(emailRequestDto.getType())
+                    .email(emailRequestDto.getEmail())
+                    .build();
+            user.getEmails().add(email);
             userRepository.save(user);
         }
     }

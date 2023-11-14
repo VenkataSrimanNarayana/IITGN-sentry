@@ -52,6 +52,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         {
             name : "Register Maid",
             link : "/register-maid",
+        },
+        {
+            name : "Maid Logs",
+            link : "/maid-logs",
+        },
+        {
+            name : "User Details",
+            link : "/super/user-details",
         }
     ];
 
