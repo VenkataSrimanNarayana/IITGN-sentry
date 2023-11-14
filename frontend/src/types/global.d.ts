@@ -1,11 +1,11 @@
 export {};
 
 declare global {
-    type LinkName = {
+    interface LinkName {
         link: string;
         name: string;
-    };
-    type Details = {
+    }
+    interface Details {
         id: number;
         firstName: string;
         lastName: string;
@@ -47,7 +47,7 @@ declare global {
         accountNonLocked: "bool";
         credentialsNonExpired: "bool";
         enabled: "bool";
-    };
+    }
     interface Request {
         requestId: number;
         userId: number;

@@ -52,10 +52,7 @@ const handler = NextAuth({
             if (account && user) {
                 // Fetching the user privileges from the backend
                 const backend_details_url =
-                    process.env.BACKEND_URL +
-                    "/api/users/" +
-                    parseJwt(user.accessToken).sub +
-                    "/details";
+                    process.env.BACKEND_URL + "/api/users";
                 const res = await fetch(backend_details_url, {
                     method: "GET",
                     headers: {
@@ -78,10 +75,7 @@ const handler = NextAuth({
             if (session.user) {
                 // Fetch the user details from the backend
                 const backend_details_url =
-                    process.env.BACKEND_URL +
-                    "/api/users/" +
-                    parseJwt(token.accessToken as string).sub +
-                    "/details";
+                    process.env.BACKEND_URL + "/api/users";
                 const res = await fetch(backend_details_url, {
                     method: "GET",
                     headers: {

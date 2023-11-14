@@ -4,8 +4,13 @@ import { CircularProgress, Container } from "@mui/material";
 import { redirect } from "next/navigation";
 import ProfileForm from "@/components/ProfileForm";
 
-export default function Settings() {
-    const { data: session, status } = useSession();
+export default function UserDetailsEdit({
+    params,
+}: {
+    params: { userID: string };
+}) {
+    const userID = params.userID;
+    const { status } = useSession();
     if (status === "loading") {
         return (
             <Container
@@ -23,5 +28,5 @@ export default function Settings() {
         redirect("/login");
     }
 
-    return <ProfileForm userID={session?.user.userID as string} />;
+    return <ProfileForm userID={userID} />;
 }

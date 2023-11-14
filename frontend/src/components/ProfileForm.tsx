@@ -26,13 +26,23 @@ const CustomButton = (props: any) => {
     return <Button sx={{ margin: "1rem 0 1rem 1rem" }} {...props} />;
 };
 
-const ProfileForm = () => {
+const ProfileForm = ({ userID }: { userID: string }) => {
     const [formData, setFormData] = useState({} as Details);
-    const { data: session } = useSession();
-
+    const { data: session } = useSession({ required: true });
+    const fetchUrl =
+        userID === session?.user.userID
+            ? process.env.NEXT_PUBLIC_BACKEND_URL + "/api/users"
+            : process.env.NEXT_PUBLIC_BACKEND_URL +
+              "/api/users/" +
+              userID +
+              "/details";
+    const updateUrl =
+        userID === session?.user.userID
+            ? process.env.NEXT_PUBLIC_BACKEND_URL + "/api/users"
+            : process.env.NEXT_PUBLIC_BACKEND_URL + "/api/users/" + userID;
     // Fetch the user data from the backend
     useEffect(() => {
-        fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/users", {
+        fetch(fetchUrl, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -107,8 +117,25 @@ const ProfileForm = () => {
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = (e: any) => {
+    const handleSubmit = async (e: any) => {
         e.preventDefault();
+        // Generate form data for the allowed fields
+        const allowedFields = [
+            "houseNo",
+            "area",
+            "landmark",
+            "pinCode",
+            "townCity",
+            "state",
+            "country",
+            "contactNumbers",
+            "emails",
+        ];
+        let formDataAllowed: any = {};
+        allowedFields.forEach((field) => {
+            formDataAllowed[field] = formData[field] as any;
+        });
+        // Make a request to the backend to update the user details
     };
 
     return (
@@ -151,7 +178,7 @@ const ProfileForm = () => {
             </Typography>
             <CustomTextField
                 type="text"
-                name="houstNo"
+                name="houseNo"
                 label="House No."
                 value={formData.houseNo}
                 onChange={handleChange}
@@ -172,7 +199,7 @@ const ProfileForm = () => {
             />
             <CustomTextField
                 type="text"
-                name="pincode"
+                name="pinCode"
                 label="Pincode"
                 value={formData.pinCode}
                 onChange={handleChange}
@@ -208,7 +235,7 @@ const ProfileForm = () => {
                     <div key={index}>
                         <CustomTextField
                             type="text"
-                            name="type"
+                            name="mobileType"
                             label="Type"
                             value={contact.type}
                             onChange={(e: any) => {
@@ -217,7 +244,7 @@ const ProfileForm = () => {
                         />
                         <CustomTextField
                             type="text"
-                            name="phone"
+                            name="mobileNo"
                             label="Phone"
                             value={contact.phone}
                             onChange={(e: any) => {
@@ -245,7 +272,7 @@ const ProfileForm = () => {
                     <div key={index}>
                         <CustomTextField
                             type="text"
-                            name="type"
+                            name="emailType"
                             label="Type"
                             value={contact.type}
                             onChange={(e: any) => {

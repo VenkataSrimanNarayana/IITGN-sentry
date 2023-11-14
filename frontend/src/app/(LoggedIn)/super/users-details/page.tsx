@@ -1,11 +1,16 @@
 "use client";
-import { useSession } from "next-auth/react";
-import { CircularProgress, Container } from "@mui/material";
-import { redirect } from "next/navigation";
-import ProfileDisplay from "@/components/ProfileDisplay";
 
-export default function Settings() {
+import UsersDetails from "@/components/UsersDetails";
+import { CircularProgress, Container } from "@mui/material";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+
+export default function UsersDetailsPage() {
+    const router = useRouter();
     const { data: session, status } = useSession();
+
+    if (status === "unauthenticated") router.push("/login");
+
     if (status === "loading") {
         return (
             <>
@@ -14,20 +19,14 @@ export default function Settings() {
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
-                        height: "100vh",
+                        height: "100vh", // Make the container take the full viewport height
                     }}
                 >
                     <CircularProgress />
                 </Container>
             </>
         );
-    } else if (status === "unauthenticated") {
-        redirect("/login");
     }
 
-    return (
-        <>
-            <ProfileDisplay userID={session?.user.userID as string} />
-        </>
-    );
+    return <UsersDetails></UsersDetails>;
 }

@@ -4,8 +4,13 @@ import { CircularProgress, Container } from "@mui/material";
 import { redirect } from "next/navigation";
 import ProfileDisplay from "@/components/ProfileDisplay";
 
-export default function Settings() {
-    const { data: session, status } = useSession();
+export default function UserDetails({
+    params,
+}: {
+    params: { userID: string };
+}) {
+    const userID = params.userID;
+    const { status } = useSession();
     if (status === "loading") {
         return (
             <>
@@ -27,7 +32,7 @@ export default function Settings() {
 
     return (
         <>
-            <ProfileDisplay userID={session?.user.userID as string} />
+            <ProfileDisplay userID={userID} />
         </>
     );
 }
