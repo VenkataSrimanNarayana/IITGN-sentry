@@ -2,6 +2,7 @@ package com.iitgn.entryexit.services.impl;
 
 import com.iitgn.entryexit.entities.Email;
 import com.iitgn.entryexit.entities.PendingRequest;
+import com.iitgn.entryexit.entities.Role;
 import com.iitgn.entryexit.entities.User;
 import com.iitgn.entryexit.models.requestdto.PendingRequestSelfDto;
 import com.iitgn.entryexit.repositories.UserRepository;
@@ -95,5 +96,15 @@ public class UserServiceImpl implements UserService {
             user.getEmails().add(email);
             userRepository.save(user);
         }
+    }
+
+    @Override
+    public Role findRoleById(Long id) {
+        Optional<User> userTemp = userRepository.findById(id);
+        if(userTemp.isPresent()){
+            User user = userTemp.get();
+            return user.getRole();
+        }
+        return null;
     }
 }

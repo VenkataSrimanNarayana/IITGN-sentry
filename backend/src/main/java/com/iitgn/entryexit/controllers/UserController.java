@@ -3,6 +3,7 @@ package com.iitgn.entryexit.controllers;
 
 import com.iitgn.entryexit.entities.ContactNumber;
 import com.iitgn.entryexit.entities.Email;
+import com.iitgn.entryexit.entities.Role;
 import com.iitgn.entryexit.entities.User;
 import com.iitgn.entryexit.models.requestdto.NewRoleDto;
 import com.iitgn.entryexit.models.requestdto.PasswordChangeRequestDto;
@@ -288,6 +289,17 @@ public class UserController {
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+
+
+    @PreAuthorize("hasAuthority('ROLE_UPDATE_PRIVILEGE')")
+    @GetMapping("/api/users/{id}/role")
+    public ResponseEntity<String> getRoleByUserId(@PathVariable Long id){
+        Role role = userService.findRoleById(id);
+        if(role == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(role.getName(), HttpStatus.OK);
+    }
+
 
 
 }
