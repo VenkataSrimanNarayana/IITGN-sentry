@@ -61,6 +61,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             name : "Maid Details",
             link : "/maid-details",
         },
+        {
+            name : "Change Password",
+            link : "/change-password",
+        }
     ];
 
     return (

@@ -109,7 +109,7 @@ public class User implements UserDetails {
     private Set<UserVehicleLog> userVehicleLogs;
 
     @JsonIgnore
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Maid maid;
 
     @JsonIgnore
