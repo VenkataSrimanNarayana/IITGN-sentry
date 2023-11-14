@@ -175,8 +175,6 @@ public class UserController {
     }
 
 
-    // TODO : Function to be completed
-
     private User changeUser(Long id, UserDetailsDto userDetailsDto) {
         Optional<User> userTemp = userService.getUserById(id);
 

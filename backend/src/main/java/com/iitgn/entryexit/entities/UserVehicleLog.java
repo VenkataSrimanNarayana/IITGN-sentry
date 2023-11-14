@@ -58,7 +58,7 @@ public class UserVehicleLog {
     @JsonFormat(pattern = "HH:mm")
     private LocalTime outTime;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;

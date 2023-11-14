@@ -83,7 +83,7 @@ public class User implements UserDetails {
     private Role role;
 
     @JsonIgnore
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private Set<UserVisitorLog> userVisitorLogs;
 
@@ -104,7 +104,7 @@ public class User implements UserDetails {
     }
 
     @JsonIgnore
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private Set<UserVehicleLog> userVehicleLogs;
 

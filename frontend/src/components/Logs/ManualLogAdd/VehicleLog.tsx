@@ -23,17 +23,18 @@ const CustomTextField = (props: any) => {
 function getCurrentDateTime() {
   const now = new Date();
   const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  const hours = String(now.getHours()).padStart(2, '0');
-  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  const hours = String(now.getHours()).padStart(2, "0");
+  const minutes = String(now.getMinutes()).padStart(2, "0");
 
-  const eventDate = `${year}-${month}-${day}`;
-  const eventTime = `${hours}:${minutes}`;
+  const validFromDate = `${year}-${month}-${day}`;
+  const validFromTime = `${hours}:${minutes}`;
 
   return {
-    eventDate, eventTime
-  }
+    validFromDate,
+    validFromTime,
+  };
 }
 
 const Form = () => {
@@ -45,19 +46,32 @@ const Form = () => {
   const [pickUp, setPickUp] = useState(0);
   const [validUptoDate, setValidUptoDate] = useState();
   const [validUptoTime, setValidUptoTime] = useState();
-  const [pendingRequest, setPendingRequest] = useState();
 
   const { data: session } = useSession();
   const router = useRouter();
 
+  const loggerFunction = async (id: string) => {
+    const response = await fetch(
+      process.env.NEXT_PUBLIC_BACKEND_URL + `/api/user-vehicle-log/${id}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + session?.user.accessToken,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  };
+
   const handleSubmit = async (event: Event) => {
     event.preventDefault();
-
-    const { eventTime, eventDate } = getCurrentDateTime();
+    const { validFromDate, validFromTime } = getCurrentDateTime();
 
     const formData = {
-      eventTime,
-      eventDate,
+      validFromDate,
+      validFromTime,
+      validUptoTime,
+      validUptoDate,
       vehicleNo,
       reason,
       firstName,
@@ -66,10 +80,9 @@ const Form = () => {
       pickUp,
     };
 
-    // Send the form data to the API here
     const response = await fetch(
       process.env.NEXT_PUBLIC_BACKEND_URL +
-        "/api/pending-requests/user/raise-vehicle",
+        "/api/pending-requests/raise-vehicle",
       {
         method: "POST",
         headers: {
@@ -80,11 +93,18 @@ const Form = () => {
       }
     );
 
-  
     if (response.ok) {
       const data = await response.json();
-      setPendingRequest(data);
-      router.push("/");
+      loggerFunction(data.requestId);
+      alert("Request raised successfully");
+      setValidUptoDate("");
+      setValidUptoTime("");
+      setVehicleNo("");
+      setReason("");
+      setFirstName("");
+      setLastName("");
+      setMobileNo("");
+      setPickUp(0);
     } else {
       alert(data.message);
     }
@@ -93,7 +113,6 @@ const Form = () => {
   return (
     <Container maxWidth="xs">
       <form onSubmit={handleSubmit}>
-
         <FormControl className="form-control">
           <CustomTextField
             id="validUptoTime"
