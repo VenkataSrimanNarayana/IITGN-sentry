@@ -7,7 +7,6 @@ import {
     Button,
     Modal,
     Box,
-    Typography,
     FormControl,
     Select,
     InputLabel,
@@ -200,23 +199,31 @@ export default function UsersDetails() {
                 </strong>
             ),
         },
-        {
-            field: "roleChange",
-            headerName: "Role Change",
-            width: 120,
-            renderCell: (params: any) => (
-                <strong>
-                    <Button
-                        variant="contained"
-                        onClick={() => {
-                            roleChange(params.row.id);
-                        }}
-                    >
-                        Change
-                    </Button>
-                </strong>
-            ),
-        },
+    ];
+
+    const columns = [
+        ...defaultColumns,
+        ...(session?.user.details.authorities.includes("ROLE_UPDATE_PRIVILEGE")
+            ? [
+                  {
+                      field: "roleChange",
+                      headerName: "Role Change",
+                      width: 120,
+                      renderCell: (params: any) => (
+                          <strong>
+                              <Button
+                                  variant="contained"
+                                  onClick={() => {
+                                      roleChange(params.row.id);
+                                  }}
+                              >
+                                  Change
+                              </Button>
+                          </strong>
+                      ),
+                  },
+              ]
+            : []),
     ];
 
     return (
@@ -266,7 +273,7 @@ export default function UsersDetails() {
             </Modal>
             <div style={{ width: "100%" }}>
                 <DataGrid
-                    columns={defaultColumns}
+                    columns={columns}
                     rows={jsonData}
                     pageSizeOptions={[5, 10, 20, 50, 100]}
                 />

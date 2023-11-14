@@ -217,7 +217,7 @@ export default function Requests({
                     <QRCode value={selectedRequest} />
                 </Box>
             </Modal>
-            <div style={{ minHeight: 400, width: "100%" }}>
+            <div style={{ height: 400, width: "100%" }}>
                 <DataGrid
                     getRowId={(row: any) => row.requestId}
                     rows={requests.filter(

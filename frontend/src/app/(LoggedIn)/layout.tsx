@@ -2,76 +2,33 @@ import Navbar from "@/components/Navbar";
 import { Container } from "@mui/material";
 import Provider from "@/components/Provider";
 import "public/global.css";
+import type { Metadata } from "next";
+import { getServerSession } from "next-auth";
+import { getSession } from "next-auth/react";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export const metadata: Metadata = {
+    title: "Sentry",
+};
+
+export default async function Layout({
+    children,
+}: {
+    children: React.ReactNode;
+}) {
     // TODO : // conditinal rendering of links
-
-    const links = [
-        {
-            name: "Home",
-            link: "/",
-        },
-
-        {
-            name: "Raise Request",
-            link: "/raise-request",
-        },
-
-        {
-            name: "Super Requests",
-            link: "/super/requests",
-        },
-        {
-            name: "Super Logs",
-            link: "/super/logs",
-        },
-        {
-            name: "User Logs",
-            link: "/user/logs",
-        },
-        {
-            name: "User Requests",
-            link: "/user/requests",
-        },
-        {
-            name: "Register User",
-            link: "/register-user",
-        },
-        {
-            name: "Add new Role",
-            link: "/role/create",
-        },
-        {
-            name: "Edit Role",
-            link: "/role/edit",
-        },
-        {
-            name: "Manual Entry",
-            link: "/super/manual-log-register",
-        },
-        {
-            name : "Register Maid",
-            link : "/register-maid",
-        },
-        {
-            name : "Maid Logs",
-            link : "/maid-logs",
-        },
-        {
-            name : "Maid Details",
-            link : "/maid-details",
-        },
-        {
-            name : "Change Password",
-            link : "/change-password",
-        }
-    ];
 
     return (
         <html>
+            <head>
+                <link
+                    rel="shortcut icon"
+                    href="/logo.png"
+                    type="image/x-icon"
+                />
+            </head>
             <body>
                 <Provider>
-                    <Navbar links={links} />
+                    <Navbar />
                     <Container maxWidth="xl" sx={{ marginTop: "5rem" }}>
                         {children}
                     </Container>

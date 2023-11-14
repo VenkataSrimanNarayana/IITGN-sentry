@@ -2,6 +2,7 @@ package com.iitgn.entryexit.controllers;
 
 import com.iitgn.entryexit.entities.Maid;
 import com.iitgn.entryexit.entities.MaidLog;
+import com.iitgn.entryexit.models.requestdto.MaidDetailsDto;
 import com.iitgn.entryexit.models.responses.SingleLineResponse;
 import com.iitgn.entryexit.services.MaidLogService;
 import com.iitgn.entryexit.services.MaidService;
@@ -31,25 +32,12 @@ public class MaidLogController {
     }
 
     @PreAuthorize("hasAuthority('LOG_MAID_PRIVILEGE')")
-    @GetMapping("/log/{id}/entry")
-    public ResponseEntity<SingleLineResponse> inLogMaid(@PathVariable UUID id) {
+    @PostMapping("/log")
+    public ResponseEntity<SingleLineResponse> outLogMaid(@RequestBody MaidDetailsDto maidDetailsDto) {
         LocalTime time = LocalTime.now();
         LocalDate date = LocalDate.now();
-
-        Maid maid = maidService.getMaid(id);
-        MaidLog maidLog = MaidLog.builder().eventDate(date).eventTime(time).isEntry(true).maid(maid).build();
-        maidLogService.saveMaidLog(maidLog);
-        return ResponseEntity.ok(new SingleLineResponse("Maid Logged Successfully"));
-    }
-
-    @PreAuthorize("hasAuthority('LOG_MAID_PRIVILEGE')")
-    @GetMapping("/log/{id}/exit")
-    public ResponseEntity<SingleLineResponse> outLogMaid(@PathVariable UUID id){
-        LocalTime time = LocalTime.now();
-        LocalDate date = LocalDate.now();
-
-        Maid maid = maidService.getMaid(id);
-        MaidLog maidLog = MaidLog.builder().eventDate(date).eventTime(time).isEntry(false).maid(maid).build();
+        Maid maid = maidService.getMaid(maidDetailsDto.getId());
+        MaidLog maidLog = MaidLog.builder().eventDate(date).eventTime(time).isEntry(maidDetailsDto.isEntry()).maid(maid).build();
         maidLogService.saveMaidLog(maidLog);
         return ResponseEntity.ok(new SingleLineResponse("Maid Logged Successfully"));
     }

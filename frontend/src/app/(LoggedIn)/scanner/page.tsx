@@ -2,7 +2,14 @@
 import React, { useState } from "react";
 import QrReader from "react-qr-scanner";
 import { useSession } from "next-auth/react";
-import { Typography } from "@mui/material";
+import {
+    Typography,
+    Modal,
+    Box,
+    Button,
+    Checkbox,
+    FormControl,
+} from "@mui/material";
 
 const postData = (requestId: string, link: string, accessToken: string) => {
     console.log("sending request");
@@ -26,8 +33,50 @@ const postData = (requestId: string, link: string, accessToken: string) => {
         });
 };
 
+const handleMaidSubmit = (
+    requestId: string,
+    isEntry: boolean,
+    accessToken: string
+) => {
+    console.log(
+        process.env.NEXT_PUBLIC_BACKEND_URL +
+            `/api/maid-log/log/${requestId}/${isEntry ? "entry" : "exit"}`
+    );
+    console.log({
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+    fetch(process.env.NEXT_PUBLIC_BACKEND_URL + `/api/maid-log/log`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+            id: requestId,
+            entry: isEntry,
+        }),
+    })
+        .then((response) => {
+            console.log(response);
+            if (!response.ok) {
+                throw new Error("Invalid Request");
+            }
+            alert("Successfully logged the request");
+        })
+        .catch((error) => {
+            alert(error);
+        });
+};
+
 const QRScanner = () => {
     const [isScannerEnabled, setIsScannerEnabled] = useState(true);
+    const [open, setOpen] = useState(false); // For the modal
+    const [selectedRequest, setSelectedRequest] = useState("");
+    const [isEntry, setIsEntry] = useState(true); // For the modal
     const { data: session, status } = useSession({ required: true });
 
     const handleScan = (data) => {
@@ -40,7 +89,8 @@ const QRScanner = () => {
                 if (
                     request.requestType != "self" &&
                     request.requestType != "vehicle" &&
-                    request.requestType != "other"
+                    request.requestType != "other" &&
+                    request.requestType != "maid"
                 ) {
                     throw new Error("Invalid request type");
                 }
@@ -58,6 +108,9 @@ const QRScanner = () => {
                         "/api/user-log/") as string,
                     session?.user.accessToken as string
                 );
+                setTimeout(() => {
+                    setIsScannerEnabled(true);
+                }, 5000);
             } else if (request.requestType == "vehicle") {
                 postData(
                     request.id,
@@ -65,6 +118,9 @@ const QRScanner = () => {
                         "/api/user-vehicle-log/",
                     session?.user.accessToken as string
                 );
+                setTimeout(() => {
+                    setIsScannerEnabled(true);
+                }, 5000);
             } else if (request.requestType == "other") {
                 postData(
                     request.id,
@@ -72,10 +128,13 @@ const QRScanner = () => {
                         "/api/user-visitor-log/",
                     session?.user.accessToken as string
                 );
+                setTimeout(() => {
+                    setIsScannerEnabled(true);
+                }, 5000);
+            } else if (request.requestType == "maid") {
+                setSelectedRequest(request.id);
+                setOpen(true);
             }
-            setTimeout(() => {
-                setIsScannerEnabled(true);
-            }, 5000);
         }
     };
 
@@ -85,6 +144,54 @@ const QRScanner = () => {
 
     return (
         <div>
+            <Modal
+                open={open}
+                onClose={() => {
+                    setOpen(false);
+                }}
+            >
+                <Box
+                    sx={{
+                        position: "absolute" as "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        minWidth: "10rem",
+                        bgcolor: "background.paper",
+                        border: "2px solid #000",
+                        boxShadow: 24,
+                        p: 4,
+                    }}
+                >
+                    <FormControl
+                        sx={{ marginBottom: "1rem", display: "block" }}
+                    >
+                        <Checkbox
+                            checked={isEntry}
+                            onChange={(event) => {
+                                setIsEntry(event.target.checked);
+                            }}
+                        />
+                        <Typography variant="h6">For Entry</Typography>
+                    </FormControl>
+                    <Button
+                        variant="contained"
+                        onClick={() => {
+                            handleMaidSubmit(
+                                selectedRequest,
+                                isEntry,
+                                session?.user.accessToken as string
+                            );
+                            setOpen(false);
+                            setTimeout(() => {
+                                setIsScannerEnabled(true);
+                            }, 5000);
+                        }}
+                    >
+                        Submit
+                    </Button>
+                </Box>
+            </Modal>
             {isScannerEnabled ? (
                 <QrReader
                     delay={300}
@@ -95,7 +202,7 @@ const QRScanner = () => {
             ) : (
                 // Loading screen
                 <Typography variant="h4" align="center">
-                    Sacanner on Pause
+                    Scanner on Pause
                 </Typography>
             )}
         </div>

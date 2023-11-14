@@ -160,18 +160,29 @@ const Profile = ({ userID }: { userID: string }) => {
                     </TableBody>
                 </Table>
             </TableContainer>
-
-            <Button
-                variant="contained"
-                href={
-                    userID === session?.user.userID
-                        ? "/profile/edit"
-                        : "/user-details/" + userID + "/edit"
-                }
-                sx={{ margin: "1rem" }}
-            >
-                Edit
-            </Button>
+            {...(
+                userID === session?.user.userID
+                    ? session?.user.details.authorities.includes(
+                          "UPDATE_USER_USER_PRIVILEGE"
+                      )
+                    : session?.user.details.authorities.includes(
+                          "UPDATE_USER_PRIVILEGE"
+                      )
+            )
+                ? [
+                      <Button
+                          variant="contained"
+                          href={
+                              userID === session?.user.userID
+                                  ? "/profile/edit"
+                                  : "/user-details/" + userID + "/edit"
+                          }
+                          sx={{ margin: "1rem" }}
+                      >
+                          Edit
+                      </Button>,
+                  ]
+                : []}
         </>
     );
 };

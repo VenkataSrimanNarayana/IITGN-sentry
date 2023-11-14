@@ -10,6 +10,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { redirect } from "next/dist/server/api-utils";
 
 export default function Login() {
@@ -17,6 +18,7 @@ export default function Login() {
         message: "",
         error: false,
     });
+    const router = useRouter();
     const [userId, setUserId] = useState("");
     const [password, setPassword] = useState("");
 
@@ -24,7 +26,7 @@ export default function Login() {
         const response = await signIn("credentials", {
             userId: userId,
             password: password,
-            callbackUrl: "/",
+            redirect: false,
         });
         if (response && !response.ok) {
             setAlertData({
@@ -32,6 +34,7 @@ export default function Login() {
                 error: true,
             });
         }
+        router.push("/");
     };
 
     return (

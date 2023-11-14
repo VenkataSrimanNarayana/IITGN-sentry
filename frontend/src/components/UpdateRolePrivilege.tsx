@@ -6,6 +6,10 @@ import {
     InputLabel,
     Select,
     MenuItem,
+    Container,
+    Typography,
+    FormControlLabel,
+    Checkbox,
 } from "@mui/material";
 import { useSession } from "next-auth/react";
 
@@ -93,11 +97,12 @@ const UpdateRolePrivilege: React.FC = () => {
 
     return (
         // give a map to show all the roles
-        <div>
+        <Container maxWidth="md">
             <FormControl fullWidth>
                 <InputLabel>Role</InputLabel>
                 <Select
                     value={selectedRole}
+                    sx={{ marginBottom: "2rem" }}
                     onChange={(value) => {
                         setSelectedRole(value.target.value);
                         // Set the selected privileges to the privileges of the selected role
@@ -118,36 +123,43 @@ const UpdateRolePrivilege: React.FC = () => {
             </FormControl>
             <FormControl fullWidth>
                 <div style={{ marginBottom: "16px" }}>
-                    <h2>Privileges:</h2>
+                    <Typography variant="h5" marginBottom={"1rem"}>
+                        Change Privileges:
+                    </Typography>
                     {privileges.map((privilege) => (
                         <div key={privilege.id} style={{ marginBottom: "8px" }}>
-                            <input
-                                type="checkbox"
-                                id={privilege.id}
-                                checked={selectedPrivileges.includes(
-                                    privilege.id
-                                )}
-                                onChange={() =>
-                                    handleCheckboxChange(privilege.id)
+                            <FormControlLabel
+                                label={
+                                    privilege.name +
+                                    " - " +
+                                    privilege.description
                                 }
-                                style={{ marginRight: "8px" }}
+                                control={
+                                    <Checkbox
+                                        id={privilege.id}
+                                        checked={selectedPrivileges.includes(
+                                            privilege.id
+                                        )}
+                                        onChange={() =>
+                                            handleCheckboxChange(privilege.id)
+                                        }
+                                    />
+                                }
                             />
-                            <label htmlFor={privilege.id}>
-                                {privilege.name} - {privilege.description}
-                            </label>
                         </div>
                     ))}
                 </div>
             </FormControl>
             <Button
                 fullWidth
-                variant="contained"
+                variant="outlined"
                 color="primary"
                 onClick={handleSubmit}
+                sx={{ marginBottom: "2rem" }}
             >
                 Update
             </Button>
-        </div>
+        </Container>
     );
 };
 
