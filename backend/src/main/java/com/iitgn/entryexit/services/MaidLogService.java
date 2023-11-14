@@ -14,5 +14,5 @@ public interface MaidLogService {
 
     void deleteMaidLog(UUID id);
 
-    MaidLog getMaidLogByUserId(Long id);
+    List<MaidLog> getMaidLogByUserId(Long id);
 }

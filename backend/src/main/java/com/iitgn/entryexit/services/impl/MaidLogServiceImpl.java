@@ -37,7 +37,7 @@ public class MaidLogServiceImpl implements MaidLogService {
     }
 
     @Override
-    public MaidLog getMaidLogByUserId(Long id) {
+    public List<MaidLog> getMaidLogByUserId(Long id) {
         return maidLogRepository.findMaidLogByMaidId(id);
     }
 }

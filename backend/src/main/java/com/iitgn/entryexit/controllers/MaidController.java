@@ -3,6 +3,7 @@ package com.iitgn.entryexit.controllers;
 import com.iitgn.entryexit.entities.Maid;
 import com.iitgn.entryexit.entities.User;
 import com.iitgn.entryexit.models.requestdto.MaidDto;
+import com.iitgn.entryexit.models.responses.MaidResponse;
 import com.iitgn.entryexit.models.responses.SingleLineResponse;
 import com.iitgn.entryexit.services.MaidService;
 import com.iitgn.entryexit.services.UserService;
@@ -61,20 +62,35 @@ public class MaidController {
         return ResponseEntity.ok(new SingleLineResponse("Maid Deleted Successfully"));
     }
 
+    private MaidResponse maidResponseBuilder(Maid maid){
+        return MaidResponse.builder().workerId(maid.getWorkerId())
+                .firstName(maid.getFirstName()).lastName(maid.getLastName()).houseNo(maid.getHouseNo())
+                .area(maid.getArea()).landmark(maid.getLandmark()).pinCode(maid.getPinCode())
+                .townCity(maid.getTownCity()).state(maid.getState()).country(maid.getCountry())
+                .UserId(maid.getUser().getId()).workDoing(maid.getWorkDoing()).mobileNo(maid.getMobileNo()).build();
+    }
+
     @PreAuthorize("hasAuthority('READ_MAID_DETAILS_PRIVILEGE')")
     @GetMapping("/all")
-    public ResponseEntity<List<Maid>> getAllMaid() {
-        return ResponseEntity.ok(maidService.getAllMaid());
+    public ResponseEntity<List<MaidResponse>> getAllMaid() {
+        List<MaidResponse> maidResponses = new ArrayList<>();
+        List<Maid> maids = maidService.getAllMaid();
+        for (Maid maid : maids) {
+            MaidResponse maidResponse = maidResponseBuilder(maid);
+            maidResponses.add(maidResponse);
+        }
+        return ResponseEntity.ok(maidResponses);
     }
 
     @PreAuthorize("hasAuthority('READ_MAID_DETAILS_PRIVILEGE')")
     @GetMapping("/{id}")
-    public ResponseEntity<Maid> getMaid(@PathVariable UUID id) {
+    public ResponseEntity<MaidResponse> getMaid(@PathVariable UUID id) {
         Maid maid = maidService.getMaid(id);
         if (maid == null) {
             return ResponseEntity.notFound().build();
         } else {
-            return ResponseEntity.ok(maid);
+            MaidResponse maidResponse = maidResponseBuilder(maid);
+            return ResponseEntity.ok(maidResponse);
         }
     }
 

@@ -9,6 +9,6 @@ import java.util.UUID;
 
 public interface MaidRepository extends JpaRepository<Maid, UUID>{
 
-    @Query("SELECT m FROM Maid m WHERE m.user = ?1")
+    @Query("SELECT m FROM Maid m WHERE m.user.id = ?1")
     List<Maid> findMaidByUserId(Long id);
 }

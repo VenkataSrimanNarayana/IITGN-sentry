@@ -30,7 +30,6 @@ public class MaidLogController {
         return Long.parseLong(auth.getName());
     }
 
-
     @PreAuthorize("hasAuthority('LOG_MAID_PRIVILEGE')")
     @GetMapping("/log/{id}/entry")
     public ResponseEntity<SingleLineResponse> inLogMaid(@PathVariable UUID id) {
@@ -64,9 +63,9 @@ public class MaidLogController {
 
     @PreAuthorize("hasAuthority('READ_LOG_USER_MAID_PRIVILEGE')")
     @GetMapping("/user")
-    public ResponseEntity<MaidLog> getAllMaidLogs(){
+    public ResponseEntity<List<MaidLog>> getAllMaidLogs(){
         Long id = getCurrentUser();
-        MaidLog maidLog = maidLogService.getMaidLogByUserId(id);
+        List<MaidLog> maidLog = maidLogService.getMaidLogByUserId(id);
         if(maidLog == null){
             return ResponseEntity.notFound().build();
         }else{
@@ -79,6 +78,7 @@ public class MaidLogController {
     public ResponseEntity<List<MaidLog>> getAllMaidLog(){
         return ResponseEntity.ok(maidLogService.getAllMaidLog());
     }
+
     @PreAuthorize("hasAuthority('READ_LOG_MAID_PRIVILEGE')")
     @GetMapping("/{id}")
     public ResponseEntity<MaidLog> getMaidLog(@PathVariable UUID id){

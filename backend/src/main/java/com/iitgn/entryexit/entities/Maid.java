@@ -58,6 +58,7 @@ public class Maid {
     @Column(length = 10, nullable = false)
     private String mobileNo;
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
