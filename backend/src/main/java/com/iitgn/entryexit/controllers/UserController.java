@@ -8,6 +8,7 @@ import com.iitgn.entryexit.entities.User;
 import com.iitgn.entryexit.models.requestdto.NewRoleDto;
 import com.iitgn.entryexit.models.requestdto.PasswordChangeRequestDto;
 import com.iitgn.entryexit.models.requestdto.UserDetailsDto;
+import com.iitgn.entryexit.models.responses.RoleResponse;
 import com.iitgn.entryexit.models.responses.SingleLineResponse;
 import com.iitgn.entryexit.services.ContactNumberService;
 import com.iitgn.entryexit.services.EmailIdService;
@@ -293,15 +294,12 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('ROLE_UPDATE_PRIVILEGE')")
     @GetMapping("/api/users/{id}/role")
-    public ResponseEntity<String> getRoleByUserId(@PathVariable Long id){
+    public ResponseEntity<RoleResponse> getRoleByUserId(@PathVariable Long id){
         Role role = userService.findRoleById(id);
         if(role == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(role.getName(), HttpStatus.OK);
+        return new ResponseEntity<>(RoleResponse.builder().id(role.getId()).role(role.getName()).build(), HttpStatus.OK);
     }
-
-
-
 }
 
 
