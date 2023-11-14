@@ -90,7 +90,7 @@ export default function UserDetails() {
     },
     {
       field: "contactNumbers",
-      valueGetter: (params) => {
+      valueGetter: (params: { row: { contactNumbers: any[]; }; }) => {
         return params.row.contactNumbers.map((contactNumber: any) => {
           if (contactNumber.type === "personal") {
             return contactNumber.phone;
@@ -103,7 +103,7 @@ export default function UserDetails() {
     {
       field: "emails",
       headerName: "Emails",
-      valueGetter: (params) => {
+      valueGetter: (params: { row: { emails: any[]; }; }) => {
         return params.row.emails.map((email: any) => {
           if (email.type === "college") {
             return email.email;

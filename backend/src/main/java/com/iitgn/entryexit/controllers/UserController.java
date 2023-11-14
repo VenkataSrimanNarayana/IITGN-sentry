@@ -39,7 +39,6 @@ public class UserController {
     }
 
 
-
     @PreAuthorize("hasAuthority('READ_ACCOUNT_PRIVILEGE')")
     @GetMapping("/api/users/all")
     public ResponseEntity<List<User>> getAllUsers(@RequestParam int offset, @RequestParam int limit) {
@@ -172,27 +171,47 @@ public class UserController {
 
 
     // TODO : Function to be completed
-//    @PreAuthorize("hasAuthority('UPDATE_USER_PRIVILEGE')")
-//    @PutMapping("/api/users/{id}")
-//    public ResponseEntity<User> updateUserById(@PathVariable Long id, @RequestBody UserDetailsDto userDetailsDto) {
-//        Optional<User> userTemp = userService.getUserById(id);
-//        if (userTemp.isEmpty()) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//        userService.updateUserById(id, userDetailsDto);
-//        return new ResponseEntity<>(userTemp.get(), HttpStatus.OK);
-//    }
-//
-//    @PreAuthorize("hasAuthority('UPDATE_USER_USER_PRIVILEGE')")
-//    @PutMapping("/api/users")
-//    public ResponseEntity<SingleLineResponse> updateUserById(@PathVariable Long id, @RequestBody ) {
-//        Optional<User> userTemp = userService.getUserById(id);
-//        if (userTemp.isEmpty()) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//        userService.updateUserById(id, signUpDto);
-//        return new ResponseEntity<>(new SingleLineResponse("User updated successfully"), HttpStatus.OK);
-//    }
+
+    private User changeUser(Long id, UserDetailsDto userDetailsDto) {
+        Optional<User> userTemp = userService.getUserById(id);
+
+        if (userTemp.isEmpty()) {
+            return null;
+        }
+
+        User user = userTemp.get();
+        user.setHouseNo(userDetailsDto.getHouseNo());
+        user.setArea(userDetailsDto.getArea());
+        user.setLandmark(userDetailsDto.getLandmark());
+        user.setPinCode(userDetailsDto.getPinCode());
+        user.setTownCity(userDetailsDto.getTownCity());
+        user.setState(userDetailsDto.getState());
+        user.setCountry(userDetailsDto.getCountry());
+        userService.updateUserById(id, user);
+        return user;
+    }
+
+
+    @PreAuthorize("hasAuthority('UPDATE_USER_PRIVILEGE')")
+    @PutMapping("/api/users/{id}")
+    public ResponseEntity<User> updateUserById(@PathVariable Long id, @RequestBody UserDetailsDto userDetailsDto) {
+
+        if (changeUser(id, userDetailsDto) == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        User user = changeUser(id, userDetailsDto);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAuthority('UPDATE_USER_USER_PRIVILEGE')")
+    @PutMapping("/api/users")
+    public ResponseEntity<SingleLineResponse> updateUserById(@RequestBody UserDetailsDto userDetailsDto) {
+        Long id = getCurrentUser();
+        if (changeUser(id, userDetailsDto) == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(new SingleLineResponse("User updated successfully"), HttpStatus.OK);
+    }
 
 
     @PreAuthorize("hasAuthority('ROLE_UPDATE_PRIVILEGE')")
@@ -209,26 +228,6 @@ public class UserController {
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
-
-//    @PreAuthorize("hasAuthority('UPDATE_USER_PRIVILEGE')")
-//    @PostMapping("/api/users/{id}/email")
-//    public ResponseEntity<SingleLineResponse> addEmail(@PathVariable Long id, @RequestBody Email email) {
-//        Optional<User> userTemp = userService.getUserById(id);
-//        if (userTemp.isEmpty()) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//        userService.addEmail(id, email);
-//        return new ResponseEntity<>(new SingleLineResponse("Email added successfully"), HttpStatus.OK);
-//    }
-//
-//    @PreAuthorize("hasAuthority('UPDATE_USER_USER_PRIVILEGE')")
-//    @PostMapping("/api/users/email")
-//    public ResponseEntity<SingleLineResponse> addEmail(@RequestBody Email email) {
-//        Long id = getCurrentUser();
-//        userService.addEmail(id, email);
-//        return new ResponseEntity<>(new SingleLineResponse("Email added successfully"), HttpStatus.OK);
-//    }
-
 
 
 }
