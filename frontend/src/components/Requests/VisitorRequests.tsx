@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { DataGrid } from "@mui/x-data-grid";
 import QRCode from "react-qr-code";
+import generateQR from "./QRGenrator";
 // import { fetchData } from "@/api/pending-requests-api/fetchData";
 
 export default function VisitorRequests({
@@ -24,12 +25,6 @@ export default function VisitorRequests({
     const [selectedRequest, setSelectedRequest] = useState("");
 
     const router = useRouter();
-    // Function to generate QR and display it on a modal
-    function generateQR(id: string) {
-        console.log("Generating QR for request ID: ", id);
-        setSelectedRequest(id);
-        setOpen(true);
-    }
 
     if (status === "unauthenticated") {
         router.push("/login");
@@ -196,7 +191,12 @@ export default function VisitorRequests({
                     <Button
                         variant="contained"
                         onClick={(e: any) => {
-                            generateQR(params.row.requestId);
+                            generateQR(
+                                params.row.requestId,
+                                params.row.requestType,
+                                setOpen,
+                                setSelectedRequest
+                            );
                         }}
                     >
                         Gen

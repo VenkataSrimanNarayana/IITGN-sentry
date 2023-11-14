@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import QRCode from "react-qr-code";
+import generateQR from "./QRGenrator";
 
 export default function Requests({
     allowDelete,
@@ -20,12 +21,7 @@ export default function Requests({
     const [open, setOpen] = useState(false); // For the modal
     const [selectedRequest, setSelectedRequest] = useState("");
     const { data: session, status } = useSession();
-    // Function to generate QR and display it on a modal
-    function generateQR(id: string) {
-        console.log("Generating QR for request ID: ", id);
-        setSelectedRequest(id);
-        setOpen(true);
-    }
+
     const postData = async (id: number) => {
         try {
             const response = await fetch(
@@ -146,7 +142,12 @@ export default function Requests({
                     <Button
                         variant="contained"
                         onClick={(e: any) => {
-                            generateQR(params.row.requestId);
+                            generateQR(
+                                params.row.requestId,
+                                params.row.requestType,
+                                setOpen,
+                                setSelectedRequest
+                            );
                         }}
                     >
                         Gen

@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { DataGrid } from "@mui/x-data-grid";
 import QRCode from "react-qr-code";
+import generateQR from "./QRGenrator";
 
 export default function VehicleRequests({
     allowDelete,
@@ -21,12 +22,6 @@ export default function VehicleRequests({
     const { data: session, status } = useSession();
     const [open, setOpen] = useState(false); // For the modal
     const [selectedRequest, setSelectedRequest] = useState("");
-    // Function to generate QR and display it on a modal
-    function generateQR(id: string) {
-        console.log("Generating QR for request ID: ", id);
-        setSelectedRequest(id);
-        setOpen(true);
-    }
 
     const router = useRouter();
 
@@ -199,7 +194,12 @@ export default function VehicleRequests({
                     <Button
                         variant="contained"
                         onClick={(e: any) => {
-                            generateQR(params.row.requestId);
+                            generateQR(
+                                params.row.requestId,
+                                params.row.requestType,
+                                setOpen,
+                                setSelectedRequest
+                            );
                         }}
                     >
                         Gen
