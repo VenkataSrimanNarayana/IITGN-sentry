@@ -1,7 +1,11 @@
 package com.iitgn.entryexit.models.requestdto;
 
+import com.iitgn.entryexit.entities.ContactNumber;
+import com.iitgn.entryexit.entities.Email;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.List;
 
 // user(user_id, first_name, last_name, house_no, area, Landmark, pin_code, Town_city, State, Country, Type)
 @Data
@@ -14,8 +18,6 @@ public class UserDetailsDto {
     private String townCity;
     private String state;
     private String country;
-    private String emailType;
-    private String email;
-    private String mobileNo;
-    private String mobileType;
+    private List<Email> emails;
+    private List<ContactNumber> contactNumbers;
 }

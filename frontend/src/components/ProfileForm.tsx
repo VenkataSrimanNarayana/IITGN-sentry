@@ -117,6 +117,8 @@ const ProfileForm = ({ userID }: { userID: string }) => {
         setFormData({ ...formData, [name]: value });
     };
 
+
+
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         // Generate form data for the allowed fields
@@ -135,6 +137,29 @@ const ProfileForm = ({ userID }: { userID: string }) => {
         allowedFields.forEach((field) => {
             formDataAllowed[field] = formData[field] as any;
         });
+
+        try {
+            const res = await fetch(
+                updateUrl,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${session?.user.accessToken}`,
+                    },
+                    body: JSON.stringify(
+                        formDataAllowed,
+                    ),
+                }
+            );
+            const response = await res.json();
+            if (res.ok) {
+                alert(response.message);
+            }
+        } catch (error) {
+            console.error("Error creating role:", error);
+        }
+
         // Make a request to the backend to update the user details
     };
 

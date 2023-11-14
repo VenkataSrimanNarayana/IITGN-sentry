@@ -1,12 +1,15 @@
 package com.iitgn.entryexit.controllers;
 
 
+import com.iitgn.entryexit.entities.ContactNumber;
 import com.iitgn.entryexit.entities.Email;
 import com.iitgn.entryexit.entities.User;
 import com.iitgn.entryexit.models.requestdto.NewRoleDto;
 import com.iitgn.entryexit.models.requestdto.PasswordChangeRequestDto;
 import com.iitgn.entryexit.models.requestdto.UserDetailsDto;
 import com.iitgn.entryexit.models.responses.SingleLineResponse;
+import com.iitgn.entryexit.services.ContactNumberService;
+import com.iitgn.entryexit.services.EmailIdService;
 import com.iitgn.entryexit.services.EmailService;
 import com.iitgn.entryexit.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +35,8 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
     private final SimpleMailMessage simpleMailMessage;
     private final EmailService emailService;
+    private final EmailIdService emailIdService;
+    private final ContactNumberService contactNumberService;
 
     public Long getCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -187,20 +192,77 @@ public class UserController {
         user.setTownCity(userDetailsDto.getTownCity());
         user.setState(userDetailsDto.getState());
         user.setCountry(userDetailsDto.getCountry());
+
+        for (Email email :
+                userDetailsDto.getEmails()) {
+            if(email.getEmail() == null || email.getEmail().isEmpty()) {
+                continue;
+            }
+            emailIdService.saveEmailId(email);
+            user.getEmails().add(email);
+        }
+        for (ContactNumber contactNumber :
+                userDetailsDto.getContactNumbers()) {
+            if(contactNumber.getPhone() == null || contactNumber.getPhone().isEmpty()) {
+                continue;
+            }
+            contactNumberService.saveContactNumber(contactNumber);
+            user.getContactNumbers().add(contactNumber);
+        }
+
         userService.updateUserById(id, user);
         return user;
+    }
+
+    private ResponseEntity<SingleLineResponse> checkValidity(UserDetailsDto userDetailsDto) {
+        if(userDetailsDto == null) {
+            return new ResponseEntity<>(new SingleLineResponse("User details cannot be empty"), HttpStatus.BAD_REQUEST);
+        }
+
+        if(userDetailsDto.getHouseNo() == null || userDetailsDto.getHouseNo().isEmpty()) {
+            return new ResponseEntity<>(new SingleLineResponse("House No. cannot be empty"), HttpStatus.BAD_REQUEST);
+        }
+        if(userDetailsDto.getArea() == null || userDetailsDto.getArea().isEmpty()) {
+            return new ResponseEntity<>(new SingleLineResponse("Area cannot be empty"), HttpStatus.BAD_REQUEST);
+        }
+
+        if(userDetailsDto.getLandmark() == null || userDetailsDto.getLandmark().isEmpty()) {
+            return new ResponseEntity<>(new SingleLineResponse("Landmark cannot be empty"), HttpStatus.BAD_REQUEST);
+        }
+
+        if(userDetailsDto.getPinCode() == 0) {
+            return new ResponseEntity<>(new SingleLineResponse("Pin code cannot be empty"), HttpStatus.BAD_REQUEST);
+        }
+
+        if(userDetailsDto.getTownCity() == null || userDetailsDto.getTownCity().isEmpty()) {
+            return new ResponseEntity<>(new SingleLineResponse("Town/City cannot be empty"), HttpStatus.BAD_REQUEST);
+        }
+
+        if(userDetailsDto.getState() == null || userDetailsDto.getState().isEmpty()) {
+            return new ResponseEntity<>(new SingleLineResponse("State cannot be empty"), HttpStatus.BAD_REQUEST);
+        }
+
+        if(userDetailsDto.getCountry() == null || userDetailsDto.getCountry().isEmpty()) {
+            return new ResponseEntity<>(new SingleLineResponse("Country cannot be empty"), HttpStatus.BAD_REQUEST);
+        }
+
+        if(userDetailsDto.getEmails() == null || userDetailsDto.getEmails().isEmpty()) {
+            return new ResponseEntity<>(new SingleLineResponse("Emails cannot be empty"), HttpStatus.BAD_REQUEST);
+        }
+        return null;
     }
 
 
     @PreAuthorize("hasAuthority('UPDATE_USER_PRIVILEGE')")
     @PutMapping("/api/users/{id}")
-    public ResponseEntity<User> updateUserById(@PathVariable Long id, @RequestBody UserDetailsDto userDetailsDto) {
-
+    public ResponseEntity<SingleLineResponse> updateUserById(@PathVariable Long id, @RequestBody UserDetailsDto userDetailsDto) {
         if (changeUser(id, userDetailsDto) == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        User user = changeUser(id, userDetailsDto);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        if(checkValidity(userDetailsDto) != null){
+            return checkValidity(userDetailsDto);
+        }
+        return new ResponseEntity<>(new SingleLineResponse("User updated successfully"), HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('UPDATE_USER_USER_PRIVILEGE')")
