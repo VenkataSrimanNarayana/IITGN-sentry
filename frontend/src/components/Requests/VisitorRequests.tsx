@@ -1,14 +1,4 @@
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Paper,
-    Typography,
-    IconButton,
-} from "@mui/material";
+import { IconButton, Modal, Box, Button } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useState } from "react";
@@ -16,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { DataGrid } from "@mui/x-data-grid";
+import QRCode from "react-qr-code";
 // import { fetchData } from "@/api/pending-requests-api/fetchData";
 
 export default function VisitorRequests({
@@ -29,8 +20,16 @@ export default function VisitorRequests({
 }) {
     const [requests, setRequests] = useState([]);
     const { data: session, status } = useSession();
+    const [open, setOpen] = useState(false); // For the modal
+    const [selectedRequest, setSelectedRequest] = useState("");
 
     const router = useRouter();
+    // Function to generate QR and display it on a modal
+    function generateQR(id: string) {
+        console.log("Generating QR for request ID: ", id);
+        setSelectedRequest(id);
+        setOpen(true);
+    }
 
     if (status === "unauthenticated") {
         router.push("/login");
@@ -188,6 +187,23 @@ export default function VisitorRequests({
             headerName: "Entry",
             width: 150,
         },
+        {
+            field: "generateQR",
+            headerName: "Generate QR",
+            width: 100,
+            renderCell: (params: any) => (
+                <strong>
+                    <Button
+                        variant="contained"
+                        onClick={(e: any) => {
+                            generateQR(params.row.requestId);
+                        }}
+                    >
+                        Gen
+                    </Button>
+                </strong>
+            ),
+        },
     ];
 
     const deleteColumn = {
@@ -233,16 +249,36 @@ export default function VisitorRequests({
     ];
 
     return (
-        <DataGrid
-            getRowId={(row) => row.requestId}
-            rows={requests.filter(
-                (request: Request) => request.requestType === "other"
-            )}
-            columns={columns}
-            pageSize={5}
-            rowsPerPageOptions={[5]}
-            pagination
-            autoHeight
-        />
+        <>
+            <Modal
+                open={open}
+                onClose={() => {
+                    setOpen(false);
+                }}
+            >
+                <Box
+                    style={{
+                        position: "absolute" as "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                    }}
+                    id={"modal-qr"}
+                >
+                    <QRCode value={selectedRequest} />
+                </Box>
+            </Modal>
+            <DataGrid
+                getRowId={(row) => row.requestId}
+                rows={requests.filter(
+                    (request: Request) => request.requestType === "other"
+                )}
+                columns={columns}
+                pageSize={5}
+                rowsPerPageOptions={[5]}
+                pagination
+                autoHeight
+            />
+        </>
     );
 }

@@ -1,20 +1,11 @@
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Paper,
-    Typography,
-    IconButton,
-} from "@mui/material";
+import { Button, IconButton, Modal, Box } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
+import QRCode from "react-qr-code";
 
 export default function Requests({
     allowDelete,
@@ -26,8 +17,15 @@ export default function Requests({
     requestType: string;
 }) {
     const [requests, setRequests] = useState([] as Request[]);
+    const [open, setOpen] = useState(false); // For the modal
+    const [selectedRequest, setSelectedRequest] = useState("");
     const { data: session, status } = useSession();
-
+    // Function to generate QR and display it on a modal
+    function generateQR(id: string) {
+        console.log("Generating QR for request ID: ", id);
+        setSelectedRequest(id);
+        setOpen(true);
+    }
     const postData = async (id: number) => {
         try {
             const response = await fetch(
@@ -139,6 +137,23 @@ export default function Requests({
             width: 150,
         },
         { field: "validUptoTime", headerName: "Valid Upto Time", width: 150 },
+        {
+            field: "generateQR",
+            headerName: "Generate QR",
+            width: 100,
+            renderCell: (params: any) => (
+                <strong>
+                    <Button
+                        variant="contained"
+                        onClick={(e: any) => {
+                            generateQR(params.row.requestId);
+                        }}
+                    >
+                        Gen
+                    </Button>
+                </strong>
+            ),
+        },
     ];
 
     const acceptColumn = {
@@ -182,16 +197,38 @@ export default function Requests({
     ];
 
     return (
-        <div style={{ width: "100%" }}>
-            <DataGrid
-                getRowId={(row: any) => row.requestId}
-                rows={requests}
-                columns={columns}
-                pageSize={5}
-                rowsPerPageOptions={[5]}
-                disableSelectionOnClick
-                pageSizeOptions={[5, 10, 20, 50, 100]}
-            />
-        </div>
+        <>
+            <Modal
+                open={open}
+                onClose={() => {
+                    setOpen(false);
+                }}
+            >
+                <Box
+                    style={{
+                        position: "absolute" as "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                    }}
+                    id={"modal-qr"}
+                >
+                    <QRCode value={selectedRequest} />
+                </Box>
+            </Modal>
+            <div style={{ minHeight: 400, width: "100%" }}>
+                <DataGrid
+                    getRowId={(row: any) => row.requestId}
+                    rows={requests.filter(
+                        (request) => request.requestType === "self"
+                    )}
+                    columns={columns}
+                    pageSize={5}
+                    rowsPerPageOptions={[5]}
+                    disableSelectionOnClick
+                    pageSizeOptions={[5, 10, 20, 50, 100]}
+                />
+            </div>
+        </>
     );
 }

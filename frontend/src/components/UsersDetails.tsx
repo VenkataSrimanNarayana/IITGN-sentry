@@ -3,6 +3,7 @@
 import { DataGrid } from "@mui/x-data-grid";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import { Button } from "@mui/material";
 
 export default function UsersDetails() {
     const { data: session, status } = useSession();
@@ -116,6 +117,17 @@ export default function UsersDetails() {
             field: "view",
             headerName: "View",
             width: 100,
+            renderCell: (params: any) => (
+                <strong>
+                    {/* View button pointing to /user-details/id */}
+                    <Button
+                        variant="contained"
+                        href={`/user-details/${params.row.id}`}
+                    >
+                        View
+                    </Button>
+                </strong>
+            ),
         },
     ];
 
