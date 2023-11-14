@@ -58,9 +58,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             link : "/maid-logs",
         },
         {
-            name : "User Details",
-            link : "/super/user-details",
-        }
+            name : "Maid Details",
+            link : "/maid-details",
+        },
     ];
 
     return (

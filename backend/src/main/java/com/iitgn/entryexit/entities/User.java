@@ -60,7 +60,7 @@ public class User implements UserDetails {
     @Column(length = 10, nullable = false)
     private String userType;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private Set<ContactNumber> contactNumbers;
 

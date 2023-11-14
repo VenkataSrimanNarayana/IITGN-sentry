@@ -48,6 +48,7 @@ export default function RegisterUser() {
         );
         const jsonData = await response.json();
         setRoles(jsonData);
+        console.log(jsonData);
       } catch (error) {
         console.error("Error fetching data: ", error);
       }
@@ -55,6 +56,7 @@ export default function RegisterUser() {
     fetchData();
   }, [status]);
 
+  
 
   const postData = async () => {
     try {

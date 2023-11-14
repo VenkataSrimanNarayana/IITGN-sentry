@@ -4,6 +4,9 @@ import com.iitgn.entryexit.entities.*;
 import com.iitgn.entryexit.repositories.PrivilegeRepository;
 import com.iitgn.entryexit.repositories.RoleRepository;
 import com.iitgn.entryexit.repositories.UserRepository;
+
+import com.iitgn.entryexit.services.ContactNumberService;
+import com.iitgn.entryexit.services.EmailIdService;
 import jakarta.transaction.Transactional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +26,9 @@ public class SetupDataLoader implements
     private final RoleRepository roleRepository;
     private final PrivilegeRepository privilegeRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ContactNumberService contactNumberService;
+    private final EmailIdService emailIdService;
+
     boolean alreadySetup = false;
 
     @Override
@@ -68,6 +74,7 @@ public class SetupDataLoader implements
         Privilege privilege27 = createPrivilegeIfNotFound("READ_MAID_DETAILS_USER_PRIVILEGE", "This privilege allows to read maid details of a user by himself");
         Privilege privilege28 = createPrivilegeIfNotFound("UPDATE_USER_PRIVILEGE", "This privilege allows to update user details of any user");
         Privilege privilege29 = createPrivilegeIfNotFound("UPDATE_USER_USER_PRIVILEGE", "This privilege allows to read user details of any user");
+        Privilege privilege30 = createPrivilegeIfNotFound("ACCOUNT_SIGNUP_PRIVILEGE", "This privilege allows to signup a user mostly by super users");
 
 
 
@@ -81,7 +88,7 @@ public class SetupDataLoader implements
                 privilege1, privilege2, privilege3, privilege4, privilege5, privilege6,
                 privilege7, privilege8, privilege9, privilege10, privilege11, privilege12, privilege13, privilege14,
                 privilege15, privilege16, privilege17, privilege18, privilege19, privilege20, privilege21, privilege22, privilege23, privilege24, privilege25, privilege26, privilege27,
-                privilege28, privilege29
+                privilege28, privilege29, privilege30
         );
 
 
@@ -112,17 +119,20 @@ public class SetupDataLoader implements
                     .townCity("Gandhinagar")
                     .build();
 
-            // Set Emails
+//          Set Emails
             Email email = Email.builder().email("zeeshan.snehil@iitgn.ac.in").type("college").build();
+            emailIdService.saveEmailId(email);
             Set<Email> emails = new HashSet<>();
             emails.add(email);
             user1.setEmails(emails);
 
-            // Set Contact Numbers
+//          Set Contact Numbers
             ContactNumber contactNumber = ContactNumber.builder().phone("9434614611").type("personal").build();
+            contactNumberService.saveContactNumber(contactNumber);
             Set<ContactNumber> contactNumbers = new HashSet<>();
             contactNumbers.add(contactNumber);
             user1.setContactNumbers(contactNumbers);
+
 
             // Set User Roles
             if (adminRole.isEmpty()) {

@@ -11,6 +11,8 @@ import com.iitgn.entryexit.repositories.UserRepository;
 import com.iitgn.entryexit.security.JwtTokenProvider;
 import com.iitgn.entryexit.services.AuthService;
 
+import com.iitgn.entryexit.services.ContactNumberService;
+import com.iitgn.entryexit.services.EmailIdService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,6 +33,8 @@ public class AuthServiceImpl implements AuthService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
+    private final ContactNumberService contactNumberService;
+    private final EmailIdService emailIdService;
 
 
     @Override
@@ -82,12 +86,16 @@ public class AuthServiceImpl implements AuthService {
 
         ContactNumber contactNumber = ContactNumber.builder().type("personal").phone(signUpDto.getMobileNo()).build();
         Set<ContactNumber> contactNumbers = new HashSet<>();
+        contactNumberService.saveContactNumber(contactNumber);
         contactNumbers.add(contactNumber);
+
         user.setContactNumbers(contactNumbers);
 
         Set<Email> emails = new HashSet<>();
         Email email = Email.builder().type("college").email(signUpDto.getEmail()).build();
+        emailIdService.saveEmailId(email);
         emails.add(email);
+
         user.setEmails(emails);
 
         userRepository.save(user);

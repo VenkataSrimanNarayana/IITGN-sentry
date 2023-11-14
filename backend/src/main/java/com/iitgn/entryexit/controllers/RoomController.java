@@ -2,7 +2,9 @@ package com.iitgn.entryexit.controllers;
 
 import com.iitgn.entryexit.entities.Room;
 import com.iitgn.entryexit.entities.User;
+import com.iitgn.entryexit.models.requestdto.RoomAllocationDto;
 import com.iitgn.entryexit.models.responses.SingleLineResponse;
+import com.iitgn.entryexit.services.RoomService;
 import com.iitgn.entryexit.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +12,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
@@ -20,15 +24,19 @@ public class RoomController {
 
     private final UserService userService;
 
+    private final RoomService roomService;
 
-    @PostMapping("/{id}")
-    public ResponseEntity<SingleLineResponse> userRegisterRoom(@PathVariable Long id, @RequestBody Room room){
+
+    @PostMapping
+    public ResponseEntity<SingleLineResponse> userRegisterRoom(@RequestBody RoomAllocationDto roomAllocationDto){
+
+        Long id = roomAllocationDto.getUserId();
+        UUID roomId = roomAllocationDto.getRoomId();
         Optional<User> user = userService.getUserById(id);
-
+        Room room = roomService.getRoomById(roomId);
         if (user.isPresent()) {
             User tempUser = user.get();
-            Room room1 = Room.builder().blockName(room.getBlockName()).roomNo(room.getRoomNo()).build();
-            tempUser.setRoom(room1);
+            tempUser.setRoom(room);
             userService.updateUserById(id, tempUser);
             return ResponseEntity.ok().body(new SingleLineResponse("Room Allocated"));
         }else {
@@ -60,7 +68,9 @@ public class RoomController {
         }
     }
 
-
-
+    @GetMapping("/all")
+    public ResponseEntity<List<Room>> getAllRooms(){
+        return ResponseEntity.ok().body(roomService.getAllRooms());
+    }
 
 }

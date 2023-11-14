@@ -30,7 +30,7 @@ public class AuthController {
         return ResponseEntity.ok(jwtAuthResponse);
     }
 
-    @PreAuthorize("hasAuthority('ACCOUNT_SIGNUP_PRIVILEGE')")
+//    @PreAuthorize("hasAuthority('ACCOUNT_SIGNUP_PRIVILEGE')")
     // signup endpoint
     @PostMapping("/signup")
     public ResponseEntity<String> registerUser(@RequestBody SignUpDto signUpDto){
